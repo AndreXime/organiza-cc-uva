@@ -35,7 +35,7 @@ export default function GerenciadorInterativo() {
         ]}
       />
 
-      <div className="flex flex-col md:flex-row gap-8 ">
+      <div className="flex flex-col md:flex-row justify-center gap-8 ">
         {/* Lista disciplinas feitas */}
         <section className="overflow-scroll h-150 order-2 md:order-1">
           <h2 className="text-xl font-semibold mb-4 text-green-700">Disciplinas que você já fez</h2>

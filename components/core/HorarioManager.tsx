@@ -69,7 +69,7 @@ export default function HorarioManager() {
       />
       <div className="overflow-x-scroll">
         <Calendar
-          className="text-black capitalize min-w-[800px] "
+          className="text-black capitalize min-w-[1000px] "
           defaultDate={new Date()}
           localizer={localizer}
           defaultView="work_week"
