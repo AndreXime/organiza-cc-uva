@@ -1,16 +1,16 @@
 "use client";
 import Disciplinas from "@/disciplinas/disciplinas";
-import { DisciplinaSingle } from "@/lib/types";
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useMemo, useState } from "react";
+import { DisciplinaComPeriodo } from "@/lib/types";
+import { createContext, Dispatch, SetStateAction, useContext, useMemo, useState } from "react";
 
 type ContextData = {
   Tab: string;
   setTab: Dispatch<SetStateAction<string>>;
   DisciplinasFeitas: Set<number>;
   setDisciplinasFeitas: Dispatch<SetStateAction<Set<number>>>;
-  DisciplinasDisponiveis: (DisciplinaSingle & {
-    periodo: string;
-  })[];
+  DisciplinasDisponiveis: DisciplinaComPeriodo[];
+  TodasDisciplinas: DisciplinaComPeriodo[];
+  DisciplinasPorPeriodo: Record<string, DisciplinaComPeriodo[]>;
 };
 
 const DataContext = createContext<ContextData | undefined>(undefined);
@@ -19,27 +19,41 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [DisciplinasFeitas, setDisciplinasFeitas] = useState<Set<number>>(new Set());
   const [Tab, setTab] = useState("gerenciador");
 
-  const listaCompleta: (DisciplinaSingle & { periodo: string })[] = [];
-  for (const [periodo, disciplinas] of Object.entries(Disciplinas)) {
-    disciplinas.forEach((d) => {
-      listaCompleta.push({ ...d, periodo });
-    });
-  }
+  const { TodasDisciplinas, DisciplinasPorPeriodo, DisciplinasDisponiveis } = useMemo(() => {
+    const TodasDisciplinas: DisciplinaComPeriodo[] = [];
+    const DisciplinasPorPeriodo: Record<string, DisciplinaComPeriodo[]> = {};
 
-  // Calcular as disciplinas que estão disponíveis pra fazer
-  // Uma disciplina está disponível se:
-  // - Não está marcada como feita
-  // - Todos os seus requisitos (se tiver) estão dentro do conjunto feitas
-  const DisciplinasDisponiveis = useMemo(() => {
-    return listaCompleta.filter((disciplina) => {
-      if (DisciplinasFeitas.has(disciplina.id)) return false;
-      if (!disciplina.requisitos || disciplina.requisitos.length === 0) return true;
-      return disciplina.requisitos.every((req) => DisciplinasFeitas.has(req.id));
+    for (const [periodo, lista] of Object.entries(Disciplinas)) {
+      const completas = lista.map((disc) => ({ ...disc, periodo }));
+      DisciplinasPorPeriodo[periodo] = completas;
+      TodasDisciplinas.push(...completas);
+    }
+
+    // Calcular as disciplinas que estão disponíveis pra fazer
+    // Uma disciplina está disponível se:
+    // - Não está marcada como feita
+    // - Todos os seus requisitos (se tiver) estão dentro do conjunto feitas
+    const DisciplinasDisponiveis = TodasDisciplinas.filter((d) => {
+      if (DisciplinasFeitas.has(d.id)) return false;
+      if (!d.requisitos?.length) return true;
+      return d.requisitos.every((req) => DisciplinasFeitas.has(req.id));
     });
+
+    return { TodasDisciplinas, DisciplinasPorPeriodo, DisciplinasDisponiveis };
   }, [DisciplinasFeitas]);
 
   return (
-    <DataContext.Provider value={{ Tab, setTab, DisciplinasFeitas, setDisciplinasFeitas, DisciplinasDisponiveis }}>
+    <DataContext.Provider
+      value={{
+        Tab,
+        setTab,
+        DisciplinasFeitas,
+        setDisciplinasFeitas,
+        DisciplinasDisponiveis,
+        TodasDisciplinas,
+        DisciplinasPorPeriodo,
+      }}
+    >
       {children}
     </DataContext.Provider>
   );

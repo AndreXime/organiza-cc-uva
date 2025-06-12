@@ -9,7 +9,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Disciplinas do curso UVA",
+  title: "Disciplinas de Ciencias da Computação UVA",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

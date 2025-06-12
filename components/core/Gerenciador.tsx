@@ -1,18 +1,10 @@
 "use client";
 
-import Disciplinas from "@/disciplinas/disciplinas";
-import { DisciplinaSingle } from "@/lib/types";
 import { useData } from "../../context/DataContext";
 import Header from "../ui/header";
 
 export default function GerenciadorInterativo() {
-  const { DisciplinasFeitas, setDisciplinasFeitas, DisciplinasDisponiveis } = useData();
-
-  // Mapa id => disciplina pra facilitar busca
-  const mapaDisciplinas: Record<number, DisciplinaSingle> = {};
-  Object.values(Disciplinas)
-    .flat()
-    .forEach((d) => (mapaDisciplinas[d.id] = d));
+  const { DisciplinasFeitas, setDisciplinasFeitas, DisciplinasDisponiveis, TodasDisciplinas } = useData();
 
   // Função pra clicar e alternar se já fez ou não
   function toggleFeita(id: number) {
@@ -34,7 +26,7 @@ export default function GerenciadorInterativo() {
         ]}
       />
 
-      <div className="flex flex-col md:flex-row justify-center gap-8 ">
+      <div className="flex flex-col md:flex-row justify-center gap-10">
         {/* Lista disciplinas feitas */}
         <section className="overflow-scroll h-150 order-2 md:order-1">
           <h2 className="text-xl font-semibold mb-4 text-green-700">Disciplinas que você já fez</h2>
@@ -49,7 +41,7 @@ export default function GerenciadorInterativo() {
                   onClick={() => toggleFeita(id)}
                   title="Clique para desmarcar"
                 >
-                  {mapaDisciplinas[id]?.nome || "Disciplina desconhecida"}
+                  {TodasDisciplinas.find((d) => d.id === id)?.nome || "Disciplina desconhecida"}{" "}
                 </li>
               ))}
             </ul>

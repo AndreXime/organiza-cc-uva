@@ -1,22 +1,15 @@
-import Disciplinas from "@/disciplinas/disciplinas";
-import { DisciplinaSingle } from "@/lib/types";
 import { formatPeriodo } from "@/lib/utils";
 import Header from "../ui/header";
+import { useData } from "@/context/DataContext";
 
 export default function TabelaDisciplinas() {
-  // Criar mapa de id para disciplina
-  const mapaDisciplinas: Record<number, DisciplinaSingle> = {};
-  Object.values(Disciplinas)
-    .flat()
-    .forEach((disciplina) => {
-      mapaDisciplinas[disciplina.id] = disciplina;
-    });
+  const { TodasDisciplinas, DisciplinasPorPeriodo } = useData();
 
   return (
     <div className="mx-3 md:mx-10">
       <Header title="Tabela de Disciplinas" subtitles={"Todas as disciplinas registradas no momento"} />
 
-      {Object.entries(Disciplinas).map(([periodo, disciplinas]) => (
+      {Object.entries(DisciplinasPorPeriodo).map(([periodo, disciplinas]) => (
         <section key={periodo} className="mb-10">
           <h2 className="text-xl font-semibold mb-4 text-indigo-700 ml-1">{formatPeriodo(periodo)}</h2>
           <ul className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -31,7 +24,9 @@ export default function TabelaDisciplinas() {
                     <p>Depende de: </p>
                     <ul className="list-disc pl-5">
                       {disciplina.requisitos.map((req) => (
-                        <li key={req.id}>{mapaDisciplinas[req.id]?.nome || "Disciplina não encontrada"}</li>
+                        <li key={req.id}>
+                          {TodasDisciplinas.find((d) => d.id === req.id)?.nome || "Disciplina não encontrada"}
+                        </li>
                       ))}
                     </ul>
                   </span>

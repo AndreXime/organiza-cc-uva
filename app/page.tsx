@@ -32,7 +32,7 @@ export default function Home() {
         <Tabs />
       </nav>
 
-      <section>
+      <section className="pb-6">
         <ActiveTab />
       </section>
     </main>
