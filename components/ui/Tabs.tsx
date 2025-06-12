@@ -1,4 +1,4 @@
-import { useData } from "@/Context/DataContext";
+import { useData } from "@/context/DataContext";
 
 export default function Tabs() {
   const { Tab, setTab } = useData();
@@ -7,10 +7,11 @@ export default function Tabs() {
     { label: "Gerenciador Interativo", path: "gerenciador" },
     { label: "Organizador de horarios", path: "horario" },
     { label: "Disciplinas Registradas", path: "disciplinas" },
+    { label: "Sobre o projeto", path: "sobre" },
   ];
 
   return (
-    <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
       {botoes.map((tab) => (
         <button
           key={tab.path}

@@ -1,9 +1,10 @@
 "use client";
 
-import { useData } from "@/Context/DataContext";
+import { useData } from "@/context/DataContext";
 import Gerenciador from "@/components/core/Gerenciador";
 import HorarioManager from "@/components/core/HorarioManager";
-import TabelaDisciplinas from "@/components/core/Tabela";
+import Sobre from "@/components/core/SobreProjeto";
+import TabelaDisciplinas from "@/components/core/TabelaDisciplina";
 import Tabs from "@/components/ui/Tabs";
 
 export default function Home() {
@@ -17,12 +18,14 @@ export default function Home() {
         return <Gerenciador />;
       case "horario":
         return <HorarioManager />;
+      case "sobre":
+        return <Sobre />;
     }
   };
 
   return (
     <main className="bg-gray-50 min-h-screen">
-      <nav className="flex flex-col gap-6 justify-center items-center py-7 mb-6 bg-blue-500">
+      <nav className="flex flex-col gap-6 justify-center items-center py-7 px-2 mb-6 bg-blue-500">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-white">
           Disciplinas de Ciencias da Computação UVA
         </h1>
