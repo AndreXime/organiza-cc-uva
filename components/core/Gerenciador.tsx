@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useMemo } from "react";
 import Disciplinas from "@/disciplinas/disciplinas";
 import { DisciplinaSingle } from "@/lib/types";
-import { useData } from "../../Context/DataContext";
+import { useData } from "../../context/DataContext";
 import Header from "../ui/header";
 
 export default function GerenciadorInterativo() {
@@ -28,7 +27,7 @@ export default function GerenciadorInterativo() {
   return (
     <div className="px-6 max-w-5xl mx-auto">
       <Header
-        title="Gerenciador Interativo de Disciplinas"
+        title="Gerenciador Interativo"
         subtitles={[
           "Clique nas disciplinas disponiveis para marcar como concluida e na disciplina que você já fez para desmarcar",
           "Todas as disciplina que aparecem disponiveis é porque você tem requisitos suficiente para fazer",

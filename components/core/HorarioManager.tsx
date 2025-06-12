@@ -1,10 +1,9 @@
 "use client";
-import React, { useMemo } from "react";
-import Disciplinas from "../../disciplinas/disciplinas";
-import { useData } from "@/Context/DataContext";
+import { useMemo } from "react";
+import { useData } from "@/context/DataContext";
 import { Horario } from "@/lib/types";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import { getDay, startOfWeek as dateFnsStartOfWeek, parse, format, addDays } from "date-fns";
+import { getDay, startOfWeek, parse, format, addDays } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Header from "../ui/header";
@@ -14,7 +13,7 @@ const locales = { "pt-BR": ptBR };
 const localizer = dateFnsLocalizer({
   format,
   parse,
-  startOfWeek: (date: Date): Date => dateFnsStartOfWeek(date, { weekStartsOn: 1 }),
+  startOfWeek: (date: Date): Date => startOfWeek(date, { weekStartsOn: 1 }),
   getDay,
   locales,
 });
@@ -62,7 +61,7 @@ export default function HorarioManager() {
   return (
     <div className="px-4 pb-4">
       <Header
-        title="Organizador de horarios automatico"
+        title="Organizador de horarios"
         subtitles={
           "Na aba 'Gerenciador Interativo' marque a suas disciplinas já feitas, e as diciplinas disponiveis apareceram aqui automaticamente."
         }

@@ -16,7 +16,6 @@ type ContextData = {
 const DataContext = createContext<ContextData | undefined>(undefined);
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
-  // Estado das disciplinas que o usuário já fez (ids)
   const [DisciplinasFeitas, setDisciplinasFeitas] = useState<Set<number>>(new Set());
   const [Tab, setTab] = useState("gerenciador");
 
