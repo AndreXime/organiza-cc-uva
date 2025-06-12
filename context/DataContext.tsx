@@ -1,7 +1,7 @@
 "use client";
 import Disciplinas from "@/disciplinas/disciplinas";
 import { DisciplinaComPeriodo } from "@/lib/types";
-import { createContext, Dispatch, SetStateAction, useContext, useMemo, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useMemo, useState } from "react";
 
 type ContextData = {
   Tab: string;
@@ -18,6 +18,23 @@ const DataContext = createContext<ContextData | undefined>(undefined);
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const [DisciplinasFeitas, setDisciplinasFeitas] = useState<Set<number>>(new Set());
   const [Tab, setTab] = useState("gerenciador");
+
+  // Salva no navegador as disciplinas do usuario
+  useEffect(() => {
+    const salvas = localStorage.getItem("disciplinas");
+    if (salvas) {
+      try {
+        const ids: number[] = JSON.parse(salvas);
+        setDisciplinasFeitas(new Set(ids));
+      } catch (e) {
+        console.error("Erro ao carregar disciplinas feitas:", e);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("disciplinas", JSON.stringify([...DisciplinasFeitas]));
+  }, [DisciplinasFeitas]);
 
   const { TodasDisciplinas, DisciplinasPorPeriodo, DisciplinasDisponiveis } = useMemo(() => {
     const TodasDisciplinas: DisciplinaComPeriodo[] = [];
