@@ -1,62 +1,45 @@
 "use client";
 import { useMemo } from "react";
 import { useData } from "@/context/DataContext";
-import { Horario } from "@/lib/types";
-import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import { getDay, startOfWeek, parse, format, addDays } from "date-fns";
+import { CalendarEvent, DisciplinaComPeriodo } from "@/lib/types";
+import { Calendar } from "react-big-calendar";
+import { format, startOfWeek } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Header from "../ui/header";
+import { setHoursAndMinutes, getDateForWeekday, localizer, calendarMessages, weekdays } from "@/lib/CalendarHelper";
+import { formatPeriodo } from "@/lib/utils";
 
-// Configure date-fns localizer
-const locales = { "pt-BR": ptBR };
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek: (date: Date): Date => startOfWeek(date, { weekStartsOn: 1 }),
-  getDay,
-  locales,
-});
+function buildEvents(disciplinas: DisciplinaComPeriodo[]): CalendarEvent[] {
+  return disciplinas.flatMap((disc) =>
+    (disc.horarios || []).map((h) => {
+      const date = getDateForWeekday(weekdays[h.dia]);
+      const [sh, sm] = h.inicio.split(":").map(Number);
+      const [eh, em] = h.fim.split(":").map(Number);
+      return {
+        id: `${disc.id}-${h.dia}-${h.inicio}`,
+        title: disc.nome,
+        start: setHoursAndMinutes(date, sh, sm),
+        end: setHoursAndMinutes(date, eh, em),
+        subtitle: formatPeriodo(disc.periodo),
+      };
+    })
+  );
+}
 
-interface Event {
-  id: string;
-  title: string;
-  start: Date;
-  end: Date;
+function EventCard({ event }: { event: CalendarEvent }) {
+  return (
+    <div>
+      <div className="font-semibold text-sm">{event.title}</div>
+      {event.subtitle && <div className="text-sm">{event.subtitle}</div>}
+    </div>
+  );
 }
 
 export default function HorarioManager() {
   const { DisciplinasDisponiveis } = useData();
 
-  // Map disciplines to events
-  const events = useMemo<Event[]>(() => {
-    const ev: Event[] = [];
-    DisciplinasDisponiveis.forEach((disc) => {
-      if (!disc.horarios) return;
-      disc.horarios.forEach((h: Horario) => {
-        const weekdays: Record<string, number> = {
-          Segunda: 1,
-          Terça: 2,
-          Quarta: 3,
-          Quinta: 4,
-          Sexta: 5,
-        };
-        const today = new Date();
-        const weekdayIndex = weekdays[h.dia];
-        const todayIndex = getDay(today) || 7;
-        const diffDays = (weekdayIndex - todayIndex + 7) % 7;
-        const date = addDays(today, diffDays);
-        const [startH, startM] = h.inicio.split(":").map(Number);
-        const [endH, endM] = h.fim.split(":").map(Number);
-        const start = new Date(date);
-        start.setHours(startH, startM, 0, 0);
-        const end = new Date(date);
-        end.setHours(endH, endM, 0, 0);
-        ev.push({ id: `${disc.id}-${h.dia}-${h.inicio}`, title: disc.nome, start, end });
-      });
-    });
-    return ev;
-  }, [DisciplinasDisponiveis]);
+  const events = useMemo(() => buildEvents(DisciplinasDisponiveis), [DisciplinasDisponiveis]);
 
   return (
     <div className="px-4 pb-4">
@@ -69,7 +52,7 @@ export default function HorarioManager() {
       <div className="overflow-x-scroll">
         <Calendar
           className="text-black capitalize min-w-[1000px] "
-          defaultDate={new Date()}
+          defaultDate={startOfWeek(new Date(), { weekStartsOn: 1 })}
           localizer={localizer}
           defaultView="work_week"
           views={["work_week"]}
@@ -90,27 +73,14 @@ export default function HorarioManager() {
               `${format(start, "HH:mm", { locale: ptBR })} - ${format(end, "HH:mm", { locale: ptBR })}`,
           }}
           toolbar={false}
-          messages={{
-            allDay: "Dia inteiro",
-            previous: "Anterior",
-            next: "Próximo",
-            today: "Hoje",
-            month: "Mês",
-            week: "Semana",
-            day: "Dia",
-            agenda: "Agenda",
-            date: "Data",
-            time: "Hora",
-            event: "Evento",
-            noEventsInRange: "Não há eventos neste intervalo.",
-            showMore: (total) => `+ ver mais (${total})`,
-          }}
           components={{
+            event: EventCard,
             timeGutterHeader: () => <div className="py-1 text-xs font-semibold">Horário</div>,
           }}
+          messages={calendarMessages}
           dayLayoutAlgorithm="no-overlap"
           allDayAccessor={() => false}
-          showAllEvents={false}
+          showAllEvents={true}
         />
       </div>
     </div>
