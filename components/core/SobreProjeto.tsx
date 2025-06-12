@@ -36,7 +36,7 @@ export default function Sobre() {
           Se quiser sugerir alguma melhoria, você pode abrir uma <strong>issue</strong> ou um{" "}
           <strong>pull request</strong> no repositorio do GitHub abaixo.
         </p>
-        <Link href={"https://github.com/AndreXime/disciplinas"} className="flex justify-center">
+        <Link href={"https://github.com/AndreXime/organiza-cc-uva"} className="flex justify-center">
           <Image src={"/assets/github.svg"} alt="Github logo" height={70} width={70} />
         </Link>
       </div>
