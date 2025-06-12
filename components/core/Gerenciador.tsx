@@ -1,5 +1,6 @@
 "use client";
 
+import { formatPeriodo } from "@/lib/utils";
 import { useData } from "../../context/DataContext";
 import Header from "../ui/header";
 
@@ -23,33 +24,40 @@ export default function GerenciadorInterativo() {
         subtitles={[
           "Clique nas disciplinas disponiveis para marcar como concluida e na disciplina que você já fez para desmarcar",
           "Todas as disciplina que aparecem disponiveis é porque você tem requisitos suficiente para fazer",
+          "Toda alteração aqui vai ser salvo no navegador automaticamente",
         ]}
       />
 
-      <div className="flex flex-col md:flex-row justify-center gap-10">
+      <div className="flex flex-col md:flex-row justify-evenly gap-10">
         {/* Lista disciplinas feitas */}
-        <section className="overflow-scroll h-150 order-2 md:order-1">
+        <section className="overflow-scroll h-150 w-full md:w-1/2 order-2 md:order-1">
           <h2 className="text-xl font-semibold mb-4 text-green-700">Disciplinas que você já fez</h2>
           {DisciplinasFeitas.size === 0 ? (
             <p className="italic text-gray-500">Nenhuma disciplina selecionada.</p>
           ) : (
             <ul className="space-y-2">
-              {[...DisciplinasFeitas].map((id) => (
-                <li
-                  key={id}
-                  className="cursor-pointer rounded bg-green-100 text-green-800 px-4 py-2 shadow hover:bg-green-200 transition"
-                  onClick={() => toggleFeita(id)}
-                  title="Clique para desmarcar"
-                >
-                  {TodasDisciplinas.find((d) => d.id === id)?.nome || "Disciplina desconhecida"}{" "}
-                </li>
-              ))}
+              {[...DisciplinasFeitas].map((id) => {
+                const disciplina = TodasDisciplinas.find((d) => d.id === id);
+                return (
+                  <li
+                    key={id}
+                    className="cursor-pointer rounded bg-green-100 text-green-800 px-4 py-2 shadow hover:bg-green-200 transition flex justify-between"
+                    onClick={() => toggleFeita(id)}
+                    title="Clique para desmarcar"
+                  >
+                    {disciplina?.nome || "Disciplina desconhecida"}{" "}
+                    {disciplina && (
+                      <small className="text-gray-500 capitalize">{formatPeriodo(disciplina.periodo)}</small>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           )}
         </section>
 
         {/* Lista disciplinas disponíveis */}
-        <section className="overflow-scroll h-150 order-1 md:order-2">
+        <section className="overflow-scroll h-150 w-full md:w-1/2 order-1 md:order-2">
           <h2 className="text-xl font-semibold mb-4 text-indigo-700">Disciplinas disponíveis para fazer</h2>
           {DisciplinasDisponiveis.length === 0 ? (
             <p className="italic text-gray-500">Nenhuma disciplina disponível no momento.</p>
@@ -62,7 +70,8 @@ export default function GerenciadorInterativo() {
                   onClick={() => toggleFeita(disciplina.id)}
                   title="Clique para marcar como feita"
                 >
-                  {disciplina.nome} <small className="text-gray-500 capitalize">{disciplina.periodo}</small>
+                  {disciplina.nome}{" "}
+                  <small className="text-gray-500 capitalize">{formatPeriodo(disciplina.periodo)}</small>
                 </li>
               ))}
             </ul>

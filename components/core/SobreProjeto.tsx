@@ -4,9 +4,9 @@ import Link from "next/link";
 
 export default function Sobre() {
   return (
-    <div className="px-6">
+    <div className="px-6 flex flex-col justify-center items-center">
       <Header title="Sobre esse projeto" subtitles={[""]} />
-      <div className="text-lg text-gray-800 flex justify-center items-center gap-4 flex-col">
+      <div className="text-lg text-gray-800 max-w-[700px] flex gap-4 flex-col">
         <p>
           Este projeto foi desenvolvido por um estudante do próprio curso, utilizando <strong>Next.js</strong>,{" "}
           <strong>React</strong> e <strong>Tailwind CSS</strong>.
@@ -36,7 +36,7 @@ export default function Sobre() {
           Se quiser sugerir alguma melhoria, você pode abrir uma <strong>issue</strong> ou um{" "}
           <strong>pull request</strong> no repositorio do GitHub abaixo.
         </p>
-        <Link href={"https://github.com/AndreXime/disciplinas"}>
+        <Link href={"https://github.com/AndreXime/disciplinas"} className="flex justify-center">
           <Image src={"/assets/github.svg"} alt="Github logo" height={70} width={70} />
         </Link>
       </div>
