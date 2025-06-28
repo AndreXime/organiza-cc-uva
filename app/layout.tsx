@@ -1,23 +1,23 @@
-import type { Metadata } from "next";
-import { Geist } from "next/font/google";
-import "./globals.css";
-import { DataProvider } from "@/context/DataContext";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { DataProvider } from '@/context/DataContext';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const inter = Inter({
+    variable: '--font-inter',
+    subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "Disciplinas de Ciencias da Computação UVA",
+    title: 'Disciplinas de Ciencias da Computação UVA',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="pt-br">
-      <DataProvider>
-        <body className={`${geistSans.variable} antialiased`}>{children}</body>
-      </DataProvider>
-    </html>
-  );
+    return (
+        <html lang="pt-br">
+            <DataProvider>
+                <body className={`${inter.variable} antialiased`}>{children}</body>
+            </DataProvider>
+        </html>
+    );
 }

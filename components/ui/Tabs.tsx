@@ -5,26 +5,25 @@ export default function Tabs() {
 
     const botoes = [
         { label: 'Gerenciador Interativo', path: 'gerenciador' },
-        { label: 'Organizador de horarios', path: 'horario' },
+        { label: 'Organizador de Horários', path: 'horario' },
         { label: 'Tabela de Disciplinas', path: 'disciplinas' },
         { label: 'Sobre o projeto', path: 'sobre' },
     ];
 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {botoes.map((tab) => (
-                <button
-                    key={tab.path}
-                    onClick={() => setTab(tab.path)}
-                    className={`px-6 py-2 rounded-md font-bold transition ${
-                        Tab === tab.path
-                            ? 'bg-indigo-800 text-white shadow-lg'
-                            : 'bg-indigo-600 text-white hover:bg-indigo-800'
-                    }`}
-                >
-                    {tab.label}
-                </button>
-            ))}
-        </div>
+        <nav className="flex justify-center my-8 bg-white p-3 rounded-lg md:rounded-full shadow-sm">
+            <div className="grid grid-cols-2 md:grid-cols-4 flex-col md:flex-row justify-center gap-2">
+                {botoes.map((tab) => (
+                    <button
+                        key={tab.path}
+                        onClick={() => setTab(tab.path)}
+                        className={`px-4 py-2 text-sm font-semibold rounded-full  
+                    ${Tab === tab.path ? 'text-white bg-blue-600 shadow-md' : 'text-gray-600 hover:bg-gray-100'}`}
+                    >
+                        {tab.label}
+                    </button>
+                ))}
+            </div>
+        </nav>
     );
 }

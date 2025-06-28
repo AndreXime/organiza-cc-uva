@@ -24,17 +24,16 @@ export default function Home() {
     };
 
     return (
-        <main className="bg-gray-50 min-h-[110vh]">
-            <nav className="flex flex-col gap-6 justify-center items-center py-7 px-2 mb-6 bg-blue-500">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-white">
-                    Disciplinas de Ciencias da Computação UVA
-                </h1>
-                <Tabs />
-            </nav>
+        <main className="container mx-auto p-4 sm:p-6 md:p-8 py-12">
+            <header className="text-center">
+                <h1 className="text-3xl md:text-4xl font-bold text-blue-700">Disciplinas de Ciências da Computação</h1>
+                <p className="text-gray-500 mt-2">Um assistente para sua jornada acadêmica</p>
+            </header>
+            <Tabs />
 
-            <section className="pb-6">
+            <main>
                 <ActiveTab />
-            </section>
+            </main>
         </main>
     );
 }
