@@ -50,41 +50,45 @@ export default function HorarioManager() {
                     <span className="font-semibold text-blue-600">Gerenciador Interativo</span> para removê-las daqui.
                 </p>
             </header>
-            <div className="overflow-x-scroll">
-                <Calendar
-                    className="text-black capitalize min-w-[1000px]"
-                    defaultDate={startOfWeek(new Date(), { weekStartsOn: 1 })}
-                    localizer={localizer}
-                    defaultView="work_week"
-                    views={['work_week']}
-                    events={events}
-                    step={30}
-                    timeslots={1}
-                    scrollToTime={new Date(1970, 1, 1, 8, 0)}
-                    min={new Date(0, 0, 0, 8, 0)}
-                    max={new Date(0, 0, 0, 22, 0)}
-                    startAccessor="start"
-                    endAccessor="end"
-                    titleAccessor="title"
-                    dayPropGetter={() => ({ style: { backgroundColor: '#f9f9f9' } })}
-                    formats={{
-                        dayFormat: (date) => {
-                            const dayName = format(date, 'EEEE', { locale: ptBR });
-                            const dayNameCapitalize = dayName.charAt(0).toUpperCase() + dayName.slice(1);
-                            return dayNameCapitalize.split('-')[0];
-                        },
-                        timeGutterFormat: 'HH:mm',
-                        eventTimeRangeFormat: ({ start, end }) =>
-                            `${format(start, 'HH:mm', { locale: ptBR })} - ${format(end, 'HH:mm', { locale: ptBR })}`,
-                    }}
-                    toolbar={false}
-                    components={{
-                        event: EventCard,
-                        timeGutterHeader: () => <div className="py-1 text-xs font-semibold">Horário</div>,
-                    }}
-                    dayLayoutAlgorithm="no-overlap"
-                    allDayAccessor={() => false}
-                />
+            <div className="relative overflow-x-auto lg:overflow-visible">
+                <div className="relative w-[1400px] lg:w-[95vw] pb-6 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:max-w-[1800px]">
+                    <Calendar
+                        className="text-black capitalize w-full"
+                        defaultDate={startOfWeek(new Date(), { weekStartsOn: 1 })}
+                        localizer={localizer}
+                        defaultView="work_week"
+                        views={['work_week']}
+                        events={events}
+                        step={30}
+                        timeslots={1}
+                        scrollToTime={new Date(1970, 1, 1, 8, 0)}
+                        min={new Date(0, 0, 0, 8, 0)}
+                        max={new Date(0, 0, 0, 22, 0)}
+                        startAccessor="start"
+                        endAccessor="end"
+                        titleAccessor="title"
+                        dayPropGetter={() => ({ style: { backgroundColor: '#f9f9f9' } })}
+                        formats={{
+                            dayFormat: (date) => {
+                                const dayName = format(date, 'EEEE', { locale: ptBR });
+                                const dayNameCapitalize = dayName.charAt(0).toUpperCase() + dayName.slice(1);
+                                return dayNameCapitalize.split('-')[0];
+                            },
+                            timeGutterFormat: 'HH:mm',
+                            eventTimeRangeFormat: ({ start, end }) =>
+                                `${format(start, 'HH:mm', { locale: ptBR })} - ${format(end, 'HH:mm', {
+                                    locale: ptBR,
+                                })}`,
+                        }}
+                        toolbar={false}
+                        components={{
+                            event: EventCard,
+                            timeGutterHeader: () => <div className="py-1 text-xs font-semibold">Horário</div>,
+                        }}
+                        dayLayoutAlgorithm="no-overlap"
+                        allDayAccessor={() => false}
+                    />
+                </div>
             </div>
         </>
     );
