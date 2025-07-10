@@ -1,7 +1,9 @@
 import { Horario, Requisito } from './types';
-
+/**
+ * Recebe a key string do objeto da disciplina e devolve formartado
+ * Exemplo: "periodo1" -> "1° Periodo"
+ */
 export function formatPeriodo(periodo: string) {
-    // extrai o número da string, ex: "periodo1" -> "1"
     const numero = periodo.replace(/\D/g, '');
     return `${numero}° Período`;
 }

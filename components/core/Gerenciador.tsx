@@ -2,7 +2,6 @@
 
 import { formatPeriodo } from '@/lib/utils';
 import { useData } from '../../context/DataContext';
-import Header from '../ui/header';
 
 export default function GerenciadorInterativo() {
     const { DisciplinasFeitas, setDisciplinasFeitas, DisciplinasDisponiveis, TodasDisciplinas } = useData();

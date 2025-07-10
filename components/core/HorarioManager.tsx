@@ -6,14 +6,13 @@ import { Calendar } from 'react-big-calendar';
 import { format, startOfWeek } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import Header from '../ui/header';
-import { setHoursAndMinutes, getDateForWeekday, localizer, calendarMessages, weekdays } from '@/lib/CalendarHelper';
+import { setHoursAndMinutes, getDateForWeekday, localizer } from '@/lib/CalendarHelper';
 import { formatPeriodo } from '@/lib/utils';
 
 function buildEvents(disciplinas: DisciplinaComPeriodo[]): CalendarEvent[] {
     return disciplinas.flatMap((disc) =>
         (disc.horarios || []).map((h) => {
-            const date = getDateForWeekday(weekdays[h.dia]);
+            const date = getDateForWeekday(h.dia);
             const [sh, sm] = h.inicio.split(':').map(Number);
             const [eh, em] = h.fim.split(':').map(Number);
             return {
@@ -43,12 +42,14 @@ export default function HorarioManager() {
 
     return (
         <>
-            <Header
-                title="Organizador de horarios"
-                subtitles={
-                    ' A grade abaixo mostra os horários das disciplinas disponíveis para você cursar. Marque as disciplinas como concluídas na aba anterior para removê-las daqui. '
-                }
-            />
+            <header className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl">
+                <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Organizador de horarios</h2>
+                <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base">
+                    A grade abaixo mostra os horários das disciplinas disponíveis para você cursar. Marque as
+                    disciplinas como concluídas na aba{' '}
+                    <span className="font-semibold text-blue-600">Gerenciador Interativo</span> para removê-las daqui.
+                </p>
+            </header>
             <div className="overflow-x-scroll">
                 <Calendar
                     className="text-black capitalize min-w-[1000px]"
@@ -81,7 +82,6 @@ export default function HorarioManager() {
                         event: EventCard,
                         timeGutterHeader: () => <div className="py-1 text-xs font-semibold">Horário</div>,
                     }}
-                    messages={calendarMessages}
                     dayLayoutAlgorithm="no-overlap"
                     allDayAccessor={() => false}
                 />

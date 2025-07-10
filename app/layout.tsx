@@ -10,6 +10,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
     title: 'Disciplinas de Ciencias da Computação UVA',
+    description: 'Organize seu semestre rapidamente',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
