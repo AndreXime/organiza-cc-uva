@@ -11,7 +11,7 @@ export default function Sobre() {
         { title: 'Disponíveis para Cursar', value: DisciplinasDisponiveis.length, icon: '📚' },
         {
             title: 'Perto de Desbloquear',
-            value: DisciplinasDisponiveis[Math.floor(Math.random() * DisciplinasDisponiveis.length)].nome,
+            value: DisciplinasDisponiveis[Math.floor(Math.random() * DisciplinasDisponiveis.length)]?.nome || "Você concluiu todas as disciplinas!",
             icon: '🔑',
         },
     ];
