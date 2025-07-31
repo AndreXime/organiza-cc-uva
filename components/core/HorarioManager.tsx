@@ -1,15 +1,13 @@
 'use client';
 import { useMemo } from 'react';
 import { useData } from '@/context/DataContext';
-import { CalendarEvent, DisciplinaComPeriodo } from '@/lib/types';
 import { Calendar } from 'react-big-calendar';
 import { format, startOfWeek } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { setHoursAndMinutes, getDateForWeekday, localizer } from '@/lib/CalendarHelper';
-import { formatPeriodo } from '@/lib/utils';
 
-function buildEvents(disciplinas: DisciplinaComPeriodo[]): CalendarEvent[] {
+function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
     return disciplinas.flatMap((disc) =>
         (disc.horarios || []).map((h) => {
             const date = getDateForWeekday(h.dia);
@@ -20,7 +18,7 @@ function buildEvents(disciplinas: DisciplinaComPeriodo[]): CalendarEvent[] {
                 title: disc.nome,
                 start: setHoursAndMinutes(date, sh, sm),
                 end: setHoursAndMinutes(date, eh, em),
-                subtitle: formatPeriodo(disc.periodo),
+                subtitle: disc.periodo,
             };
         })
     );

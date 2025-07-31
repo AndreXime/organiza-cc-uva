@@ -1,7 +1,6 @@
 import { getDay, startOfWeek, parse, format, setDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import { dateFnsLocalizer } from 'react-big-calendar';
-import { Horario } from './types';
 
 const weekdays = {
     Segunda: 1,
@@ -10,6 +9,7 @@ const weekdays = {
     Quinta: 4,
     Sexta: 5,
 };
+
 function getDateForWeekday(targetWeekday: Horario['dia'], fromDate = new Date()): Date {
     const weekStart = startOfWeek(fromDate, { weekStartsOn: 1 });
     return setDay(weekStart, weekdays[targetWeekday], { weekStartsOn: 1 });

@@ -1,27 +1,22 @@
-export interface Horario {
+interface Horario {
     dia: 'Segunda' | 'Terça' | 'Quarta' | 'Quinta' | 'Sexta';
     inicio: string; // Exemplo: "08:00"
     fim: string; // Exemplo: "10:00"
 }
 
-export interface Requisito {
+interface Requisito {
     id: number;
 }
 
-export interface DisciplinaSingle {
+interface Disciplina {
     id: number;
     nome: string;
+    periodo: string;
     requisitos?: Requisito[];
     horarios?: Horario[];
 }
 
-export interface DisciplinasType {
-    [key: string]: DisciplinaSingle[];
-}
-
-export type DisciplinaComPeriodo = DisciplinaSingle & { periodo: string };
-
-export interface CalendarEvent {
+interface CalendarEvent {
     id: string;
     title: string;
     start: Date;

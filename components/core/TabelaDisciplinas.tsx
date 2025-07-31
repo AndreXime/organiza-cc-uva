@@ -1,5 +1,3 @@
-import { formatPeriodo } from '@/lib/utils';
-import Header from '../ui/header';
 import { useData } from '@/context/DataContext';
 import ProgressBar from '../ui/ProgressBar';
 
@@ -8,18 +6,18 @@ export default function TabelaDisciplinas() {
 
     return (
         <>
-            <Header
-                title="Tabela de Disciplinas"
-                subtitles={'Visualize a grade curricular completa e seu progresso no curso.'}
-            />
+            <header className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl">
+                <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Tabela de Disciplinas</h2>
+                <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base">
+                    <span>Visualize a grade curricular completa e seu progresso no curso.</span>
+                </p>
+            </header>
 
             <ProgressBar total={TodasDisciplinas.length} current={DisciplinasFeitas.size} />
 
             {Object.entries(DisciplinasPorPeriodo).map(([periodo, disciplinas]) => (
                 <section key={periodo} className="mb-8">
-                    <h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2">
-                        {formatPeriodo(periodo)}
-                    </h3>
+                    <h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2">{periodo}</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                         {disciplinas.map((disciplina) => {
                             const foiFeita = DisciplinasFeitas.has(disciplina.id);

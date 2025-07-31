@@ -1,22 +1,10 @@
 'use client';
-import Disciplinas from '@/disciplinas/disciplinas';
-import { DisciplinaComPeriodo } from '@/lib/types';
+import { ContextType } from '@/types/contextType';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 
-type ContextData = {
-    Tab: string;
-    setTab: Dispatch<SetStateAction<string>>;
-    DisciplinasFeitas: Set<number>;
-    setDisciplinasFeitas: Dispatch<SetStateAction<Set<number>>>;
-    DisciplinasDisponiveis: DisciplinaComPeriodo[];
-    TodasDisciplinas: DisciplinaComPeriodo[];
-    DisciplinasPorPeriodo: Record<string, DisciplinaComPeriodo[]>;
-};
+const DataContext = createContext<ContextType | undefined>(undefined);
 
-const DataContext = createContext<ContextData | undefined>(undefined);
-
-export function DataProvider({ children }: { children: React.ReactNode }) {
+export function DataProvider({ children, disciplinas }: { children: React.ReactNode; disciplinas: Disciplina[] }) {
     const [DisciplinasFeitas, setDisciplinasFeitas] = useState<Set<number>>(new Set());
     const [Tab, setTab] = useState('gerenciador');
 
@@ -40,14 +28,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
     // Todos os dados que os componentes irão precisar
     const { TodasDisciplinas, DisciplinasPorPeriodo, DisciplinasDisponiveis } = useMemo(() => {
-        const TodasDisciplinas: DisciplinaComPeriodo[] = [];
-        const DisciplinasPorPeriodo: Record<string, DisciplinaComPeriodo[]> = {};
+        const TodasDisciplinas = disciplinas;
 
-        for (const [periodo, lista] of Object.entries(Disciplinas)) {
-            const completas = lista.map((disc) => ({ ...disc, periodo }));
-            DisciplinasPorPeriodo[periodo] = completas;
-            TodasDisciplinas.push(...completas);
-        }
+        const DisciplinasPorPeriodo = TodasDisciplinas.reduce<Record<string, Disciplina[]>>((acc, disc) => {
+            if (!acc[disc.periodo]) acc[disc.periodo] = [];
+            acc[disc.periodo].push(disc);
+            return acc;
+        }, {});
 
         // Calcular as disciplinas que estão disponíveis pra fazer
         // Uma disciplina está disponível se:
@@ -79,7 +66,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     );
 }
 
-export function useData(): ContextData {
+export function useData() {
     const context = useContext(DataContext);
     if (!context) {
         throw new Error('Para consumir context é preciso usar contextProvider');

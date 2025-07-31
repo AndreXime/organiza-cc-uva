@@ -1,17 +1,42 @@
 'use client';
 
-import { formatPeriodo } from '@/lib/utils';
+import { useState } from 'react';
 import { useData } from '../../context/DataContext';
+import PopupComponent from '../ui/Popup';
 
 export default function GerenciadorInterativo() {
     const { DisciplinasFeitas, setDisciplinasFeitas, DisciplinasDisponiveis, TodasDisciplinas } = useData();
+    const [message, setMessage] = useState('');
+
+    function showMessage(message: string) {
+        setMessage(''); // força mudança
+        setTimeout(() => setMessage(message), 0); // próxima render
+        setTimeout(() => setMessage(''), 5000); // fecha depois
+    }
 
     // Função pra clicar e alternar se já fez ou não
     function toggleFeita(id: number) {
         setDisciplinasFeitas((prev) => {
             const nova = new Set(prev);
-            if (nova.has(id)) nova.delete(id);
-            else nova.add(id);
+
+            if (nova.has(id)) {
+                // Verifica se alguma disciplina feita depende da que está sendo desmarcada
+                const dependeDessa = TodasDisciplinas.some(
+                    (disc) => nova.has(disc.id) && disc.requisitos?.some((req) => req.id === id)
+                );
+
+                if (dependeDessa) {
+                    showMessage(
+                        'Você não pode desmarcar esta disciplina porque outra que depende dela já está marcada como feita.'
+                    );
+                    return prev;
+                }
+
+                nova.delete(id);
+            } else {
+                nova.add(id);
+            }
+
             return nova;
         });
     }
@@ -47,7 +72,7 @@ export default function GerenciadorInterativo() {
                                     >
                                         <p className="font-semibold text-sm md:text-base">{disciplina.nome}</p>
                                         <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap">
-                                            {formatPeriodo(disciplina.periodo)}
+                                            {disciplina.periodo}
                                         </span>
                                     </li>
                                 ))}
@@ -78,7 +103,7 @@ export default function GerenciadorInterativo() {
                                             >
                                                 <p className="font-semibold text-sm md:text-base">{disciplina.nome}</p>
                                                 <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap">
-                                                    {formatPeriodo(disciplina.periodo)}
+                                                    {disciplina.periodo}
                                                 </span>
                                             </li>
                                         );
@@ -89,6 +114,8 @@ export default function GerenciadorInterativo() {
                     </div>
                 </div>
             </div>
+
+            <PopupComponent message={message} />
         </>
     );
 }
