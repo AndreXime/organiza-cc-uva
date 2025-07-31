@@ -13,7 +13,10 @@ export default function TabelaDisciplinas() {
                 </p>
             </header>
 
-            <ProgressBar total={TodasDisciplinas.length} current={DisciplinasFeitas.size} />
+            <ProgressBar
+                total={TodasDisciplinas.filter((disc) => disc.periodo != 'Optativa').length}
+                current={DisciplinasFeitas.size}
+            />
 
             {Object.entries(DisciplinasPorPeriodo).map(([periodo, disciplinas]) => (
                 <section key={periodo} className="mb-8">

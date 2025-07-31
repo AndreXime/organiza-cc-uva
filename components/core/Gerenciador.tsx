@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useData } from '../../context/DataContext';
 import PopupComponent from '../ui/Popup';
 
@@ -8,10 +8,18 @@ export default function GerenciadorInterativo() {
     const { DisciplinasFeitas, setDisciplinasFeitas, DisciplinasDisponiveis, TodasDisciplinas } = useData();
     const [message, setMessage] = useState('');
 
+    useEffect(() => {
+        if (!message) return;
+
+        const timer = setTimeout(() => {
+            setMessage('');
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }, [message]);
+
     function showMessage(message: string) {
-        setMessage(''); // força mudança
-        setTimeout(() => setMessage(message), 0); // próxima render
-        setTimeout(() => setMessage(''), 5000); // fecha depois
+        setMessage(message);
     }
 
     // Função pra clicar e alternar se já fez ou não

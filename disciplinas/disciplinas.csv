@@ -15,7 +15,7 @@ id,nome,periodo,horarios,requisitos
 14,Estrutura de Dados,3° Período,Terça 14:00-17:30;Sexta 08:00-11:30,"8,9"
 15,Cálculo Numérico,3° Período,Quinta 14:00-17:30,"11,10,9"
 16,Física,3° Período,Terça 20:20-22:00;Quarta 18:30-22:00,
-17,Estatística Computacional,4° Período,Quarta 08:00-11:30,12
+17,Estatistica com Apoio Computacional ,4° Período,Quarta 08:00-11:30,12
 18,Banco de Dados I,4° Período,Terça 18:30-20:10;Quarta 18:30-22:00,14
 19,Algoritmos para Grafos,4° Período,Segunda 08:00-11:30,"6,14"
 20,Programação Orientada a Objetos,4° Período,Segunda 18:30-22:00;Quarta 15:50-18:20,14
@@ -36,3 +36,11 @@ id,nome,periodo,horarios,requisitos
 35,Administração de Sistemas e Serviços,8° Período,Terça 08:00-11:30,
 36,Laboratório de Desenvolvimento de Software,8° Período,Segunda 18:30-22:00,"25,29"
 37,Projeto de Conclusão de Curso TCC,8° Período,,"15,25,23,31,33"
+38,Tópicos Avançados em Banco de Dados,Optativa,Segunda 18:30-22:00, 25
+39,Matemática Comercial e Financeira,Optativa,Terça 14:00-17:30,
+40,Redes Neurais Artificiais,Optativa,Terça 14:00-17:30,"11,17"
+41,Metaheuristicas,Optativa,Quarta 08:00-11:30,23
+42,Estágio Supervisionado,Optativa,Quarta 14:00-17:30,
+43,Empreendedorismo,Optativa,Quarta 14:00-17:30,
+44,Introdução a Administração,Optativa,Quarta 18:30-22:00,
+45,Introdução às Telecomunicações,Optativa,Sexta 18:30-22:00,
