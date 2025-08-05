@@ -1,5 +1,5 @@
 'use client';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useData } from '@/context/DataContext';
 import { Calendar } from 'react-big-calendar';
 import { format, startOfWeek } from 'date-fns';
@@ -14,11 +14,12 @@ function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
             const [sh, sm] = h.inicio.split(':').map(Number);
             const [eh, em] = h.fim.split(':').map(Number);
             return {
-                id: `${disc.id}-${h.dia}-${h.inicio}`,
+                id: String(disc.id),
                 title: disc.nome,
                 start: setHoursAndMinutes(date, sh, sm),
                 end: setHoursAndMinutes(date, eh, em),
                 subtitle: disc.periodo,
+                selected: false,
             };
         })
     );
@@ -33,19 +34,64 @@ function EventCard({ event }: { event: CalendarEvent }) {
     );
 }
 
+function eventsOverlap(a: CalendarEvent, b: CalendarEvent) {
+    return a.start < b.end && b.start < a.end;
+}
+
 export default function HorarioManager() {
     const { DisciplinasDisponiveis } = useData();
+    const allEvents = useMemo(() => buildEvents(DisciplinasDisponiveis), [DisciplinasDisponiveis]);
 
-    const events = useMemo(() => buildEvents(DisciplinasDisponiveis), [DisciplinasDisponiveis]);
+    const [selectedDiscs, setSelectedDiscs] = useState<string[]>([]);
+    const [hideNonSelected, setHideNonSelected] = useState(false);
+
+    const toggleSelect = (discId: string) => {
+        setSelectedDiscs((prev) => (prev.includes(discId) ? prev.filter((x) => x !== discId) : [...prev, discId]));
+    };
+
+    // Disciplinas selecionadas ou que não colidem com nenhum selecionado
+    const visibleEvents = useMemo(() => {
+        if (!selectedDiscs.length) return allEvents;
+
+        const selectedEvents = allEvents.filter((ev) => selectedDiscs.includes(ev.id));
+
+        if (hideNonSelected) {
+            return selectedEvents;
+        }
+
+        // Não deve esconder se tiver selecionado ou não tiver nenhum conflito com os selecionados
+        const shouldHideEvent = (ev: CalendarEvent) => {
+            if (selectedDiscs.includes(ev.id)) return false;
+            const allEvFromDisc = allEvents.filter((e) => e.id === ev.id);
+            return allEvFromDisc.some((e) => selectedEvents.some((sel) => eventsOverlap(e, sel)));
+        };
+
+        return allEvents.filter((ev) => !shouldHideEvent(ev));
+    }, [allEvents, selectedDiscs, hideNonSelected]);
 
     return (
         <>
             <header className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl">
                 <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Organizador de horarios</h2>
-                <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base">
-                    A grade abaixo mostra os horários das disciplinas disponíveis para você cursar. Marque as
-                    disciplinas como concluídas na aba{' '}
-                    <span className="font-semibold text-blue-600">Gerenciador Interativo</span> para removê-las daqui.
+                <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base mb-4">
+                    A grade abaixo mostra os horários das disciplinas que estão disponíveis na aba{' '}
+                    <span className="font-semibold text-blue-600">Gerenciador de Disciplinas</span>. Você pode clicar
+                    nos cards para <span className="font-semibold text-[#7608c4]">marcar como selecionada</span> , isso
+                    fará ocultar disciplina que tenham conflito com ela, você pode usar isso para planejar as
+                    disciplinas com base nos horarios.
+                </p>
+                <p>
+                    <button
+                        onClick={() => setHideNonSelected(!hideNonSelected)}
+                        disabled={selectedDiscs.length === 0}
+                        className={
+                            'px-4 py-2 text-sm font-semibold rounded-full shadow-md text-white bg-blue-600 cursor-pointer disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'
+                        }
+                    >
+                        {hideNonSelected
+                            ? 'Clique para mostrar disciplinas não selecionadas'
+                            : 'Clique para esconder disciplinas não selecionadas'}
+                    </button>
                 </p>
             </header>
             <div className="relative overflow-x-auto lg:overflow-visible">
@@ -56,7 +102,19 @@ export default function HorarioManager() {
                         localizer={localizer}
                         defaultView="work_week"
                         views={['work_week']}
-                        events={events}
+                        events={visibleEvents}
+                        onSelectEvent={(event) => toggleSelect(event.id)}
+                        eventPropGetter={(event) => {
+                            const isSelected = selectedDiscs.includes(event.id);
+                            return {
+                                style: {
+                                    backgroundColor: isSelected ? '#6A0DAD' : undefined,
+                                    color: isSelected ? '#FFFFFF' : undefined,
+                                    border: '0',
+                                    borderWidth: 0,
+                                },
+                            };
+                        }}
                         step={30}
                         timeslots={1}
                         scrollToTime={new Date(1970, 1, 1, 8, 0)}
