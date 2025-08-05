@@ -1,17 +1,20 @@
 import Link from 'next/link';
 import { useData } from '@/context/DataContext';
-import React from 'react';
+import React, { useState } from 'react';
 import { SiTypescript, SiTailwindcss, SiNextdotjs, SiGithub } from 'react-icons/si';
+import DisciplinaTable from '../ui/DisciplinaTable';
 
 export default function Sobre() {
     const { DisciplinasDisponiveis, DisciplinasFeitas } = useData();
+
+    const [showTable, setShowTable] = useState(false);
 
     const stats = [
         { title: 'Disciplinas Concluídas', value: DisciplinasFeitas.size, icon: '✅' },
         { title: 'Disponíveis para Cursar', value: DisciplinasDisponiveis.length, icon: '📚' },
         {
-            title: 'Perto de Desbloquear',
-            value: DisciplinasDisponiveis[Math.floor(Math.random() * DisciplinasDisponiveis.length)]?.nome || "Você concluiu todas as disciplinas!",
+            title: 'Próxima Disciplina Disponível',
+            value: DisciplinasDisponiveis[0]?.nome || 'Você concluiu todas as disciplinas!',
             icon: '🔑',
         },
     ];
@@ -21,7 +24,7 @@ export default function Sobre() {
             <div className="text-center mb-10">
                 <h2 className="text-2xl md:text-3xl font-semibold text-blue-800">Sobre este Projeto</h2>
             </div>
-            <div className="max-w-4xl mx-auto space-y-12">
+            <div className="max-w-7xl mx-auto space-y-12">
                 <div>
                     <h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2">
                         Estatísticas do Progresso
@@ -46,7 +49,7 @@ export default function Sobre() {
                         A ideia surgiu da necessidade recorrente de montar uma tabela no Excel todo semestre para
                         verificar os conflitos de horário e os pré-requisitos das disciplinas. Este projeto visa
                         simplificar esse processo, oferecendo uma ferramenta interativa e visual para os estudantes de
-                        Ciências da Computação.
+                        Ciências da Computação da Universidade Estadual do Vale do Acaraú.
                     </p>
                     <p className="text-gray-600 leading-relaxed">
                         Os horários e requisitos das disciplinas foram retirados desses dois PDFs:{' '}
@@ -62,9 +65,22 @@ export default function Sobre() {
                             className="text-blue-600 hover:underline font-semibold"
                         >
                             Requisitos
-                        </Link>
-                        .
+                        </Link>{' '}
+                        e do sistema do proprio curso.
                     </p>
+                    <div className={`w-full flex justify-center items-center  ${showTable ? 'my-5' : 'mt-5'}`}>
+                        <button
+                            onClick={() => setShowTable(!showTable)}
+                            className={
+                                'px-4 py-2 text-sm font-semibold rounded-full shadow-md text-white bg-blue-600 cursor-pointer'
+                            }
+                        >
+                            {!showTable
+                                ? 'Clique para mostrar os dados sendo utilizados'
+                                : 'Clique para esconder a tabela'}
+                        </button>
+                    </div>
+                    {showTable && <DisciplinaTable />}
                 </div>
                 <div>
                     <h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2">

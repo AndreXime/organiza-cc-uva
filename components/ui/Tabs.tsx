@@ -4,7 +4,7 @@ export default function Tabs() {
     const { Tab, setTab } = useData();
 
     const botoes = [
-        { label: 'Gerenciador Interativo', path: 'gerenciador' },
+        { label: 'Gerenciador de Disciplinas', path: 'gerenciador' },
         { label: 'Organizador de Horários', path: 'horario' },
         { label: 'Tabela de Disciplinas', path: 'disciplinas' },
         { label: 'Sobre o projeto', path: 'sobre' },

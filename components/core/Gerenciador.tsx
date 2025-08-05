@@ -52,13 +52,16 @@ export default function GerenciadorInterativo() {
     return (
         <>
             <div className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl">
-                <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Gerenciador Interativo</h2>
+                <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Gerenciador de Disciplinas</h2>
                 <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base">
-                    Clique nas disciplinas em <span className="font-semibold text-blue-600">Disponíveis</span> para
-                    marcá-las como concluídas. Clique nas disciplinas concluidas para desmarcá-las.
+                    Clique nas disciplinas dentro da área de{' '}
+                    <span className="font-semibold text-blue-600">Disciplinas Disponíveis</span> para marcá-las como
+                    concluídas. Clique nas disciplinas dentro da área de{' '}
+                    <span className="font-semibold text-green-600">Disciplinas Concluídas</span> para desmarcá-las.
                     <br />
-                    As matérias só ficam disponíveis quando todos os seus pré-requisitos forem cumpridos. Suas
-                    alterações são salvas automaticamente!
+                    As disciplinas só aparecem como disponíveis quando todos os seus{' '}
+                    <span className="font-semibold text-red-600">pré-requisitos</span> estão cumpridos. <br />
+                    Suas alterações são salvas automaticamente!
                 </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
