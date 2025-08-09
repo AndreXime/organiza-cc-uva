@@ -1,11 +1,12 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useData } from '@/context/DataContext';
 import { Calendar } from 'react-big-calendar';
 import { format, startOfWeek } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { setHoursAndMinutes, getDateForWeekday, localizer } from '@/lib/CalendarHelper';
+import html2canvas from 'html2canvas-pro';
 
 function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
     return disciplinas.flatMap((disc) =>
@@ -29,7 +30,7 @@ function EventCard({ event }: { event: CalendarEvent }) {
     return (
         <div>
             <div className="font-semibold text-sm">{event.title}</div>
-            {event.subtitle && <div className="text-sm">{event.subtitle}</div>}
+            <div className="text-sm">{event.subtitle}</div>
         </div>
     );
 }
@@ -42,6 +43,7 @@ export default function HorarioManager() {
     const { DisciplinasDisponiveis } = useData();
     const allEvents = useMemo(() => buildEvents(DisciplinasDisponiveis), [DisciplinasDisponiveis]);
 
+    const calendarRef = useRef<HTMLDivElement>(null);
     const [selectedDiscs, setSelectedDiscs] = useState<string[]>([]);
     const [hideNonSelected, setHideNonSelected] = useState(false);
 
@@ -69,6 +71,24 @@ export default function HorarioManager() {
         return allEvents.filter((ev) => !shouldHideEvent(ev));
     }, [allEvents, selectedDiscs, hideNonSelected]);
 
+    const salvarImagem = async () => {
+        const calendarRefcurrent = calendarRef.current;
+        if (!calendarRefcurrent) return;
+
+        const canvas = await html2canvas(calendarRefcurrent, {
+            allowTaint: true,
+            useCORS: true,
+            scale: 2,
+        });
+
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'horarios.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <>
             <header className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl">
@@ -80,7 +100,7 @@ export default function HorarioManager() {
                     fará ocultar disciplina que tenham conflito com ela, você pode usar isso para planejar as
                     disciplinas com base nos horarios.
                 </p>
-                <p>
+                <p className="flex flex-wrap flex-row gap-4 items-center justify-center">
                     <button
                         onClick={() => setHideNonSelected(!hideNonSelected)}
                         disabled={selectedDiscs.length === 0}
@@ -89,13 +109,24 @@ export default function HorarioManager() {
                         }
                     >
                         {hideNonSelected
-                            ? 'Clique para mostrar disciplinas não selecionadas'
-                            : 'Clique para esconder disciplinas não selecionadas'}
+                            ? 'Mostrar disciplinas não selecionadas'
+                            : 'Esconder disciplinas não selecionadas'}
+                    </button>
+                    <button
+                        className={
+                            'px-4 py-2 text-sm font-semibold rounded-full shadow-md text-white bg-blue-600 cursor-pointer'
+                        }
+                        onClick={salvarImagem}
+                    >
+                        Salvar horarios como imagem
                     </button>
                 </p>
             </header>
             <div className="relative overflow-x-auto lg:overflow-visible">
-                <div className="relative w-[1400px] lg:w-[95vw] pb-6 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:max-w-[1800px]">
+                <div
+                    ref={calendarRef}
+                    className="relative w-[1400px] lg:w-[95vw] pb-6 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:max-w-[1800px]"
+                >
                     <Calendar
                         className="text-black capitalize w-full"
                         defaultDate={startOfWeek(new Date(), { weekStartsOn: 1 })}
