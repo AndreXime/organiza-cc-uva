@@ -1,15 +1,38 @@
 import { useData } from '@/context/DataContext';
 import ProgressBar from '../ui/ProgressBar';
+import { useMemo, useState } from 'react';
 
 export default function TabelaDisciplinas() {
     const { TodasDisciplinas, DisciplinasPorPeriodo, DisciplinasFeitas, DisciplinasDisponiveis } = useData();
+    const [mostrarFeitas, setMostrarFeitas] = useState(true);
+
+    const disciplinasVisiveis: Record<string, Disciplina[]> = useMemo(() => {
+        if (mostrarFeitas) return DisciplinasPorPeriodo;
+
+        return Object.fromEntries(
+            Object.entries(DisciplinasPorPeriodo).map(([periodo, disciplinas]) => [
+                periodo,
+                disciplinas.filter((disc) => !DisciplinasFeitas.has(disc.id)),
+            ])
+        );
+    }, [mostrarFeitas]);
 
     return (
         <>
             <header className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl">
                 <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Tabela de Disciplinas</h2>
-                <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base">
+                <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base mb-4">
                     <span>Visualize a grade curricular completa e seu progresso no curso.</span>
+                </p>
+                <p className="flex flex-wrap flex-row gap-4 items-center justify-center">
+                    <button
+                        onClick={() => setMostrarFeitas(!mostrarFeitas)}
+                        className={
+                            'px-4 py-2 text-sm font-semibold rounded-full shadow-md text-white bg-blue-600 cursor-pointer'
+                        }
+                    >
+                        {mostrarFeitas ? 'Esconder disciplinas já feitas' : 'Mostrar todas disciplinas'}
+                    </button>
                 </p>
             </header>
 
@@ -18,7 +41,7 @@ export default function TabelaDisciplinas() {
                 current={DisciplinasFeitas.size}
             />
 
-            {Object.entries(DisciplinasPorPeriodo).map(([periodo, disciplinas]) => (
+            {Object.entries(disciplinasVisiveis).map(([periodo, disciplinas]) => (
                 <section key={periodo} className="mb-8">
                     <h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2">{periodo}</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
