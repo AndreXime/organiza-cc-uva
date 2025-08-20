@@ -4,7 +4,6 @@ import { useData } from '@/context/DataContext';
 import Gerenciador from '@/components/core/Gerenciador';
 import HorarioManager from '@/components/core/HorarioManager';
 import Sobre from '@/components/core/SobreProjeto';
-import TabelaDisciplinas from '@/components/core/TabelaDisciplinas';
 import Tabs from '@/components/ui/Tabs';
 
 export default function Home() {
@@ -12,8 +11,6 @@ export default function Home() {
 
     const ActiveTab = () => {
         switch (Tab) {
-            case 'disciplinas':
-                return <TabelaDisciplinas />;
             case 'gerenciador':
                 return <Gerenciador />;
             case 'horario':

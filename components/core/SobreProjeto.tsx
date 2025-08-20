@@ -3,6 +3,7 @@ import { useData } from '@/context/DataContext';
 import React, { useState } from 'react';
 import { SiTypescript, SiTailwindcss, SiNextdotjs, SiGithub } from 'react-icons/si';
 import DisciplinaTable from '../ui/DisciplinaTable';
+import { ArrowRight, BadgeCheck, Eye, EyeOff, LibraryBig } from 'lucide-react';
 
 export default function Sobre() {
     const { DisciplinasDisponiveis, DisciplinasFeitas } = useData();
@@ -10,12 +11,20 @@ export default function Sobre() {
     const [showTable, setShowTable] = useState(false);
 
     const stats = [
-        { title: 'Disciplinas Concluídas', value: DisciplinasFeitas.size, icon: '✅' },
-        { title: 'Disponíveis para Cursar', value: DisciplinasDisponiveis.length, icon: '📚' },
+        {
+            title: 'Disciplinas Concluídas',
+            value: DisciplinasFeitas.size,
+            icon: <BadgeCheck size={33} color="green" />,
+        },
+        {
+            title: 'Disponíveis para Cursar',
+            value: DisciplinasDisponiveis.length,
+            icon: <LibraryBig size={33} color="blue" />,
+        },
         {
             title: 'Próxima Disciplina Disponível',
             value: DisciplinasDisponiveis[0]?.nome || 'Você concluiu todas as disciplinas!',
-            icon: '🔑',
+            icon: <ArrowRight size={33} color="#E12AFB" />,
         },
     ];
 
@@ -69,15 +78,17 @@ export default function Sobre() {
                         e do sistema do proprio curso.
                     </p>
                     <div className={`w-full flex justify-center items-center  ${showTable ? 'my-5' : 'mt-5'}`}>
-                        <button
-                            onClick={() => setShowTable(!showTable)}
-                            className={
-                                'px-4 py-2 text-sm font-semibold rounded-full shadow-md text-white bg-blue-600 cursor-pointer'
-                            }
-                        >
-                            {!showTable
-                                ? 'Clique para mostrar os dados sendo utilizados'
-                                : 'Clique para esconder a tabela'}
+                        <button onClick={() => setShowTable(!showTable)} className="btn-primary">
+                            {!showTable ? (
+                                <>
+                                    <Eye size={20} /> Clique para mostrar os dados sendo utilizados
+                                </>
+                            ) : (
+                                <>
+                                    <EyeOff size={20} />
+                                    Clique para esconder a tabela
+                                </>
+                            )}
                         </button>
                     </div>
                     {showTable && <DisciplinaTable />}

@@ -6,13 +6,12 @@ export default function Tabs() {
     const botoes = [
         { label: 'Gerenciador de Disciplinas', path: 'gerenciador' },
         { label: 'Organizador de Horários', path: 'horario' },
-        { label: 'Tabela de Disciplinas', path: 'disciplinas' },
         { label: 'Sobre o projeto', path: 'sobre' },
     ];
 
     return (
         <nav className="flex justify-center my-8 bg-white p-3 rounded-lg md:rounded-full shadow-sm">
-            <div className="grid grid-cols-2 md:grid-cols-4 flex-col md:flex-row justify-center gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-3 flex-col md:flex-row justify-center gap-2">
                 {botoes.map((tab) => (
                     <button
                         key={tab.path}

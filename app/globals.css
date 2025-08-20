@@ -15,24 +15,12 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Custom scrollbar para melhor aparência */
-::-webkit-scrollbar {
-    width: 8px;
+@utility btn-primary {
+    @apply px-4 py-2 text-sm font-semibold rounded-full shadow-md text-white bg-blue-600 cursor-pointer flex gap-2 items-center justify-center;
+    @apply disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed;
 }
 
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
+/* Desfazendo estilos do react-big-calendar */
 .rbc-allday-cell {
     display: none !important;
     min-height: unset;
@@ -47,6 +35,7 @@ body {
     display: none;
 }
 
+/* Popup de mensagem generico */
 .popup-message-error {
     color: white;
     padding: 0.75rem 1.25rem;

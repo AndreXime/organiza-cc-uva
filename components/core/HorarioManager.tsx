@@ -7,6 +7,7 @@ import { ptBR } from 'date-fns/locale/pt-BR';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { setHoursAndMinutes, getDateForWeekday, localizer } from '@/lib/CalendarHelper';
 import html2canvas from 'html2canvas-pro';
+import { Download, Eye, EyeOff } from 'lucide-react';
 
 function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
     return disciplinas.flatMap((disc) =>
@@ -104,21 +105,21 @@ export default function HorarioManager() {
                     <button
                         onClick={() => setHideNonSelected(!hideNonSelected)}
                         disabled={selectedDiscs.length === 0}
-                        className={
-                            'px-4 py-2 text-sm font-semibold rounded-full shadow-md text-white bg-blue-600 cursor-pointer disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'
-                        }
+                        className="btn-primary"
                     >
-                        {hideNonSelected
-                            ? 'Mostrar disciplinas não selecionadas'
-                            : 'Esconder disciplinas não selecionadas'}
+                        {hideNonSelected ? (
+                            <>
+                                <Eye size={20} /> Mostrar disciplinas não selecionadas
+                            </>
+                        ) : (
+                            <>
+                                <EyeOff size={20} />
+                                Esconder disciplinas não selecionadas
+                            </>
+                        )}
                     </button>
-                    <button
-                        className={
-                            'px-4 py-2 text-sm font-semibold rounded-full shadow-md text-white bg-blue-600 cursor-pointer'
-                        }
-                        onClick={salvarImagem}
-                    >
-                        Salvar horarios como imagem
+                    <button className="btn-primary" onClick={salvarImagem}>
+                        <Download size={20} /> Salvar horarios como imagem
                     </button>
                 </p>
             </header>
