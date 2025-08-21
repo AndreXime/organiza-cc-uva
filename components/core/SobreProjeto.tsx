@@ -3,7 +3,7 @@ import { useData } from '@/context/DataContext';
 import React, { useState } from 'react';
 import { SiTypescript, SiTailwindcss, SiNextdotjs, SiGithub } from 'react-icons/si';
 import DisciplinaTable from '../ui/DisciplinaTable';
-import { ArrowRight, BadgeCheck, Eye, EyeOff, LibraryBig } from 'lucide-react';
+import { Footprints, BadgeCheck, Eye, EyeOff, LibraryBig } from 'lucide-react';
 
 export default function Sobre() {
     const { DisciplinasDisponiveis, DisciplinasFeitas } = useData();
@@ -14,23 +14,26 @@ export default function Sobre() {
         {
             title: 'Disciplinas Concluídas',
             value: DisciplinasFeitas.size,
-            icon: <BadgeCheck size={33} color="green" />,
+            icon: BadgeCheck,
+            color: 'text-green-600',
         },
         {
             title: 'Disponíveis para Cursar',
             value: DisciplinasDisponiveis.length,
-            icon: <LibraryBig size={33} color="blue" />,
+            icon: LibraryBig,
+            color: 'text-blue-600',
         },
         {
             title: 'Próxima Disciplina Disponível',
             value: DisciplinasDisponiveis[0]?.nome || 'Você concluiu todas as disciplinas!',
-            icon: <ArrowRight size={33} color="#E12AFB" />,
+            icon: Footprints,
+            color: 'text-purple-600',
         },
     ];
 
     return (
         <>
-            <div className="text-center mb-10">
+            <div className="text-center mb-10 ">
                 <h2 className="text-2xl md:text-3xl font-semibold text-blue-800">Sobre este Projeto</h2>
             </div>
             <div className="max-w-7xl mx-auto space-y-12">
@@ -44,10 +47,12 @@ export default function Sobre() {
                                 key={stat.title}
                                 className="stat-card bg-white p-4 rounded-lg shadow-sm border flex items-center"
                             >
-                                <div className="text-3xl mr-4">{stat.icon}</div>
+                                <div className="text-3xl mr-4">
+                                    <stat.icon size={35} className={stat.color} />
+                                </div>
                                 <div>
                                     <h4 className="font-bold text-gray-500 text-sm">{stat.title}</h4>
-                                    <div className="text-xl font-semibold text-blue-800">{stat.value}</div>
+                                    <div className={'text-xl font-semibold ' + stat.color}>{stat.value}</div>
                                 </div>
                             </div>
                         ))}

@@ -1,7 +1,7 @@
-import { useData } from '@/context/DataContext';
+import { useUI } from '@/context/UIContext';
 
 export default function Tabs() {
-    const { Tab, setTab } = useData();
+    const { Tab, setTab } = useUI();
 
     const botoes = [
         { label: 'Gerenciador de Disciplinas', path: 'gerenciador' },
@@ -16,8 +16,9 @@ export default function Tabs() {
                     <button
                         key={tab.path}
                         onClick={() => setTab(tab.path)}
-                        className={`px-4 py-2 text-sm font-semibold rounded-full  
-                    ${Tab === tab.path ? 'text-white bg-blue-600 shadow-md' : 'text-gray-600 hover:bg-gray-100'}`}
+                        className={`px-4 py-2 text-sm font-semibold rounded-full
+                        ${tab.path === 'sobre' ? 'col-span-2 md:col-span-1' : ''} 
+                        ${Tab === tab.path ? 'text-white bg-blue-600 shadow-md' : 'text-gray-600 hover:bg-gray-100'}`}
                     >
                         {tab.label}
                     </button>

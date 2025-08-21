@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { useData } from '@/context/DataContext';
 import { Calendar } from 'react-big-calendar';
 import { format, startOfWeek } from 'date-fns';
@@ -8,6 +8,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { setHoursAndMinutes, getDateForWeekday, localizer } from '@/lib/CalendarHelper';
 import html2canvas from 'html2canvas-pro';
 import { Download, Eye, EyeOff } from 'lucide-react';
+import { useUI } from '@/context/UIContext';
 
 function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
     return disciplinas.flatMap((disc) =>
@@ -42,11 +43,10 @@ function eventsOverlap(a: CalendarEvent, b: CalendarEvent) {
 
 export default function HorarioManager() {
     const { DisciplinasDisponiveis } = useData();
+    const { setSelectedDiscs, selectedDiscs, hideNonSelected, setHideNonSelected } = useUI();
     const allEvents = useMemo(() => buildEvents(DisciplinasDisponiveis), [DisciplinasDisponiveis]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
-    const [selectedDiscs, setSelectedDiscs] = useState<string[]>([]);
-    const [hideNonSelected, setHideNonSelected] = useState(false);
 
     const toggleSelect = (discId: string) => {
         setSelectedDiscs((prev) => (prev.includes(discId) ? prev.filter((x) => x !== discId) : [...prev, discId]));

@@ -1,12 +1,17 @@
 'use client';
-import { ContextType } from '@/types/contextType';
+import { DataContextType } from '@/types/contextType';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-const DataContext = createContext<ContextType | undefined>(undefined);
+const DataContext = createContext<DataContextType | undefined>(undefined);
 
-export function DataProvider({ children, disciplinas }: { children: React.ReactNode; disciplinas: Disciplina[] }) {
+export function DataProvider({
+    children,
+    disciplinasServer,
+}: {
+    children: React.ReactNode;
+    disciplinasServer: Disciplina[];
+}) {
     const [DisciplinasFeitas, setDisciplinasFeitas] = useState<Set<number>>(new Set());
-    const [Tab, setTab] = useState('gerenciador');
 
     // Procura por disciplinas salvas no localStorage
     useEffect(() => {
@@ -28,7 +33,7 @@ export function DataProvider({ children, disciplinas }: { children: React.ReactN
 
     // Todos os dados que os componentes irão precisar
     const { TodasDisciplinas, DisciplinasPorPeriodo, DisciplinasDisponiveis } = useMemo(() => {
-        const TodasDisciplinas = disciplinas;
+        const TodasDisciplinas = disciplinasServer;
 
         const DisciplinasPorPeriodo = TodasDisciplinas.reduce<Record<string, Disciplina[]>>((acc, disc) => {
             if (!acc[disc.periodo]) acc[disc.periodo] = [];
@@ -52,8 +57,6 @@ export function DataProvider({ children, disciplinas }: { children: React.ReactN
     return (
         <DataContext.Provider
             value={{
-                Tab,
-                setTab,
                 DisciplinasFeitas,
                 setDisciplinasFeitas,
                 DisciplinasDisponiveis,

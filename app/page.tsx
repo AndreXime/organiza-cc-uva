@@ -1,13 +1,13 @@
 'use client';
 
-import { useData } from '@/context/DataContext';
 import Gerenciador from '@/components/core/Gerenciador';
 import HorarioManager from '@/components/core/HorarioManager';
 import Sobre from '@/components/core/SobreProjeto';
 import Tabs from '@/components/ui/Tabs';
+import { useUI } from '@/context/UIContext';
 
 export default function Home() {
-    const { Tab } = useData();
+    const { Tab } = useUI();
 
     const ActiveTab = () => {
         switch (Tab) {

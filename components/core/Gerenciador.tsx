@@ -5,13 +5,12 @@ import { useData } from '../../context/DataContext';
 import PopupComponent from '../ui/Popup';
 import ProgressBar from '../ui/ProgressBar';
 import { Eye, EyeOff, Maximize2, Minimize2 } from 'lucide-react';
+import { useUI } from '@/context/UIContext';
 
 export default function GerenciadorInterativo() {
     const { DisciplinasFeitas, setDisciplinasFeitas, DisciplinasDisponiveis, TodasDisciplinas, DisciplinasPorPeriodo } =
         useData();
-    const [message, setMessage] = useState('');
-    const [expandedMode, setExpandedMode] = useState(true);
-    const [mostrarFeitas, setMostrarFeitas] = useState(true);
+    const { message, setMessage, mostrarFeitas, setMostrarFeitas, expandedMode, setExpandedMode } = useUI();
 
     useEffect(() => {
         if (!message) return;
@@ -21,7 +20,7 @@ export default function GerenciadorInterativo() {
         }, 5000);
 
         return () => clearTimeout(timer);
-    }, [message]);
+    }, [message, setMessage]);
 
     // Função pra clicar e alternar se já fez ou não
     function toggleFeita(id: number) {
@@ -130,7 +129,7 @@ export default function GerenciadorInterativo() {
                                     const estaDisponivel = DisciplinasDisponiveis.find((d) => d.id === disciplina.id);
 
                                     let cardClasses =
-                                        'shadow rounded p-4 border border-gray-200 flex flex-col justify-between cursor-pointer ';
+                                        'text-left shadow rounded p-4 border border-gray-200 flex flex-col justify-between cursor-pointer disabled:cursor-not-allowed ';
                                     let titleClasses = 'font-semibold ';
 
                                     if (foiFeita) {
@@ -145,9 +144,10 @@ export default function GerenciadorInterativo() {
                                     }
 
                                     return (
-                                        <div
+                                        <button
                                             onClick={() => toggleFeita(disciplina.id)}
                                             key={disciplina.id}
+                                            disabled={!foiFeita && !estaDisponivel}
                                             className={cardClasses}
                                         >
                                             <strong className={titleClasses}>{disciplina.nome}</strong>
@@ -163,7 +163,7 @@ export default function GerenciadorInterativo() {
                                             ) : (
                                                 <p className="text-xs italic mt-2">Sem pré-requisitos</p>
                                             )}
-                                        </div>
+                                        </button>
                                     );
                                 })}
                             </div>
