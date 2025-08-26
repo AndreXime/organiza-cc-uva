@@ -9,14 +9,8 @@ function processCSV(): Disciplina[] {
     });
 
     return registros.map((row: any) => {
-        validarDisciplina(row);
-        const horarios = row.horarios
-            ? row.horarios.split(';').map((h: string) => {
-                  const [dia, intervalo] = h.trim().split(' ');
-                  const [inicio, fim] = intervalo.split('-');
-                  return { dia, inicio, fim };
-              })
-            : [];
+        validarDisciplina(row); // Throw error se invalido
+        const horarios = parseHorarios(row.horarios);
 
         const requisitos = row.requisitos ? row.requisitos.split(',').map((id: string) => ({ id: Number(id) })) : [];
 
@@ -32,35 +26,82 @@ function processCSV(): Disciplina[] {
     });
 }
 
+const horarios: Record<string, { inicio: string; fim: string }> = {
+    A: { inicio: '07:10', fim: '08:00' },
+    B: { inicio: '08:00', fim: '08:50' },
+    C: { inicio: '08:50', fim: '09:40' },
+    D: { inicio: '09:50', fim: '10:40' },
+    E: { inicio: '10:40', fim: '11:30' },
+    F: { inicio: '11:30', fim: '12:10' },
+    G: { inicio: '12:20', fim: '13:10' },
+    H: { inicio: '13:10', fim: '14:00' },
+    I: { inicio: '14:00', fim: '14:50' },
+    J: { inicio: '14:50', fim: '15:40' },
+    K: { inicio: '15:50', fim: '16:40' },
+    L: { inicio: '16:40', fim: '17:30' },
+    M: { inicio: '17:30', fim: '18:20' },
+    N: { inicio: '18:30', fim: '19:20' },
+    O: { inicio: '19:20', fim: '20:10' },
+    P: { inicio: '20:20', fim: '21:10' },
+    Q: { inicio: '21:10', fim: '22:00' },
+    R: { inicio: '22:00', fim: '22:50' },
+    S: { inicio: '22:50', fim: '23:40' },
+};
+
+const dias: Record<string, string> = {
+    '2': 'Segunda',
+    '3': 'Terça',
+    '4': 'Quarta',
+    '5': 'Quinta',
+    '6': 'Sexta',
+    '7': 'Sábado',
+};
+
+function parseHorarios(codigos: string) {
+    if (!codigos.trim()) return [];
+
+    return codigos
+        .split(/\s+/) // quebra por um ou mais espaços
+        .filter(Boolean)
+        .map((codigo) => {
+            const dia = dias[codigo[0]];
+            const blocos = codigo.slice(1).split('');
+            const primeiro = horarios[blocos[0]];
+            const ultimo = horarios[blocos[blocos.length - 1]];
+
+            return { dia, inicio: primeiro.inicio, fim: ultimo.fim } as Horario;
+        });
+}
+
 function validarDisciplina(row: any) {
     if (!row.id || isNaN(Number(row.id))) {
-        throw new Error(`Campo id inválido em:\n ${row}`);
+        throw new Error(`Campo id inválido em:\n ${JSON.stringify(row)}`);
     }
     if (!row.carga_horaria || isNaN(Number(row.carga_horaria))) {
-        throw new Error(`Campo carga_horaria inválido em:\n ${row}`);
+        throw new Error(`Campo carga_horaria inválido em:\n ${JSON.stringify(row)}`);
     }
     if (typeof row.nome !== 'string') {
-        throw new Error(`Campo nome inválido em:\n ${row}`);
+        throw new Error(`Campo nome inválido em:\n ${JSON.stringify(row)}`);
     }
     if (typeof row.periodo !== 'string') {
-        throw new Error(`Campo periodo inválido em:\n ${row}`);
+        throw new Error(`Campo periodo inválido em:\n ${JSON.stringify(row)}`);
     }
     if (typeof row.professor !== 'string') {
-        throw new Error(`Campo professor inválido em:\n ${row}`);
+        throw new Error(`Campo professor inválido em:\n ${JSON.stringify(row)}`);
+    }
+    if (row.requisitos && !row.requisitos.split(',').every((r: string) => !isNaN(Number(r)))) {
+        throw new Error(`Campo requisitos inválido em:\n ${JSON.stringify(row)}`);
     }
 
     if (
         row.horarios &&
         !row.horarios
-            .split(';')
-            .every((h: string) =>
-                /^(Segunda|Terça|Quarta|Quinta|Sexta|Sábado|Domingo) \d{2}:\d{2}-\d{2}:\d{2}$/.test(h.trim())
-            )
-    )
-        throw new Error(`Campo horario inválido em:\n ${row}`);
-
-    if (row.requisitos && !row.requisitos.split(',').every((r: string) => !isNaN(Number(r))))
-        throw new Error(`Campo requisitos inválido em:\n ${row}`);
+            .split(/\s+/) // quebra por um ou mais espaços
+            .filter(Boolean)
+            .every((h: string) => /^[2-7][A-S]+$/.test(h.trim()))
+    ) {
+        throw new Error(`Campo horarios inválido em:\n ${JSON.stringify(row)}`);
+    }
 }
 
 export default processCSV();
