@@ -26,6 +26,7 @@ function processCSV(): Disciplina[] {
     });
 }
 
+// Formato de horarios da faculdade
 const horarios: Record<string, { inicio: string; fim: string }> = {
     A: { inicio: '07:10', fim: '08:00' },
     B: { inicio: '08:00', fim: '08:50' },

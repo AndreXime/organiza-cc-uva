@@ -76,6 +76,14 @@ export default function HorarioManager() {
         return allEvents.filter((ev) => !shouldHideEvent(ev));
     }, [allEvents, selectedDiscs, hideNonSelected]);
 
+    // Soma total da carga horária das disciplinas selecionadas
+    const totalCargaHoraria = useMemo(() => {
+        return DisciplinasDisponiveis.filter((disc) => selectedDiscs.includes(String(disc.id))).reduce(
+            (sum, disc) => sum + disc.carga_horaria,
+            0
+        );
+    }, [DisciplinasDisponiveis, selectedDiscs]);
+
     const salvarImagem = async () => {
         const calendarRefcurrent = calendarRef.current;
         if (!calendarRefcurrent) return;
@@ -104,6 +112,9 @@ export default function HorarioManager() {
                     nos cards para <span className="font-semibold text-[#7608c4]">marcar como selecionada</span> , isso
                     fará ocultar disciplina que tenham conflito com ela, você pode usar isso para planejar as
                     disciplinas com base nos horarios.
+                </p>
+                <p className="text-gray-600 mx-auto text-sm md:text-base mb-4 font-semibold">
+                    Total de horas das disciplinas selecionadas: {totalCargaHoraria} horas
                 </p>
                 <p className="flex flex-wrap flex-row gap-4 items-center justify-center">
                     <button
