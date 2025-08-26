@@ -1,5 +1,5 @@
 'use client';
-import { DataContextType } from '@/types/contextType';
+import { DataContextType } from '@/context/contextType';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 const DataContext = createContext<DataContextType | undefined>(undefined);

@@ -14,6 +14,8 @@ interface Disciplina {
     periodo: string;
     requisitos?: Requisito[];
     horarios?: Horario[];
+    carga_horaria: number;
+    professor: string;
 }
 
 interface CalendarEvent {
@@ -21,5 +23,5 @@ interface CalendarEvent {
     title: string;
     start: Date;
     end: Date;
-    subtitle: string;
+    subtitle: string[];
 }

@@ -12,6 +12,8 @@ export default function DisciplinaTable() {
                         <th className="border px-2 py-1">Nome</th>
                         <th className="border px-2 py-1">Período</th>
                         <th className="border px-2 py-1">Horários</th>
+                        <th className="border px-2 py-1">Professor</th>
+                        <th className="border px-2 py-1">Carga Horaria</th>
                         <th className="border px-2 py-1">ID dos requisitos</th>
                     </tr>
                 </thead>
@@ -24,6 +26,8 @@ export default function DisciplinaTable() {
                             <td className="border px-2 py-1">
                                 {d.horarios ? d.horarios.map((h) => `${h.dia} ${h.inicio}-${h.fim}`).join('; ') : '–'}
                             </td>
+                            <td className="border px-2 py-1">{d.professor}</td>
+                            <td className="border px-2 py-1">{d.carga_horaria}</td>
                             <td className="border px-2 py-1">
                                 {d.requisitos ? d.requisitos.map((r) => r.id).join(', ') : '–'}
                             </td>

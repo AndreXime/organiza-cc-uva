@@ -151,6 +151,9 @@ export default function GerenciadorInterativo() {
                                             className={cardClasses}
                                         >
                                             <strong className={titleClasses}>{disciplina.nome}</strong>
+                                            <span className="text-xs mt-2 font-semibold">
+                                                {disciplina.professor} - {disciplina.carga_horaria} horas
+                                            </span>
                                             {disciplina.requisitos && disciplina.requisitos.length > 0 ? (
                                                 <ul className="list-disc list-inside mt-2 text-xs">
                                                     {disciplina.requisitos.map((req) => (

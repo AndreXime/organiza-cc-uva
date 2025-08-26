@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { DataProvider } from '@/context/DataContext';
-import Disciplinas from '@/disciplinas/csvToObject';
+import Disciplinas from '@/lib/csvToObject';
 import { UIProvider } from '@/context/UIContext';
 
 const inter = Inter({

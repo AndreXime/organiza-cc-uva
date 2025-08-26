@@ -21,7 +21,7 @@ function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
                 title: disc.nome,
                 start: setHoursAndMinutes(date, sh, sm),
                 end: setHoursAndMinutes(date, eh, em),
-                subtitle: disc.periodo,
+                subtitle: [disc.periodo, disc.professor],
                 selected: false,
             };
         })
@@ -32,7 +32,11 @@ function EventCard({ event }: { event: CalendarEvent }) {
     return (
         <div>
             <div className="font-semibold text-sm">{event.title}</div>
-            <div className="text-sm">{event.subtitle}</div>
+            <div className="text-sm">
+                {event.subtitle.map((sub, index) => (
+                    <p key={index}>{sub}</p>
+                ))}
+            </div>
         </div>
     );
 }
@@ -142,8 +146,6 @@ export default function HorarioManager() {
                                 style: {
                                     backgroundColor: isSelected ? '#6A0DAD' : undefined,
                                     color: isSelected ? '#FFFFFF' : undefined,
-                                    border: '0',
-                                    borderWidth: 0,
                                 },
                             };
                         }}
@@ -159,8 +161,8 @@ export default function HorarioManager() {
                         formats={{
                             dayFormat: (date) => {
                                 const dayName = format(date, 'EEEE', { locale: ptBR });
-                                const dayNameCapitalize = dayName.charAt(0).toUpperCase() + dayName.slice(1);
-                                return dayNameCapitalize.split('-')[0];
+                                // Tira o feira dos dias das semanas
+                                return (dayName.charAt(0).toUpperCase() + dayName.slice(1)).split('-')[0];
                             },
                             timeGutterFormat: 'HH:mm',
                             eventTimeRangeFormat: ({ start, end }) =>
