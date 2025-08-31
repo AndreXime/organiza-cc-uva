@@ -1,6 +1,6 @@
 'use client';
 import { UIContextType } from '@/context/contextType';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const UIContext = createContext<UIContextType | undefined>(undefined);
 
@@ -15,6 +15,27 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
     const [mostrarFeitas, setMostrarFeitas] = useState(true);
     // Abas
     const [Tab, setTab] = useState('gerenciador');
+
+    // Recupera e atualiza o estado com os discos salvos.
+    useEffect(() => {
+        try {
+            const savedDiscs = localStorage.getItem('selectedDiscs');
+            if (savedDiscs) {
+                setSelectedDiscs(JSON.parse(savedDiscs));
+            }
+        } catch (error) {
+            console.error("Falha ao carregar 'selectedDiscs' do localStorage.", error);
+        }
+    }, []);
+
+    // Salva selectedDiscs em qualquer alteração
+    useEffect(() => {
+        try {
+            localStorage.setItem('selectedDiscs', JSON.stringify(selectedDiscs));
+        } catch (error) {
+            console.error("Falha ao salvar 'selectedDiscs' no localStorage.", error);
+        }
+    }, [selectedDiscs]);
 
     return (
         <UIContext.Provider
