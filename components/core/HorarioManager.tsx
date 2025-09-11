@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useData } from '@/context/DataContext';
 import { Calendar } from 'react-big-calendar';
 import { format, startOfWeek } from 'date-fns';
@@ -48,6 +48,7 @@ function eventsOverlap(a: CalendarEvent, b: CalendarEvent) {
 export default function HorarioManager() {
     const { DisciplinasDisponiveis } = useData();
     const { setSelectedDiscs, selectedDiscs, hideNonSelected, setHideNonSelected } = useUI();
+    const [loading, setLoading] = useState(false);
     const allEvents = useMemo(() => buildEvents(DisciplinasDisponiveis), [DisciplinasDisponiveis]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
@@ -85,6 +86,7 @@ export default function HorarioManager() {
     }, [DisciplinasDisponiveis, selectedDiscs]);
 
     const salvarImagem = async () => {
+        setLoading(true);
         const calendarRefcurrent = calendarRef.current;
         if (!calendarRefcurrent) return;
 
@@ -100,6 +102,7 @@ export default function HorarioManager() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        setLoading(false);
     };
 
     return (
@@ -133,7 +136,7 @@ export default function HorarioManager() {
                             </>
                         )}
                     </button>
-                    <button className="btn-primary" onClick={salvarImagem}>
+                    <button disabled={loading} className="btn-primary" onClick={salvarImagem}>
                         <Download size={20} /> Salvar horarios como imagem
                     </button>
                 </p>

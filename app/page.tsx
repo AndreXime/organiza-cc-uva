@@ -21,10 +21,12 @@ export default function Home() {
     };
 
     return (
-        <main className="container mx-auto p-4 sm:p-6 md:p-8 py-12">
+        <main className="container mx-auto p-4 py-8">
             <header className="text-center">
-                <h1 className="text-3xl md:text-4xl font-bold text-blue-700">Disciplinas de Ciências da Computação</h1>
-                <p className="text-gray-500 mt-2">Organize seu semestre rapidamente</p>
+                <h1 className="text-3xl md:text-4xl font-bold text-blue-700">Gerenciador de Progresso Acadêmico </h1>
+                <p className="text-gray-500 mt-2">
+                    Para o curso de Ciência da Computação da Universidade Estadual do Vale do Acaraú
+                </p>
             </header>
             <Tabs />
 

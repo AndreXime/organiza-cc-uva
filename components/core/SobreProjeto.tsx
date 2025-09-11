@@ -1,30 +1,34 @@
 import Link from 'next/link';
 import { useData } from '@/context/DataContext';
-import React, { useState } from 'react';
+import React from 'react';
 import { SiTypescript, SiTailwindcss, SiNextdotjs, SiGithub } from 'react-icons/si';
 import DisciplinaTable from '../ui/DisciplinaTable';
-import { Footprints, BadgeCheck, Eye, EyeOff, LibraryBig } from 'lucide-react';
+import { Footprints, BadgeCheck, Eye, EyeOff, LibraryBig, Clock } from 'lucide-react';
 
 export default function Sobre() {
-    const { DisciplinasDisponiveis, DisciplinasFeitas } = useData();
-
-    const [showTable, setShowTable] = useState(false);
+    const { DisciplinasDisponiveis, DisciplinasFeitas, DisciplinasTotais } = useData();
 
     const stats = [
         {
-            title: 'Disciplinas Concluídas',
+            title: 'Disciplinas concluídas',
             value: DisciplinasFeitas.size,
             icon: BadgeCheck,
             color: 'text-green-600',
         },
         {
-            title: 'Disponíveis para Cursar',
+            title: 'Disciplinas disponíveis para cursar',
             value: DisciplinasDisponiveis.length,
             icon: LibraryBig,
             color: 'text-blue-600',
         },
         {
-            title: 'Próxima Disciplina Disponível',
+            title: 'Disciplinas para concluir todas',
+            value: DisciplinasTotais.length - DisciplinasFeitas.size,
+            icon: Clock,
+            color: 'text-orange-600',
+        },
+        {
+            title: 'Próxima disciplina disponível',
             value: DisciplinasDisponiveis[0]?.nome || 'Você concluiu todas as disciplinas!',
             icon: Footprints,
             color: 'text-purple-600',
@@ -33,15 +37,12 @@ export default function Sobre() {
 
     return (
         <>
-            <div className="text-center mb-10 ">
-                <h2 className="text-2xl md:text-3xl font-semibold text-blue-800">Sobre este Projeto</h2>
-            </div>
             <div className="max-w-7xl mx-auto space-y-12">
                 <div>
                     <h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2">
-                        Estatísticas do Progresso
+                        Estatísticas de progresso
                     </h3>
-                    <div id="stats-container" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div id="stats-container" className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {stats.map((stat) => (
                             <div
                                 key={stat.title}
@@ -58,45 +59,16 @@ export default function Sobre() {
                         ))}
                     </div>
                 </div>
+                <div>
+                    <DisciplinaTable />
+                </div>
                 <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <p className="text-gray-600 leading-relaxed mb-4">
+                    <p className="text-gray-600 leading-relaxed">
                         A ideia surgiu da necessidade recorrente de montar uma tabela no Excel todo semestre para
                         verificar os conflitos de horário e os pré-requisitos das disciplinas. Este projeto visa
                         simplificar esse processo, oferecendo uma ferramenta interativa e visual para os estudantes de
                         Ciências da Computação da Universidade Estadual do Vale do Acaraú.
                     </p>
-                    <p className="text-gray-600 leading-relaxed">
-                        Os horários e requisitos das disciplinas foram retirados desses dois PDFs:{' '}
-                        <Link
-                            href="/assets/Lotação das disciplinas por sala 2025.1.pdf"
-                            className="text-blue-600 hover:underline font-semibold"
-                        >
-                            Horários
-                        </Link>{' '}
-                        e{' '}
-                        <Link
-                            href="/assets/Fluxograma Disciplinas(Ciências da computação).pdf"
-                            className="text-blue-600 hover:underline font-semibold"
-                        >
-                            Requisitos
-                        </Link>{' '}
-                        e do sistema do proprio curso.
-                    </p>
-                    <div className={`w-full flex justify-center items-center  ${showTable ? 'my-5' : 'mt-5'}`}>
-                        <button onClick={() => setShowTable(!showTable)} className="btn-primary">
-                            {!showTable ? (
-                                <>
-                                    <Eye size={20} /> Clique para mostrar os dados sendo utilizados
-                                </>
-                            ) : (
-                                <>
-                                    <EyeOff size={20} />
-                                    Clique para esconder a tabela
-                                </>
-                            )}
-                        </button>
-                    </div>
-                    {showTable && <DisciplinaTable />}
                 </div>
                 <div>
                     <h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2">

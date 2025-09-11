@@ -4,7 +4,7 @@ export type DataContextType = {
     DisciplinasFeitas: Set<number>;
     setDisciplinasFeitas: Dispatch<SetStateAction<Set<number>>>;
     DisciplinasDisponiveis: Disciplina[];
-    TodasDisciplinas: Disciplina[];
+    DisciplinasTotais: Disciplina[];
     DisciplinasPorPeriodo: Record<string, Disciplina[]>;
 };
 

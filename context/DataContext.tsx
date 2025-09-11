@@ -32,10 +32,10 @@ export function DataProvider({
     }, [DisciplinasFeitas]);
 
     // Todos os dados que os componentes irão precisar
-    const { TodasDisciplinas, DisciplinasPorPeriodo, DisciplinasDisponiveis } = useMemo(() => {
-        const TodasDisciplinas = disciplinasServer;
+    const { DisciplinasTotais, DisciplinasPorPeriodo, DisciplinasDisponiveis } = useMemo(() => {
+        const DisciplinasTotais = disciplinasServer;
 
-        const DisciplinasPorPeriodo = TodasDisciplinas.reduce<Record<string, Disciplina[]>>((acc, disc) => {
+        const DisciplinasPorPeriodo = DisciplinasTotais.reduce<Record<string, Disciplina[]>>((acc, disc) => {
             if (!acc[disc.periodo]) acc[disc.periodo] = [];
             acc[disc.periodo].push(disc);
             return acc;
@@ -45,13 +45,13 @@ export function DataProvider({
         // Uma disciplina está disponível se:
         // - Não está marcada como feita
         // - Todos os seus requisitos (se tiver) estão dentro do conjunto feitas
-        const DisciplinasDisponiveis = TodasDisciplinas.filter((d) => {
+        const DisciplinasDisponiveis = DisciplinasTotais.filter((d) => {
             if (DisciplinasFeitas.has(d.id)) return false;
             if (!d.requisitos?.length) return true;
             return d.requisitos.every((req) => DisciplinasFeitas.has(req.id));
         });
 
-        return { TodasDisciplinas, DisciplinasPorPeriodo, DisciplinasDisponiveis };
+        return { DisciplinasTotais, DisciplinasPorPeriodo, DisciplinasDisponiveis };
     }, [DisciplinasFeitas]);
 
     return (
@@ -60,7 +60,7 @@ export function DataProvider({
                 DisciplinasFeitas,
                 setDisciplinasFeitas,
                 DisciplinasDisponiveis,
-                TodasDisciplinas,
+                DisciplinasTotais,
                 DisciplinasPorPeriodo,
             }}
         >
