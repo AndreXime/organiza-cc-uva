@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useData } from '../../context/DataContext';
-import PopupComponent from '../ui/Popup';
+import Popup from '../ui/Popup';
 import ProgressBar from '../ui/ProgressBar';
 import { Eye, EyeOff } from 'lucide-react';
 import { useUI } from '@/context/UIContext';
+import { getDisciplinasByIds } from '@/lib/utils';
 
 export default function GerenciadorInterativo() {
     const {
@@ -15,20 +16,12 @@ export default function GerenciadorInterativo() {
         DisciplinasTotais,
         DisciplinasPorPeriodo,
     } = useData();
-    const { message, setMessage, mostrarFeitas, setMostrarFeitas } = useUI();
-
-    useEffect(() => {
-        if (!message) return;
-
-        const timer = setTimeout(() => {
-            setMessage('');
-        }, 5000);
-
-        return () => clearTimeout(timer);
-    }, [message, setMessage]);
+    const { setMessage, mostrarFeitas, setMostrarFeitas } = useUI();
 
     // Função pra clicar e alternar se já fez ou não
     function toggleFeita(id: number) {
+        let mensagemErro: string | null = null;
+
         setDisciplinasFeitas((prev) => {
             const nova = new Set(prev);
 
@@ -39,9 +32,9 @@ export default function GerenciadorInterativo() {
                 );
 
                 if (dependeDessa) {
-                    setMessage(
-                        'Você não pode desmarcar esta disciplina porque outra que depende dela já está marcada como feita.'
-                    );
+                    mensagemErro =
+                        'Você não pode desmarcar esta disciplina porque outra que depende dela já está marcada como feita.';
+
                     return prev;
                 }
 
@@ -52,15 +45,39 @@ export default function GerenciadorInterativo() {
 
             return nova;
         });
+
+        // È preciso setar mensagem depois porque causa erro
+        if (mensagemErro) {
+            setMessage(mensagemErro);
+        }
     }
 
     const disciplinasVisiveis: Record<string, Disciplina[]> = useMemo(() => {
-        if (mostrarFeitas) return DisciplinasPorPeriodo;
+        if (mostrarFeitas) {
+            // Mostra as feitas mas ordernadas para mostrar as nao feitas primeiras
+            return Object.fromEntries(
+                Object.entries(DisciplinasPorPeriodo).map(([periodo, disciplinas]) => [
+                    periodo,
+                    getDisciplinasByIds(disciplinas)
+                        .slice()
+                        .sort((a, b) => {
+                            const aFeita = DisciplinasFeitas.has(a.id);
+                            const bFeita = DisciplinasFeitas.has(b.id);
 
+                            // Se a for feita (1) e b não (0), a-b = 1, então b vem antes.
+                            // Se b for feita (1) e a não (0), a-b = -1, então a vem antes.
+                            // Se ambas tiverem o mesmo status, a-b = 0, a ordem original se mantém.
+                            return Number(aFeita) - Number(bFeita);
+                        }),
+                ])
+            );
+        }
+
+        // Esconde todas as feitas
         return Object.fromEntries(
             Object.entries(DisciplinasPorPeriodo).map(([periodo, disciplinas]) => [
                 periodo,
-                disciplinas.filter((disc) => !DisciplinasFeitas.has(disc.id)),
+                getDisciplinasByIds(disciplinas).filter((disc) => !DisciplinasFeitas.has(disc.id)),
             ])
         );
     }, [mostrarFeitas, DisciplinasPorPeriodo, DisciplinasFeitas]);
@@ -110,7 +127,7 @@ export default function GerenciadorInterativo() {
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                         {disciplinas.map((disciplina) => {
                             const foiFeita = DisciplinasFeitas.has(disciplina.id);
-                            const estaDisponivel = DisciplinasDisponiveis.find((d) => d.id === disciplina.id);
+                            const estaDisponivel = DisciplinasDisponiveis.has(disciplina.id);
 
                             let cardClasses =
                                 'text-left shadow rounded p-4 border border-gray-200 flex flex-col justify-between cursor-pointer disabled:cursor-not-allowed ';
@@ -157,7 +174,7 @@ export default function GerenciadorInterativo() {
                 </section>
             ))}
 
-            <PopupComponent message={message} />
+            <Popup />
         </>
     );
 }

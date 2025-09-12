@@ -9,6 +9,7 @@ import { setHoursAndMinutes, getDateForWeekday, localizer } from '@/lib/Calendar
 import html2canvas from 'html2canvas-pro';
 import { Download, Eye, EyeOff } from 'lucide-react';
 import { useUI } from '@/context/UIContext';
+import { getDisciplinasByIds } from '@/lib/utils';
 
 function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
     return disciplinas.flatMap((disc) =>
@@ -49,7 +50,7 @@ export default function HorarioManager() {
     const { DisciplinasDisponiveis } = useData();
     const { setSelectedDiscs, selectedDiscs, hideNonSelected, setHideNonSelected } = useUI();
     const [loading, setLoading] = useState(false);
-    const allEvents = useMemo(() => buildEvents(DisciplinasDisponiveis), [DisciplinasDisponiveis]);
+    const allEvents = useMemo(() => buildEvents(getDisciplinasByIds(DisciplinasDisponiveis)), [DisciplinasDisponiveis]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -79,10 +80,9 @@ export default function HorarioManager() {
 
     // Soma total da carga horária das disciplinas selecionadas
     const totalCargaHoraria = useMemo(() => {
-        return DisciplinasDisponiveis.filter((disc) => selectedDiscs.includes(String(disc.id))).reduce(
-            (sum, disc) => sum + disc.carga_horaria,
-            0
-        );
+        return getDisciplinasByIds(DisciplinasDisponiveis)
+            .filter((disc) => selectedDiscs.includes(String(disc.id)))
+            .reduce((sum, disc) => sum + disc.carga_horaria, 0);
     }, [DisciplinasDisponiveis, selectedDiscs]);
 
     const salvarImagem = async () => {

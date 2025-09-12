@@ -1,16 +1,10 @@
 'use client';
-import { DataContextType } from '@/context/contextType';
+import { DataContextType, DataContextProps } from '@/context/contextType';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
-export function DataProvider({
-    children,
-    disciplinasServer,
-}: {
-    children: React.ReactNode;
-    disciplinasServer: Disciplina[];
-}) {
+export function DataProvider({ children, disciplinasServer }: DataContextProps) {
     const [DisciplinasFeitas, setDisciplinasFeitas] = useState<Set<number>>(new Set());
 
     // Procura por disciplinas salvas no localStorage
@@ -31,27 +25,31 @@ export function DataProvider({
         localStorage.setItem('disciplinas', JSON.stringify([...DisciplinasFeitas]));
     }, [DisciplinasFeitas]);
 
-    // Todos os dados que os componentes irão precisar
-    const { DisciplinasTotais, DisciplinasPorPeriodo, DisciplinasDisponiveis } = useMemo(() => {
+    // Calculado somente uma vez
+    const { DisciplinasTotais, DisciplinasPorPeriodo } = useMemo(() => {
         const DisciplinasTotais = disciplinasServer;
 
-        const DisciplinasPorPeriodo = DisciplinasTotais.reduce<Record<string, Disciplina[]>>((acc, disc) => {
-            if (!acc[disc.periodo]) acc[disc.periodo] = [];
-            acc[disc.periodo].push(disc);
+        const DisciplinasPorPeriodo = DisciplinasTotais.reduce<Record<string, Set<number>>>((acc, disc) => {
+            if (!acc[disc.periodo]) acc[disc.periodo] = new Set();
+            acc[disc.periodo].add(disc.id);
             return acc;
         }, {});
 
-        // Calcular as disciplinas que estão disponíveis pra fazer
+        return { DisciplinasTotais, DisciplinasPorPeriodo };
+    }, []);
+
+    // Recalculado toda vez que disciplinas feitas mudarem
+    const DisciplinasDisponiveis = useMemo(() => {
         // Uma disciplina está disponível se:
         // - Não está marcada como feita
         // - Todos os seus requisitos (se tiver) estão dentro do conjunto feitas
-        const DisciplinasDisponiveis = DisciplinasTotais.filter((d) => {
-            if (DisciplinasFeitas.has(d.id)) return false;
-            if (!d.requisitos?.length) return true;
-            return d.requisitos.every((req) => DisciplinasFeitas.has(req.id));
-        });
-
-        return { DisciplinasTotais, DisciplinasPorPeriodo, DisciplinasDisponiveis };
+        return new Set(
+            DisciplinasTotais.filter((d) => {
+                if (DisciplinasFeitas.has(d.id)) return false;
+                if (!d.requisitos?.length) return true;
+                return d.requisitos.every((req) => DisciplinasFeitas.has(req.id));
+            }).map((d) => d.id)
+        );
     }, [DisciplinasFeitas]);
 
     return (

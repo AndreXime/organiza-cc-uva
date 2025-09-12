@@ -1,11 +1,16 @@
 import type { Dispatch, SetStateAction } from 'react';
 
+export interface DataContextProps {
+    children: React.ReactNode;
+    disciplinasServer: Disciplina[];
+}
+
 export type DataContextType = {
     DisciplinasFeitas: Set<number>;
     setDisciplinasFeitas: Dispatch<SetStateAction<Set<number>>>;
-    DisciplinasDisponiveis: Disciplina[];
     DisciplinasTotais: Disciplina[];
-    DisciplinasPorPeriodo: Record<string, Disciplina[]>;
+    DisciplinasDisponiveis: Set<number>;
+    DisciplinasPorPeriodo: Record<string, Set<number>>;
 };
 
 export type UIContextType = {

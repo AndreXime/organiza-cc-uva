@@ -3,7 +3,8 @@ import { useData } from '@/context/DataContext';
 import React from 'react';
 import { SiTypescript, SiTailwindcss, SiNextdotjs, SiGithub } from 'react-icons/si';
 import DisciplinaTable from '../ui/DisciplinaTable';
-import { Footprints, BadgeCheck, Eye, EyeOff, LibraryBig, Clock } from 'lucide-react';
+import { Footprints, BadgeCheck, LibraryBig, Clock } from 'lucide-react';
+import { getDisciplinasByIds } from '@/lib/utils';
 
 export default function Sobre() {
     const { DisciplinasDisponiveis, DisciplinasFeitas, DisciplinasTotais } = useData();
@@ -17,7 +18,7 @@ export default function Sobre() {
         },
         {
             title: 'Disciplinas disponíveis para cursar',
-            value: DisciplinasDisponiveis.length,
+            value: DisciplinasDisponiveis.size,
             icon: LibraryBig,
             color: 'text-blue-600',
         },
@@ -29,7 +30,7 @@ export default function Sobre() {
         },
         {
             title: 'Próxima disciplina disponível',
-            value: DisciplinasDisponiveis[0]?.nome || 'Você concluiu todas as disciplinas!',
+            value: getDisciplinasByIds(DisciplinasDisponiveis)[0]?.nome || 'Você concluiu todas as disciplinas!',
             icon: Footprints,
             color: 'text-purple-600',
         },
