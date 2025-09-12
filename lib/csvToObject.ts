@@ -8,22 +8,26 @@ function processCSV(): Disciplina[] {
         skip_empty_lines: true,
     });
 
-    return registros.map((row: any) => {
-        validarDisciplina(row); // Throw error se invalido
-        const horarios = parseHorarios(row.horarios);
+    return registros
+        .map((row: any) => {
+            validarDisciplina(row); // Throw error se invalido
+            const horarios = parseHorarios(row.horarios);
 
-        const requisitos = row.requisitos ? row.requisitos.split(',').map((id: string) => ({ id: Number(id) })) : [];
+            const requisitos = row.requisitos
+                ? row.requisitos.split(',').map((id: string) => ({ id: Number(id) }))
+                : [];
 
-        return {
-            id: Number(row.id),
-            nome: row.nome,
-            periodo: row.periodo,
-            horarios: horarios.length ? horarios : undefined,
-            requisitos: requisitos.length ? requisitos : undefined,
-            carga_horaria: Number(row.carga_horaria),
-            professor: row.professor,
-        };
-    });
+            return {
+                id: Number(row.id),
+                nome: row.nome,
+                periodo: row.periodo,
+                horarios: horarios.length ? horarios : undefined,
+                requisitos: requisitos.length ? requisitos : undefined,
+                carga_horaria: Number(row.carga_horaria),
+                professor: row.professor,
+            };
+        })
+        .toSorted((a, b) => a.id - b.id);
 }
 
 // Formato de horarios da faculdade
