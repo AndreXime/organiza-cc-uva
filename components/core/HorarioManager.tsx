@@ -59,14 +59,13 @@ export default function HorarioManager() {
             return { visibleEvents: selectedEvents, totalCargaHoraria: cargaHoraria };
         }
 
-        // Não deve esconder se tiver selecionado ou não tiver nenhum conflito com os selecionados
         const eventosVisiveis = allEvents.filter((ev) => {
-            if (selectedDiscs.includes(ev.id)) return false;
-            const allEvFromDisc = allEvents.filter((e) => e.id === ev.id);
-            const hasConflit = allEvFromDisc.some((e) =>
-                selectedEvents.some((sel) => e.start < sel.end && e.start < sel.end)
-            );
-            return !hasConflit;
+            if (selectedDiscs.includes(ev.id)) {
+                return true; // Se está selecionado sempre manter
+            } else {
+                const hasConflict = selectedEvents.some((sel) => ev.start < sel.end && ev.end > sel.start);
+                return !hasConflict; // Manter apenas se não tiver conflito.
+            }
         });
 
         return { visibleEvents: eventosVisiveis, totalCargaHoraria: cargaHoraria };
