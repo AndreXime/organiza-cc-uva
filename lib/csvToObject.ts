@@ -79,25 +79,26 @@ function parseHorarios(codigos: string) {
 }
 
 function validarDisciplina(row: any) {
+    const erros: string[] = [];
+
     if (!row.id || isNaN(Number(row.id))) {
-        throw new Error(`Campo id inválido em:\n ${JSON.stringify(row)}`);
+        erros.push('Campo id inválido');
     }
     if (!row.carga_horaria || isNaN(Number(row.carga_horaria))) {
-        throw new Error(`Campo carga_horaria inválido em:\n ${JSON.stringify(row)}`);
+        erros.push('Campo carga_horaria inválido');
     }
     if (typeof row.nome !== 'string') {
-        throw new Error(`Campo nome inválido em:\n ${JSON.stringify(row)}`);
+        erros.push('Campo nome inválido');
     }
     if (typeof row.periodo !== 'string') {
-        throw new Error(`Campo periodo inválido em:\n ${JSON.stringify(row)}`);
+        erros.push('Campo periodo inválido');
     }
     if (typeof row.professor !== 'string') {
-        throw new Error(`Campo professor inválido em:\n ${JSON.stringify(row)}`);
+        erros.push('Campo professor inválido');
     }
     if (row.requisitos && !row.requisitos.split(',').every((r: string) => !isNaN(Number(r)))) {
-        throw new Error(`Campo requisitos inválido em:\n ${JSON.stringify(row)}`);
+        erros.push('Campo requisitos inválido');
     }
-
     if (
         row.horarios &&
         !row.horarios
@@ -105,7 +106,11 @@ function validarDisciplina(row: any) {
             .filter(Boolean)
             .every((h: string) => /^[2-7][A-S]+$/.test(h.trim()))
     ) {
-        throw new Error(`Campo horarios inválido em:\n ${JSON.stringify(row)}`);
+        erros.push('Campo horarios inválido');
+    }
+
+    if (erros.length > 0) {
+        throw new Error(erros.join('\n') + `\nEm: ${JSON.stringify(row)}`);
     }
 }
 

@@ -1,13 +1,15 @@
 import Link from 'next/link';
-import { useData } from '@/context/DataContext';
 import React from 'react';
 import { SiTypescript, SiTailwindcss, SiNextdotjs, SiGithub } from 'react-icons/si';
 import DisciplinaTable from '../ui/DisciplinaTable';
 import { Footprints, BadgeCheck, LibraryBig, Clock } from 'lucide-react';
-import { getDisciplinasByIds } from '@/lib/utils';
+import { useDisciplinaStore } from '@/store/dataStore';
 
 export default function Sobre() {
-    const { DisciplinasDisponiveis, DisciplinasFeitas, DisciplinasTotais } = useData();
+    const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
+    const DisciplinasFeitas = useDisciplinaStore((state) => state.DisciplinasFeitas);
+    const DisciplinasDisponiveis = useDisciplinaStore((state) => state.DisciplinasDisponiveis);
+    const getDisciplinasByIds = useDisciplinaStore((state) => state.getDisciplinasByIds);
 
     const stats = [
         {

@@ -1,13 +1,28 @@
 'use client';
-import { UIContextType } from '@/context/contextType';
 import { createContext, useContext, useEffect, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+
+export type UIContextType = {
+    Tab: string;
+    setTab: Dispatch<SetStateAction<string>>;
+    selectedDiscs: number[];
+    setSelectedDiscs: React.Dispatch<React.SetStateAction<number[]>>;
+    hideNonSelected: boolean;
+    setHideNonSelected: React.Dispatch<React.SetStateAction<boolean>>;
+    message: string;
+    setMessage: React.Dispatch<React.SetStateAction<string>>;
+    expandedMode: boolean;
+    setExpandedMode: React.Dispatch<React.SetStateAction<boolean>>;
+    mostrarFeitas: boolean;
+    setMostrarFeitas: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const UIContext = createContext<UIContextType | undefined>(undefined);
 
 // Contexto para persistir o estado da UI ao navegador entre as abas
 export function UIProvider({ children }: { children: React.ReactNode }) {
     // HorarioManager
-    const [selectedDiscs, setSelectedDiscs] = useState<string[]>([]);
+    const [selectedDiscs, setSelectedDiscs] = useState<number[]>([]);
     const [hideNonSelected, setHideNonSelected] = useState(false);
     // Gerenciador
     const [message, setMessage] = useState('');

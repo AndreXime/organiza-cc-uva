@@ -1,6 +1,5 @@
 'use client';
 import { useMemo, useRef, useState } from 'react';
-import { useData } from '@/context/DataContext';
 import { Calendar } from 'react-big-calendar';
 import { format, startOfWeek } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
@@ -9,7 +8,7 @@ import { setHoursAndMinutes, getDateForWeekday, localizer } from '@/lib/Calendar
 import html2canvas from 'html2canvas-pro';
 import { Download, Eye, EyeOff } from 'lucide-react';
 import { useUI } from '@/context/UIContext';
-import { getDisciplinasByIds } from '@/lib/utils';
+import { useDisciplinaStore } from '@/store/dataStore';
 
 function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
     return disciplinas.flatMap((disc) =>
@@ -18,7 +17,7 @@ function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
             const [sh, sm] = h.inicio.split(':').map(Number);
             const [eh, em] = h.fim.split(':').map(Number);
             return {
-                id: String(disc.id),
+                id: disc.id,
                 title: disc.nome,
                 start: setHoursAndMinutes(date, sh, sm),
                 end: setHoursAndMinutes(date, eh, em),
@@ -29,61 +28,49 @@ function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
     );
 }
 
-function EventCard({ event }: { event: CalendarEvent }) {
-    return (
-        <div>
-            <div className="font-semibold text-sm">{event.title}</div>
-            <div className="text-sm">
-                {event.subtitle.map((sub, index) => (
-                    <p key={index}>{sub}</p>
-                ))}
-            </div>
-        </div>
-    );
-}
-
-function eventsOverlap(a: CalendarEvent, b: CalendarEvent) {
-    return a.start < b.end && b.start < a.end;
-}
-
 export default function HorarioManager() {
-    const { DisciplinasDisponiveis } = useData();
+    const DisciplinasDisponiveis = useDisciplinaStore((state) => state.DisciplinasDisponiveis);
+    const getDisciplinasByIds = useDisciplinaStore((state) => state.getDisciplinasByIds);
+
     const { setSelectedDiscs, selectedDiscs, hideNonSelected, setHideNonSelected } = useUI();
     const [loading, setLoading] = useState(false);
-    const allEvents = useMemo(() => buildEvents(getDisciplinasByIds(DisciplinasDisponiveis)), [DisciplinasDisponiveis]);
+
+    const allEvents = useMemo(() => {
+        const disciplinas = getDisciplinasByIds(DisciplinasDisponiveis);
+        return buildEvents(disciplinas);
+    }, [DisciplinasDisponiveis]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
 
-    const toggleSelect = (discId: string) => {
+    const toggleSelect = (discId: number) => {
         setSelectedDiscs((prev) => (prev.includes(discId) ? prev.filter((x) => x !== discId) : [...prev, discId]));
     };
 
     // Disciplinas selecionadas ou que não colidem com nenhum selecionado
-    const visibleEvents = useMemo(() => {
-        if (!selectedDiscs.length) return allEvents;
+    const { visibleEvents, totalCargaHoraria } = useMemo(() => {
+        const cargaHoraria = getDisciplinasByIds(new Set(selectedDiscs)).reduce(
+            (sum, disc) => sum + disc.carga_horaria,
+            0
+        );
 
         const selectedEvents = allEvents.filter((ev) => selectedDiscs.includes(ev.id));
 
         if (hideNonSelected) {
-            return selectedEvents;
+            return { visibleEvents: selectedEvents, totalCargaHoraria: cargaHoraria };
         }
 
         // Não deve esconder se tiver selecionado ou não tiver nenhum conflito com os selecionados
-        const shouldHideEvent = (ev: CalendarEvent) => {
+        const eventosVisiveis = allEvents.filter((ev) => {
             if (selectedDiscs.includes(ev.id)) return false;
             const allEvFromDisc = allEvents.filter((e) => e.id === ev.id);
-            return allEvFromDisc.some((e) => selectedEvents.some((sel) => eventsOverlap(e, sel)));
-        };
+            const hasConflit = allEvFromDisc.some((e) =>
+                selectedEvents.some((sel) => e.start < sel.end && e.start < sel.end)
+            );
+            return !hasConflit;
+        });
 
-        return allEvents.filter((ev) => !shouldHideEvent(ev));
+        return { visibleEvents: eventosVisiveis, totalCargaHoraria: cargaHoraria };
     }, [allEvents, selectedDiscs, hideNonSelected]);
-
-    // Soma total da carga horária das disciplinas selecionadas
-    const totalCargaHoraria = useMemo(() => {
-        return getDisciplinasByIds(DisciplinasDisponiveis)
-            .filter((disc) => selectedDiscs.includes(String(disc.id)))
-            .reduce((sum, disc) => sum + disc.carga_horaria, 0);
-    }, [DisciplinasDisponiveis, selectedDiscs]);
 
     const salvarImagem = async () => {
         setLoading(true);
@@ -186,7 +173,18 @@ export default function HorarioManager() {
                         }}
                         toolbar={false}
                         components={{
-                            event: EventCard,
+                            event: ({ event }: { event: CalendarEvent }) => {
+                                return (
+                                    <div>
+                                        <div className="font-semibold text-sm">{event.title}</div>
+                                        <div className="text-sm">
+                                            {event.subtitle.map((sub, index) => (
+                                                <p key={index}>{sub}</p>
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            },
                             timeGutterHeader: () => <div className="py-1 text-xs font-semibold">Horário</div>,
                         }}
                         dayLayoutAlgorithm="no-overlap"

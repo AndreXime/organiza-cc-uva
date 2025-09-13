@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { DataProvider } from '@/context/DataContext';
-import Disciplinas from '@/lib/csvToObject';
+import DisciplinasServer from '@/lib/csvToObject';
 import { UIProvider } from '@/context/UIContext';
+import StoreInitializer from '@/store/StoreInitilizer';
 
 const inter = Inter({
     variable: '--font-inter',
@@ -11,18 +11,17 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-    title: 'Disciplinas de Ciencias da Computação UVA',
-    description: 'Organize seu semestre rapidamente',
+    title: 'Gerenciador de Progresso Acadêmico',
+    description: 'Para o curso de Ciência da Computação da Universidade Estadual do Vale do Acaraú',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="pt-br">
-            <DataProvider disciplinasServer={Disciplinas}>
-                <UIProvider>
-                    <body className={`${inter.variable} antialiased`}>{children}</body>
-                </UIProvider>
-            </DataProvider>
+            <UIProvider>
+                <StoreInitializer disciplinas={DisciplinasServer} />
+                <body className={`${inter.variable} antialiased`}>{children}</body>
+            </UIProvider>
         </html>
     );
 }

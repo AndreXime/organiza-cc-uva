@@ -1,8 +1,9 @@
-import { useData } from '@/context/DataContext';
+import { useDisciplinaStore } from '@/store/dataStore';
 import { useState } from 'react';
 
 export default function DisciplinaTable() {
-    const { DisciplinasTotais } = useData();
+    const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
+
     const [mostrarTudo, setMostrarTudo] = useState(false);
 
     const disciplinasVisiveis = mostrarTudo ? DisciplinasTotais : DisciplinasTotais.slice(0, 5);

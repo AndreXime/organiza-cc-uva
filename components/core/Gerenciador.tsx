@@ -1,83 +1,67 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useData } from '../../context/DataContext';
-import Popup from '../ui/Popup';
 import ProgressBar from '../ui/ProgressBar';
 import { Eye, EyeOff } from 'lucide-react';
 import { useUI } from '@/context/UIContext';
-import { getDisciplinasByIds } from '@/lib/utils';
+import { useDisciplinaStore } from '@/store/dataStore';
+import { SkeletonSection } from '../ui/LoadingSkeleton';
 
 export default function GerenciadorInterativo() {
-    const {
-        DisciplinasFeitas,
-        setDisciplinasFeitas,
-        DisciplinasDisponiveis,
-        DisciplinasTotais,
-        DisciplinasPorPeriodo,
-    } = useData();
+    const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
+    const DisciplinasFeitas = useDisciplinaStore((state) => state.DisciplinasFeitas);
+    const DisciplinasDisponiveis = useDisciplinaStore((state) => state.DisciplinasDisponiveis);
+    const DisciplinasPorPeriodo = useDisciplinaStore((state) => state.DisciplinasPorPeriodo);
+    const toggleDisciplina = useDisciplinaStore((state) => state.toggleDisciplina);
+    const getDisciplinasByIds = useDisciplinaStore((state) => state.getDisciplinasByIds);
+    const loading = useDisciplinaStore((state) => state.loading);
+
     const { setMessage, mostrarFeitas, setMostrarFeitas } = useUI();
 
     // Função pra clicar e alternar se já fez ou não
-    function toggleFeita(id: number) {
-        let mensagemErro: string | null = null;
+    function toggleDisc(id: number) {
+        const mensagemErro = toggleDisciplina(id);
 
-        setDisciplinasFeitas((prev) => {
-            const nova = new Set(prev);
-
-            if (nova.has(id)) {
-                // Verifica se alguma disciplina feita depende da que está sendo desmarcada
-                const dependeDessa = DisciplinasTotais.some(
-                    (disc) => nova.has(disc.id) && disc.requisitos?.some((req) => req.id === id)
-                );
-
-                if (dependeDessa) {
-                    mensagemErro =
-                        'Você não pode desmarcar esta disciplina porque outra que depende dela já está marcada como feita.';
-
-                    return prev;
-                }
-
-                nova.delete(id);
-            } else {
-                nova.add(id);
-            }
-
-            return nova;
-        });
-
-        // È preciso setar mensagem depois porque causa erro
         if (mensagemErro) {
             setMessage(mensagemErro);
         }
     }
 
     const disciplinasVisiveis: Record<string, Disciplina[]> = useMemo(() => {
+        // Função para calcular o peso para ordenação
+        const getSortWeight = (disciplina: Disciplina): number => {
+            const foiFeita = DisciplinasFeitas.has(disciplina.id);
+            const estaDisponivel = DisciplinasDisponiveis.has(disciplina.id);
+
+            if (foiFeita) {
+                return 2; // Feitas têm o maior peso, vão para o final
+            }
+            if (estaDisponivel) {
+                return 0; // Disponíveis têm o menor peso, vêm primeiro
+            }
+            return 1; // Bloqueadas ficam no meio
+        };
+
         if (mostrarFeitas) {
-            // Mostra as feitas mas ordernadas para mostrar as nao feitas primeiras
+            // Mostra todas as disciplinas com a ordem: Disponíveis > Bloqueadas > Feitas
             return Object.fromEntries(
                 Object.entries(DisciplinasPorPeriodo).map(([periodo, disciplinas]) => [
                     periodo,
                     getDisciplinasByIds(disciplinas)
                         .slice()
-                        .sort((a, b) => {
-                            const aFeita = DisciplinasFeitas.has(a.id);
-                            const bFeita = DisciplinasFeitas.has(b.id);
-
-                            // Se a for feita (1) e b não (0), a-b = 1, então b vem antes.
-                            // Se b for feita (1) e a não (0), a-b = -1, então a vem antes.
-                            // Se ambas tiverem o mesmo status, a-b = 0, a ordem original se mantém.
-                            return Number(aFeita) - Number(bFeita);
-                        }),
+                        .sort((a, b) => getSortWeight(a) - getSortWeight(b)),
                 ])
             );
         }
 
-        // Esconde todas as feitas
+        // Mostra com a ordem: Disponíveis > Bloqueadas
         return Object.fromEntries(
             Object.entries(DisciplinasPorPeriodo).map(([periodo, disciplinas]) => [
                 periodo,
-                getDisciplinasByIds(disciplinas).filter((disc) => !DisciplinasFeitas.has(disc.id)),
+                getDisciplinasByIds(disciplinas)
+                    .filter((disc) => !DisciplinasFeitas.has(disc.id))
+                    .sort((a, b) => getSortWeight(a) - getSortWeight(b)),
+                ,
             ])
         );
     }, [mostrarFeitas, DisciplinasPorPeriodo, DisciplinasFeitas]);
@@ -117,64 +101,71 @@ export default function GerenciadorInterativo() {
                     </p>
                 </div>
             </div>
+
             <ProgressBar
-                total={DisciplinasTotais.filter((disc) => disc.periodo != 'Optativa').length}
-                current={DisciplinasFeitas.size}
+                total={DisciplinasTotais.filter((disc) => disc.periodo != 'Optativa').length || 50}
+                current={DisciplinasFeitas.size || 0}
             />
-            {Object.entries(disciplinasVisiveis).map(([periodo, disciplinas]) => (
-                <section key={periodo} className="mb-8">
-                    <h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2">{periodo}</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                        {disciplinas.map((disciplina) => {
-                            const foiFeita = DisciplinasFeitas.has(disciplina.id);
-                            const estaDisponivel = DisciplinasDisponiveis.has(disciplina.id);
+            {!loading ? (
+                <>
+                    {Object.entries(disciplinasVisiveis).map(([periodo, disciplinas]) => (
+                        <section key={periodo} className="mb-8">
+                            <h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2">
+                                {periodo}
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                                {disciplinas.map((disciplina) => {
+                                    const foiFeita = DisciplinasFeitas.has(disciplina.id);
+                                    const estaDisponivel = DisciplinasDisponiveis.has(disciplina.id);
 
-                            let cardClasses =
-                                'text-left shadow rounded p-4 border border-gray-200 flex flex-col justify-between cursor-pointer disabled:cursor-not-allowed ';
-                            let titleClasses = 'font-semibold ';
+                                    let cardClasses =
+                                        'text-left shadow rounded p-4 border border-gray-200 flex flex-col justify-between cursor-pointer disabled:cursor-not-allowed ';
+                                    let titleClasses = 'font-semibold ';
 
-                            if (foiFeita) {
-                                cardClasses += 'bg-green-50';
-                                titleClasses += 'text-green-700';
-                            } else if (estaDisponivel) {
-                                cardClasses += 'bg-blue-50';
-                                titleClasses += 'text-blue-800';
-                            } else {
-                                cardClasses += 'bg-gray-100 text-gray-400';
-                                titleClasses += 'text-gray-500';
-                            }
+                                    if (foiFeita) {
+                                        cardClasses += 'bg-green-50';
+                                        titleClasses += 'text-green-700';
+                                    } else if (estaDisponivel) {
+                                        cardClasses += 'bg-blue-50';
+                                        titleClasses += 'text-blue-800';
+                                    } else {
+                                        cardClasses += 'bg-gray-100 text-gray-400';
+                                        titleClasses += 'text-gray-500';
+                                    }
 
-                            return (
-                                <button
-                                    onClick={() => toggleFeita(disciplina.id)}
-                                    key={disciplina.id}
-                                    disabled={!foiFeita && !estaDisponivel}
-                                    className={cardClasses}
-                                >
-                                    <strong className={titleClasses}>{disciplina.nome}</strong>
-                                    <span className="text-xs mt-2 font-semibold">
-                                        {disciplina.professor} - {disciplina.carga_horaria} horas
-                                    </span>
-                                    {disciplina.requisitos && disciplina.requisitos.length > 0 ? (
-                                        <ul className="list-disc list-inside mt-2 text-xs">
-                                            {disciplina.requisitos.map((req) => (
-                                                <li key={req.id}>
-                                                    {DisciplinasTotais.find((d) => d.id === req.id)?.nome ||
-                                                        'Disciplina não encontrada'}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    ) : (
-                                        <p className="text-xs italic mt-2">Sem pré-requisitos</p>
-                                    )}
-                                </button>
-                            );
-                        })}
-                    </div>
-                </section>
-            ))}
-
-            <Popup />
+                                    return (
+                                        <button
+                                            onClick={() => toggleDisc(disciplina.id)}
+                                            key={disciplina.id}
+                                            disabled={!foiFeita && !estaDisponivel}
+                                            className={cardClasses}
+                                        >
+                                            <strong className={titleClasses}>{disciplina.nome}</strong>
+                                            <span className="text-xs mt-2 font-semibold">
+                                                {disciplina.professor} - {disciplina.carga_horaria} horas
+                                            </span>
+                                            {disciplina.requisitos && disciplina.requisitos.length > 0 ? (
+                                                <ul className="list-disc list-inside mt-2 text-xs">
+                                                    {disciplina.requisitos.map((req) => (
+                                                        <li key={req.id}>
+                                                            {DisciplinasTotais.find((d) => d.id === req.id)?.nome ||
+                                                                'Disciplina não encontrada'}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            ) : (
+                                                <p className="text-xs italic mt-2">Sem pré-requisitos</p>
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </section>
+                    ))}
+                </>
+            ) : (
+                Array.from({ length: 6 }).map((_, i) => <SkeletonSection key={i} />)
+            )}
         </>
     );
 }

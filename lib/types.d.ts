@@ -19,7 +19,7 @@ interface Disciplina {
 }
 
 interface CalendarEvent {
-    id: string;
+    id: number;
     title: string;
     start: Date;
     end: Date;
