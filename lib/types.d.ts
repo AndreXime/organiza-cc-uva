@@ -18,6 +18,15 @@ interface Disciplina {
     professor: string;
 }
 
+interface Equivalente {
+    nome: string;
+    curso: string;
+    horarios?: Horario[];
+    equivaleId: number;
+    equivaleNome: string;
+    professor: string;
+}
+
 interface CalendarEvent {
     id: number;
     title: string;

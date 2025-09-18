@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import DisciplinasServer from '@/lib/csvToObject';
+import Disciplinas from '@/lib/csvToObject';
 import { UIProvider } from '@/context/UIContext';
 import StoreInitializer from '@/store/StoreInitilizer';
 
@@ -19,7 +19,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     return (
         <html lang="pt-br">
             <UIProvider>
-                <StoreInitializer disciplinas={DisciplinasServer} />
+                <StoreInitializer data={Disciplinas} />
                 <body className={`${inter.variable} antialiased`}>{children}</body>
             </UIProvider>
         </html>

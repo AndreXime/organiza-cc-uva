@@ -31,7 +31,7 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
     // Abas
     const [Tab, setTab] = useState('gerenciador');
 
-    // Recupera e atualiza o estado com os discos salvos.
+    // Recupera e atualiza o estado com as disciplinas selecionadas salvas.
     useEffect(() => {
         try {
             const savedDiscs = localStorage.getItem('selectedDiscs');

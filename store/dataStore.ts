@@ -1,17 +1,20 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { legacyStorageAdapter } from './storageAdapter';
+import { serverData } from './StoreInitilizer';
 
 export interface DisciplinaState {
     DisciplinasFeitas: Set<number>;
     DisciplinasTotais: Disciplina[];
+    DisciplinasEquivalentes: Equivalente[];
     DisciplinasPorPeriodo: Record<string, Set<number>>;
     DisciplinasDisponiveis: Set<number>;
     loading: boolean;
-    init: (disciplinasServer: Disciplina[]) => void;
+    init: (data: serverData) => void;
     recalculateDisponiveis: () => void;
     toggleDisciplina: (id: number) => string | undefined;
     getDisciplinasByIds: (ids: Set<number>) => Disciplina[];
+    getDisciplinaByName: (name: string) => Disciplina | undefined;
 }
 
 export const useDisciplinaStore = create<DisciplinaState>()(
@@ -22,6 +25,7 @@ export const useDisciplinaStore = create<DisciplinaState>()(
             DisciplinasTotais: [],
             DisciplinasPorPeriodo: {},
             DisciplinasDisponiveis: new Set(),
+            DisciplinasEquivalentes: [],
             loading: true,
 
             recalculateDisponiveis: () => {
@@ -75,16 +79,26 @@ export const useDisciplinaStore = create<DisciplinaState>()(
                 return DisciplinasTotais.filter((d) => ids.has(d.id));
             },
 
+            getDisciplinaByName: (name) => {
+                const { DisciplinasTotais } = get();
+
+                return DisciplinasTotais.find((d) => d.nome == name);
+            },
+
             // Ação para inicializar o estado com dados do servidor
-            init: (disciplinasServer) => {
-                const DisciplinasPorPeriodo = disciplinasServer.reduce<Record<string, Set<number>>>((acc, disc) => {
-                    if (!acc[disc.periodo]) acc[disc.periodo] = new Set();
-                    acc[disc.periodo].add(disc.id);
-                    return acc;
-                }, {});
+            init: (data) => {
+                const DisciplinasPorPeriodo = data.DisciplinasObrigatorias.reduce<Record<string, Set<number>>>(
+                    (acc, disc) => {
+                        if (!acc[disc.periodo]) acc[disc.periodo] = new Set();
+                        acc[disc.periodo].add(disc.id);
+                        return acc;
+                    },
+                    {}
+                );
 
                 set({
-                    DisciplinasTotais: disciplinasServer,
+                    DisciplinasTotais: data.DisciplinasObrigatorias,
+                    DisciplinasEquivalentes: data.DisciplinasEquivalentes,
                     DisciplinasPorPeriodo,
                 });
 

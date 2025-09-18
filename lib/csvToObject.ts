@@ -1,8 +1,8 @@
 import fs from 'fs';
 import { parse } from 'csv-parse/sync';
 
-function processCSV(): Disciplina[] {
-    const conteudo = fs.readFileSync('./lib/disciplinas.csv', 'utf-8');
+function processDisciplinas(): Disciplina[] {
+    const conteudo = fs.readFileSync('./lib/Disciplinas.csv', 'utf-8');
     const registros = parse(conteudo, {
         columns: true,
         skip_empty_lines: true,
@@ -28,6 +28,28 @@ function processCSV(): Disciplina[] {
             };
         })
         .toSorted((a, b) => a.id - b.id);
+}
+
+function processEquivalentes(Disciplinas: Disciplina[]): Equivalente[] {
+    const conteudo = fs.readFileSync('./lib/Equivalentes.csv', 'utf-8');
+    const registros = parse(conteudo, {
+        columns: true,
+        skip_empty_lines: true,
+    });
+
+    return registros.map((row: any) => {
+        const horarios = parseHorarios(row.Horario);
+        const originalId = searchDisciplinaId(row.Equivale, Disciplinas);
+
+        return {
+            nome: row.Nome,
+            curso: row.Curso,
+            horarios: horarios.length ? horarios : undefined,
+            equivaleId: originalId,
+            equivaleNome: row.Equivale,
+            professor: row.Professor,
+        };
+    });
 }
 
 // Formato de horarios da faculdade
@@ -114,4 +136,16 @@ function validarDisciplina(row: any) {
     }
 }
 
-export default processCSV();
+function searchDisciplinaId(name: string, Disciplina: Disciplina[]): number {
+    const DisciplinaEncontrada = Disciplina.find((disc) => disc.nome == name);
+    if (!DisciplinaEncontrada) {
+        throw new Error('Nenhuma disciplina com o nome: ' + name);
+    }
+    return DisciplinaEncontrada.id;
+}
+
+const DisciplinasObrigatorias = processDisciplinas();
+const DisciplinasEquivalentes = processEquivalentes(DisciplinasObrigatorias);
+
+export { DisciplinasObrigatorias, DisciplinasEquivalentes };
+export default { DisciplinasObrigatorias, DisciplinasEquivalentes };
