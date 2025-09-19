@@ -6,8 +6,10 @@ body {
     @apply bg-gray-50 text-gray-800;
 }
 
-.course-item {
+@utility course-item {
     transition: all 0.2s ease-in-out;
+    @apply text-left shadow rounded p-4 border border-gray-200 flex flex-col justify-between;
+    @apply cursor-pointer disabled:cursor-not-allowed;
 }
 
 .course-item:hover {
@@ -22,7 +24,7 @@ body {
 
 /* Desfazendo estilos do react-big-calendar */
 .rbc-allday-cell {
-    display: none !important;
+    display: none;
     min-height: unset;
 }
 .rbc-time-header-content .rbc-row .rbc-time-header-cell {

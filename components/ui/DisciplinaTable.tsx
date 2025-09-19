@@ -6,7 +6,7 @@ export default function DisciplinaTable() {
 
     const [mostrarTudo, setMostrarTudo] = useState(false);
 
-    const disciplinasVisiveis = mostrarTudo ? DisciplinasTotais : DisciplinasTotais.slice(0, 5);
+    const disciplinasVisiveis = mostrarTudo ? DisciplinasTotais : DisciplinasTotais.slice(0, 3);
 
     return (
         <>

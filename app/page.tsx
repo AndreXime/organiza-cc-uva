@@ -1,6 +1,7 @@
 'use client';
 
 import Equivalentes from '@/components/core/Equivalentes';
+import FiltroDisciplinas from '@/components/core/Filtrar';
 import Gerenciador from '@/components/core/Gerenciador';
 import HorarioManager from '@/components/core/HorarioManager';
 import Sobre from '@/components/core/SobreProjeto';
@@ -21,6 +22,8 @@ export default function Home() {
                 return <Sobre />;
             case 'equivalente':
                 return <Equivalentes />;
+            case 'filtro':
+                return <FiltroDisciplinas />;
         }
     };
 

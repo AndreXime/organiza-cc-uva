@@ -12,6 +12,9 @@ const inter = Inter({
 export const metadata: Metadata = {
     title: 'Gerenciador de Progresso Acadêmico',
     description: 'Para o curso de Ciência da Computação da Universidade Estadual do Vale do Acaraú',
+    icons: {
+        icon: '/favicon.ico',
+    },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

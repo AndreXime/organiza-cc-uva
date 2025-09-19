@@ -6,6 +6,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { SkeletonSection } from '../ui/LoadingSkeleton';
 import { useUIStore } from '@/store/ui/uiStore';
+import { generateDisciplinaClasses } from '@/lib/utils';
 
 export default function GerenciadorInterativo() {
     const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
@@ -117,29 +118,15 @@ export default function GerenciadorInterativo() {
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                                 {disciplinas.map((disciplina) => {
-                                    const foiFeita = DisciplinasFeitas.has(disciplina.id);
-                                    const estaDisponivel = DisciplinasDisponiveis.has(disciplina.id);
-
-                                    let cardClasses =
-                                        'text-left shadow rounded p-4 border border-gray-200 flex flex-col justify-between cursor-pointer disabled:cursor-not-allowed ';
-                                    let titleClasses = 'font-semibold ';
-
-                                    if (foiFeita) {
-                                        cardClasses += 'bg-green-50';
-                                        titleClasses += 'text-green-700';
-                                    } else if (estaDisponivel) {
-                                        cardClasses += 'bg-blue-50';
-                                        titleClasses += 'text-blue-800';
-                                    } else {
-                                        cardClasses += 'bg-gray-100 text-gray-400';
-                                        titleClasses += 'text-gray-500';
-                                    }
+                                    const { cardClasses, titleClasses, estáBloqueada } = generateDisciplinaClasses(
+                                        disciplina.id
+                                    );
 
                                     return (
                                         <button
                                             onClick={() => toggleDisc(disciplina.id)}
                                             key={disciplina.id}
-                                            disabled={!foiFeita && !estaDisponivel}
+                                            disabled={estáBloqueada}
                                             className={cardClasses}
                                         >
                                             <strong className={titleClasses}>{disciplina.nome}</strong>

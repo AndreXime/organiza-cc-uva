@@ -1,3 +1,4 @@
+import { generateDisciplinaClasses } from '@/lib/utils';
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { useMemo } from 'react';
 
@@ -58,23 +59,7 @@ export default function Equivalentes() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {DisciplinasVisiveis.map((grupo) => {
-                    const foiFeita = DisciplinasFeitas.has(grupo.disciplinas[0].equivaleId);
-                    const estaDisponivel = DisciplinasDisponiveis.has(grupo.disciplinas[0].equivaleId);
-
-                    let cardClasses =
-                        'text-left shadow rounded p-4 border border-gray-200 flex flex-col justify-between cursor-pointer disabled:cursor-not-allowed ';
-                    let titleClasses = 'font-semibold ';
-
-                    if (foiFeita) {
-                        cardClasses += 'bg-green-50';
-                        titleClasses += 'text-green-700';
-                    } else if (estaDisponivel) {
-                        cardClasses += 'bg-blue-50';
-                        titleClasses += 'text-blue-800';
-                    } else {
-                        cardClasses += 'bg-gray-100 text-gray-400';
-                        titleClasses += 'text-gray-500';
-                    }
+                    const { cardClasses, titleClasses } = generateDisciplinaClasses(grupo.disciplinas[0].equivaleId);
                     return (
                         <section key={grupo.equivaleNome} className={'mb-8 ' + cardClasses}>
                             <h3 className={'text-xl font-bold mb-4 border-b-2 border-gray-200 pb-2 ' + titleClasses}>

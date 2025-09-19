@@ -6,49 +6,49 @@ id,nome,periodo,horarios,requisitos,carga_horaria,professor
 3,Lógica Matemática,1° Período,3BCDE 4IJ,,80,Hudson Costa
 
 11,Álgebra Linear,2° Período,5NOPQ,,60,Francisco Raimundo
-10,Cálculo II,2° Período,3IJKL 4IJ,2,80,Rosangela Marques
-7,Circuitos Digitais,2° Período,4BCDE,3,60,Walisson Ferreira
+10,Cálculo II,2° Período,3IJKL 4IJ,2,80,Rosangela Marques
+7,Circuitos Digitais,2° Período,4BCDE,3,60,Walisson Ferreira
 9,Laboratório de Programação,2° Período,5IJKL,1,60,Paulo Regis
 8,Linguagens de Programação 1,2° Período,3BCDE,1,60,Jose Alex
 6,Matemática Discreta,2° Período,2DE 5BCDE,3,80,Hudson Costa
 
-13,Arquitetura de Computadores,3° Período,2ABCDEF,7,80,Walisson Ferreira
-15,Cálculo Numérico,3° Período,2IJKL,"11,10,9",60,Rosangela Marques
+13,Arquitetura de Computadores,3° Período,2ABCDEF,7,80,Walisson Ferreira
+15,Cálculo Numérico,3° Período,2IJKL,"11,10,9",60,Rosangela Marques
 14,Estrutura de Dados,3° Período,3IJKL 6BCDE,"8,9",100,Paulo Regis
-16,Física,3° Período,3PQ 4NOPQ,,80,Macario Caetano
-12,Introdução à Estatística,3° Período,2NOPQ,,60,Francisco Raimundo
+16,Física,3° Período,3PQ 4NOPQ,,80,Macario Caetano
+12,Introdução à Estatística,3° Período,2NOPQ,,60,Francisco Raimundo
 
 19,Algoritmos para Grafos,4° Período,2BCDE,"6,14",60,Jose Alex
-18,Banco de Dados I,4° Período,3NO 4NOPQ,14,80,Placido Marinho
+18,Banco de Dados I,4° Período,3NO 4NOPQ,14,80,Placido Marinho
 17,Estatistica com Apoio Computacional,4° Período,4BCDE,12,60,Paulo Regis
-22,Metodologia do Trabalho Científico,4° Período,2NOPQ,,60,Lourival Gerardo
-20,Programação Orientada a Objetos,4° Período,2NOPQ 4KLM,14,100,Placido Marinho
-21,Tecnologias da Informação,4° Período,3NOPQ,4,60,Marcio de Vasconcelos
+22,Metodologia do Trabalho Científico,4° Período,2NOPQ,,60,Lourival Gerardo
+20,Programação Orientada a Objetos,4° Período,2NOPQ 4KLM,14,100,Placido Marinho
+21,Tecnologias da Informação,4° Período,3NOPQ,4,60,Marcio de Vasconcelos
 
 25,Banco de Dados II,5° Período,3JK 4BCDE,"18,20",80,Lorena Pereira
-26,Computação Gráfica,5° Período,5BCDE,"20,11",60,Gilzamir Ferreira
+26,Computação Gráfica,5° Período,5BCDE,"20,11",60,Gilzamir Ferreira
 23,Construção e Análise de Algoritmos,5° Período,2NOPQ 4NOPQ,19,80,Claudio Soares
-24,Engenharia de Software,5° Período,2IJKL,18,60,Thales Damasceno
+24,Engenharia de Software,5° Período,2IJKL,18,60,Thales Damasceno
 
-29,Análise e Projeto de Sistemas,6° Período,6IJKL,24,60,Thales Damasceno
+29,Análise e Projeto de Sistemas,6° Período,6IJKL,24,60,Thales Damasceno
 27,Linguagens Formais e Automatos,6° Período,2IJKL 4IJKL,6,80,Claudio Soares
-30,Redes de Computadores,6° Período,3PQ 5NOPQ,"16,13",80,Lourival Gerardo
-28,Sistemas Operacionais,6° Período,2NOPQ 3NO,13,80,Walisson Ferreira
+30,Redes de Computadores,6° Período,3PQ 5NOPQ,"16,13",80,Lourival Gerardo
+28,Sistemas Operacionais,6° Período,2NOPQ 3NO,13,80,Walisson Ferreira
 
 32,Compiladores,7° Período,3LMNOPQ,"27,9",80,Eder Jacques
-34,Computação e Sociedade,7° Período,4BCDE,,60,Marcio de Vasconcelos
-31,Inteligência Artificial,7° Período,4IJK 5IJK,"3,8",80,Gilzamir Ferreira
-33,Sistemas Distribuídos,7° Período,4NOPQ,"28,30",60,Lourival Gerardo
+34,Computação e Sociedade,7° Período,4BCDE,,60,Marcio de Vasconcelos
+31,Inteligência Artificial,7° Período,4IJK 5IJK,"3,8",80,Gilzamir Ferreira
+33,Sistemas Distribuídos,7° Período,4NOPQ,"28,30",60,Lourival Gerardo
 
-35,Administração de Sistemas e Serviços,8° Período,3BCDE,,60,Marcio de Vasconcelos
-36,Laboratório de Desenvolvimento de Software,8° Período,2NOPQ,"25,29",60,Thales Damasceno
+35,Administração de Sistemas e Serviços,8° Período,3BCDE,,60,Marcio de Vasconcelos
+36,Laboratório de Desenvolvimento de Software,8° Período,2NOPQ,"25,29",60,Thales Damasceno
 37,Projeto de Conclusão de Curso TCC,8° Período,3FH 5FH,"15,25,23,31,33",60,Lorena Pereira
 
-43,Empreendedorismo,Optativa,3IJKL,,60,Raimundo Inacio
-42,Estágio Supervisionado,Optativa,4IJKL,,60,Thales Damasceno
-44,Introdução a Administração,Optativa,4NOPQ,,60,Marcio de Vasconcelos
+43,Empreendedorismo,Optativa,3IJKL,,60,Raimundo Inacio
+42,Estágio Supervisionado,Optativa,4IJKL,,60,Thales Damasceno
+44,Introdução a Administração,Optativa,4NOPQ,,60,Marcio de Vasconcelos
 46,Introducao a Ciencia de Dados,Optativa,3IJ 5IJ,,60,Hudson Costa
-45,Introdução às Telecomunicações,Optativa,3NOPQ,,60,Francisco Raimundo
+45,Introdução às Telecomunicações,Optativa,3NOPQ,,60,Francisco Raimundo
 39,Matemática Comercial e Financeira,Optativa,4IJKL,,60,Jose Hamilton
-41,Metaheuristicas,Optativa,4BCDE,23,60,Gilzamir Ferreira
+41,Metaheuristicas,Optativa,4BCDE,23,60,Gilzamir Ferreira
 38,Tópicos Avançados em Banco de Dados,Optativa,2NOPQ," 25",60,Lorena Pereira
