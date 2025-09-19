@@ -1,14 +1,15 @@
-import { useUI } from '@/context/UIContext';
+import { useUIStore } from '@/store/ui/uiStore';
+
+const botoes = [
+    { label: 'Gerenciador de Disciplinas', path: 'gerenciador' },
+    { label: 'Organizador de Horários', path: 'horario' },
+    { label: 'Disciplinas Equivalentes', path: 'equivalente' },
+    { label: 'Sobre o projeto', path: 'sobre' },
+];
 
 export default function Tabs() {
-    const { Tab, setTab } = useUI();
-
-    const botoes = [
-        { label: 'Gerenciador de Disciplinas', path: 'gerenciador' },
-        { label: 'Organizador de Horários', path: 'horario' },
-        { label: 'Disciplinas Equivalentes', path: 'equivalente' },
-        { label: 'Sobre o projeto', path: 'sobre' },
-    ];
+    const Tab = useUIStore((state) => state.Tab);
+    const setTab = useUIStore((state) => state.setTab);
 
     return (
         <nav className="flex justify-center my-8 bg-white p-3 rounded-lg md:rounded-full shadow-sm">

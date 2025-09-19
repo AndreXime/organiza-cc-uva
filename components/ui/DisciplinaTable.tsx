@@ -1,4 +1,4 @@
-import { useDisciplinaStore } from '@/store/dataStore';
+import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { useState } from 'react';
 
 export default function DisciplinaTable() {

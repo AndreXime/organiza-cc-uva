@@ -7,8 +7,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { setHoursAndMinutes, getDateForWeekday, localizer } from '@/lib/CalendarHelper';
 import html2canvas from 'html2canvas-pro';
 import { Download, Eye, EyeOff } from 'lucide-react';
-import { useUI } from '@/context/UIContext';
-import { useDisciplinaStore } from '@/store/dataStore';
+import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
+import { useUIStore } from '@/store/ui/uiStore';
 
 function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
     return disciplinas.flatMap((disc) =>
@@ -32,7 +32,11 @@ export default function HorarioManager() {
     const DisciplinasDisponiveis = useDisciplinaStore((state) => state.DisciplinasDisponiveis);
     const getDisciplinasByIds = useDisciplinaStore((state) => state.getDisciplinasByIds);
 
-    const { setSelectedDiscs, selectedDiscs, hideNonSelected, setHideNonSelected } = useUI();
+    const toggleSelectedDisc = useUIStore((state) => state.toggleSelectedDisc);
+    const selectedDiscs = useUIStore((state) => state.selectedDiscs);
+    const hideNonSelected = useUIStore((state) => state.hideNonSelected);
+    const setHideNonSelected = useUIStore((state) => state.setHideNonSelected);
+
     const [loading, setLoading] = useState(false);
 
     const allEvents = useMemo(() => {
@@ -41,10 +45,6 @@ export default function HorarioManager() {
     }, [DisciplinasDisponiveis]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
-
-    const toggleSelect = (discId: number) => {
-        setSelectedDiscs((prev) => (prev.includes(discId) ? prev.filter((x) => x !== discId) : [...prev, discId]));
-    };
 
     // Disciplinas selecionadas ou que não colidem com nenhum selecionado
     const { visibleEvents, totalCargaHoraria } = useMemo(() => {
@@ -139,7 +139,7 @@ export default function HorarioManager() {
                         defaultView="work_week"
                         views={['work_week']}
                         events={visibleEvents}
-                        onSelectEvent={(event) => toggleSelect(event.id)}
+                        onSelectEvent={(event) => toggleSelectedDisc(event.id)}
                         eventPropGetter={(event) => {
                             const isSelected = selectedDiscs.includes(event.id);
                             return {

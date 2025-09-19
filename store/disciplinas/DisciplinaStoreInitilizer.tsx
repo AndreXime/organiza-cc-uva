@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useDisciplinaStore } from './dataStore';
+import { useDisciplinaStore } from './disciplinaStore';
 
 export type serverData = { DisciplinasObrigatorias: Disciplina[]; DisciplinasEquivalentes: Equivalente[] };
 

@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Disciplinas from '@/lib/csvToObject';
-import { UIProvider } from '@/context/UIContext';
-import StoreInitializer from '@/store/StoreInitilizer';
+import StoreInitializer from '@/store/disciplinas/DisciplinaStoreInitilizer';
 
 const inter = Inter({
     variable: '--font-inter',
@@ -18,10 +17,8 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="pt-br">
-            <UIProvider>
-                <StoreInitializer data={Disciplinas} />
-                <body className={`${inter.variable} antialiased`}>{children}</body>
-            </UIProvider>
+            <StoreInitializer data={Disciplinas} />
+            <body className={`${inter.variable} antialiased`}>{children}</body>
         </html>
     );
 }

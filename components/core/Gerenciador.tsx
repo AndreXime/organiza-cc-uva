@@ -3,9 +3,9 @@
 import { useMemo } from 'react';
 import ProgressBar from '../ui/ProgressBar';
 import { Eye, EyeOff } from 'lucide-react';
-import { useUI } from '@/context/UIContext';
-import { useDisciplinaStore } from '@/store/dataStore';
+import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { SkeletonSection } from '../ui/LoadingSkeleton';
+import { useUIStore } from '@/store/ui/uiStore';
 
 export default function GerenciadorInterativo() {
     const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
@@ -16,7 +16,9 @@ export default function GerenciadorInterativo() {
     const getDisciplinasByIds = useDisciplinaStore((state) => state.getDisciplinasByIds);
     const loading = useDisciplinaStore((state) => state.loading);
 
-    const { setMessage, mostrarFeitas, setMostrarFeitas } = useUI();
+    const mostrarFeitas = useUIStore((state) => state.mostrarFeitas);
+    const setMostrarFeitas = useUIStore((state) => state.setMostrarFeitas);
+    const setMessage = useUIStore((state) => state.setMessage);
 
     // Função pra clicar e alternar se já fez ou não
     function toggleDisc(id: number) {

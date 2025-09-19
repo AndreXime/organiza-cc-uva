@@ -1,5 +1,5 @@
 import { PersistStorage } from 'zustand/middleware';
-import { DisciplinaState } from './dataStore';
+import { DisciplinaState } from './disciplinaStore';
 
 /**
  * A versão anterior do site armazenava os IDs de forma plana e o zustand espera de outra forma

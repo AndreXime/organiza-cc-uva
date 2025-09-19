@@ -6,10 +6,10 @@ import HorarioManager from '@/components/core/HorarioManager';
 import Sobre from '@/components/core/SobreProjeto';
 import Popup from '@/components/ui/Popup';
 import Tabs from '@/components/ui/Tabs';
-import { useUI } from '@/context/UIContext';
+import { useUIStore } from '@/store/ui/uiStore';
 
 export default function Home() {
-    const { Tab } = useUI();
+    const Tab = useUIStore((state) => state.Tab);
 
     const ActiveTab = () => {
         switch (Tab) {

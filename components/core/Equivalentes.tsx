@@ -1,4 +1,4 @@
-import { useDisciplinaStore } from '@/store/dataStore';
+import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { useMemo } from 'react';
 
 export default function Equivalentes() {

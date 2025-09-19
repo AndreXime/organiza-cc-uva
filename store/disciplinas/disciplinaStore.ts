@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { legacyStorageAdapter } from './storageAdapter';
-import { serverData } from './StoreInitilizer';
+import { serverData } from './DisciplinaStoreInitilizer';
 
 export interface DisciplinaState {
     DisciplinasFeitas: Set<number>;

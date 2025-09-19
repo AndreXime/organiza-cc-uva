@@ -3,7 +3,7 @@ import React from 'react';
 import { SiTypescript, SiTailwindcss, SiNextdotjs, SiGithub } from 'react-icons/si';
 import DisciplinaTable from '../ui/DisciplinaTable';
 import { Footprints, BadgeCheck, LibraryBig, Clock } from 'lucide-react';
-import { useDisciplinaStore } from '@/store/dataStore';
+import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 
 export default function Sobre() {
     const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
