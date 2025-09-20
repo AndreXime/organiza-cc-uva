@@ -4,7 +4,7 @@ const botoes = [
     { label: 'Gerenciador de Disciplinas', path: 'gerenciador' },
     { label: 'Organizador de Horários', path: 'horario' },
     { label: 'Disciplinas Equivalentes', path: 'equivalente' },
-    { label: 'Filtrar disciplinas', path: 'filtro' },
+    { label: 'Pesquisar Disciplinas', path: 'filtro' },
     { label: 'Sobre o projeto', path: 'sobre' },
 ];
 

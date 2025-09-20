@@ -1,13 +1,27 @@
 import { generateDisciplinaClasses } from '@/lib/utils';
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
-import { FiltrosState, useFiltroStore } from '@/store/ui/filtroStore';
+import { FiltrarDisciplina, FiltrosState, useFiltroStore } from '@/store/ui/filtroStore';
+import { ArrowDownNarrowWide } from 'lucide-react';
 import { useMemo } from 'react';
 
 export default function FiltroDisciplinas() {
     const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
     const DisciplinasFeitas = useDisciplinaStore((state) => state.DisciplinasFeitas);
-    const { professor, jaFez, periodo, turno, dia, setProfessor, setJaFez, setPeriodo, setTurno, setDia } =
-        useFiltroStore();
+
+    const {
+        professor,
+        jaFez,
+        periodo,
+        turno,
+        dia,
+        buscaNome,
+        setProfessor,
+        setJaFez,
+        setPeriodo,
+        setTurno,
+        setDia,
+        setBuscaNome,
+    } = useFiltroStore();
 
     const professoresUnicos = useMemo(() => {
         const nomes = DisciplinasTotais.map((d) => d.professor.trim());
@@ -18,148 +32,153 @@ export default function FiltroDisciplinas() {
         const ps = DisciplinasTotais.map((d) => d.periodo);
         const unicos = Array.from(new Set(ps));
 
-        // separar "Optativa" dos demais períodos
-        const comuns = unicos.filter((p) => p.toLowerCase() !== 'optativa');
-        const optativa = unicos.find((p) => p.toLowerCase() === 'optativa');
+        return unicos.sort((a, b) => {
+            const aIsOptativa = a.toLowerCase() === 'optativa';
+            const bIsOptativa = b.toLowerCase() === 'optativa';
 
-        comuns.sort((a, b) => {
-            const numA = parseInt(a);
-            const numB = parseInt(b);
-            return numA - numB;
+            if (aIsOptativa) return 1; // "a" (Optativa) vai para o final
+            if (bIsOptativa) return -1; // "b" (Optativa) vai para o final
+
+            // Ordenação numérica para os demais
+            return parseInt(a) - parseInt(b);
         });
-
-        return optativa ? [...comuns, optativa] : comuns;
     }, [DisciplinasTotais]);
 
     const disciplinasFiltradas = useMemo(() => {
-        return DisciplinasTotais.filter((d) => {
-            // filtro professor
-            if (professor !== 'todos' && d.professor !== professor) {
-                return false;
-            }
-            // filtro se já fez (compara com Set de ids)
-            const jaFoiFeita = DisciplinasFeitas.has(d.id);
-            if (jaFez === 'sim' && !jaFoiFeita) return false;
-            if (jaFez === 'nao' && jaFoiFeita) return false;
-
-            // filtro por período da faculdade
-            if (periodo !== 'todos' && d.periodo !== periodo) return false;
-
-            if (turno !== 'todos') {
-                if (!d.horarios || d.horarios.length === 0) {
-                    return false;
-                }
-
-                // Verifica se algum dos horários bate com o turno selecionado
-                const correspondeAoTurno = d.horarios.some((horario) => {
-                    // Pega somente as horas e ignora os minutos
-                    const horaInicio = parseInt(horario.inicio.split(':')[0]);
-
-                    if (turno === 'manha' && horaInicio < 12) return true;
-                    if (turno === 'tarde' && horaInicio >= 12 && horaInicio < 18) return true;
-                    if (turno === 'noite' && horaInicio >= 18) return true;
-
-                    return false;
-                });
-
-                if (!correspondeAoTurno) {
-                    return false;
-                }
-            }
-
-            if (dia !== 'todos') {
-                // Se a disciplina não tiver horários, não corresponde a um dia específico.
-                if (!d.horarios || d.horarios.length === 0) {
-                    return false;
-                }
-                // Verifica se ALGUM dos horários da disciplina ocorre no dia selecionado.
-                const temAulaNoDia = d.horarios.some((horario) => horario.dia === dia);
-                if (!temAulaNoDia) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
-    }, [DisciplinasTotais, DisciplinasFeitas, professor, jaFez, periodo, turno, dia]);
+        return FiltrarDisciplina(DisciplinasTotais);
+    }, [DisciplinasTotais, DisciplinasFeitas, professor, jaFez, periodo, turno, dia, buscaNome]);
 
     return (
-        <div className="p-4 space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-                <select
-                    value={professor}
-                    onChange={(e) => setProfessor(e.target.value)}
-                    className="border rounded-full p-3"
-                >
-                    <option value="todos">Todos os professores</option>
-                    {professoresUnicos.map((prof, i) => (
-                        <option key={i} value={prof}>
-                            {prof}
-                        </option>
-                    ))}
-                </select>
-
-                <select
-                    value={jaFez}
-                    onChange={(e) => setJaFez(e.target.value as any)}
-                    className="border rounded-full p-3"
-                >
-                    <option value="todos">Todas as situações</option>
-                    <option value="sim">Concluidas</option>
-                    <option value="nao">Não concluidas</option>
-                </select>
-
-                <select
-                    value={periodo}
-                    onChange={(e) => setPeriodo(e.target.value)}
-                    className="border rounded-full p-3"
-                >
-                    <option value="todos">Todos os períodos</option>
-                    {periodosUnicos.map((p, i) => (
-                        <option key={i} value={p}>
-                            {p}
-                        </option>
-                    ))}
-                </select>
-
-                <select
-                    value={turno}
-                    onChange={(e) => setTurno(e.target.value as FiltrosState['turno'])}
-                    className="border rounded-full p-3"
-                >
-                    <option value="todos">Qualquer turno</option>
-                    <option value="manha">Manhã</option>
-                    <option value="tarde">Tarde</option>
-                    <option value="noite">Noite</option>
-                </select>
-
-                <select
-                    value={dia}
-                    onChange={(e) => setDia(e.target.value as FiltrosState['dia'])}
-                    className="border rounded-full p-3"
-                >
-                    <option value="todos">Qualquer dia</option>
-                    <option value="Segunda">Segunda</option>
-                    <option value="Terça">Terça</option>
-                    <option value="Quarta">Quarta</option>
-                    <option value="Quinta">Quinta</option>
-                    <option value="Sexta">Sexta</option>
-                </select>
-
-                <h2 className="flex items-center">{disciplinasFiltradas.length} Disciplinas encontradas</h2>
+        <>
+            <div className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl">
+                <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Pesquisar Disciplinas</h2>
+                <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base">
+                    Pesquise e filtre as disciplinas com base em qualquer critérios.
+                </p>
             </div>
+            <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-sm">
+                    <div className="relative w-full">
+                        <select
+                            value={professor}
+                            onChange={(e) => setProfessor(e.target.value)}
+                            className="appearance-none border rounded-full p-3 w-full"
+                        >
+                            <option value="todos">Todos os professores</option>
+                            {professoresUnicos.map((prof, i) => (
+                                <option key={i} value={prof}>
+                                    {prof}
+                                </option>
+                            ))}
+                        </select>
+                        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                            <ArrowDownNarrowWide size={23} />
+                        </span>
+                    </div>
 
-            <ul className="grid grid-cols-2 md:grid-cols-4 gap-4 items-stretch">
-                {disciplinasFiltradas.map((d) => {
-                    const { cardClasses, titleClasses } = generateDisciplinaClasses(d.id);
-                    return (
-                        <li key={d.id} className={cardClasses}>
-                            <p className={titleClasses}>{d.nome}</p>
-                            {d.professor}
-                        </li>
-                    );
-                })}
-            </ul>
-        </div>
+                    <div className="relative w-full">
+                        <select
+                            value={jaFez}
+                            onChange={(e) => setJaFez(e.target.value as FiltrosState['jaFez'])}
+                            className="appearance-none border rounded-full p-3 w-full"
+                        >
+                            <option value="todos">Todas as situações</option>
+                            <option value="sim">Concluídas</option>
+                            <option value="nao">Não concluídas</option>
+                        </select>
+
+                        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                            <ArrowDownNarrowWide size={23} />
+                        </span>
+                    </div>
+
+                    <div className="relative w-full">
+                        <select
+                            value={periodo}
+                            onChange={(e) => setPeriodo(e.target.value)}
+                            className="appearance-none border rounded-full p-3 w-full"
+                        >
+                            <option value="todos">Todos os períodos</option>
+                            <option value="todos_sem_optativas">Todos (Exceto Optativas)</option>
+                            {periodosUnicos.map((p, i) => (
+                                <option key={i} value={p}>
+                                    {p}
+                                </option>
+                            ))}
+                        </select>
+                        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                            <ArrowDownNarrowWide size={23} />
+                        </span>
+                    </div>
+
+                    <div className="relative w-full">
+                        <select
+                            value={turno}
+                            onChange={(e) => setTurno(e.target.value as FiltrosState['turno'])}
+                            className="appearance-none border rounded-full p-3 w-full"
+                        >
+                            <option value="todos">Qualquer turno</option>
+                            <option value="manha">Manhã</option>
+                            <option value="tarde">Tarde</option>
+                            <option value="noite">Noite</option>
+                        </select>
+                        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                            <ArrowDownNarrowWide size={23} />
+                        </span>
+                    </div>
+
+                    <div className="relative w-full">
+                        <select
+                            value={dia}
+                            onChange={(e) => setDia(e.target.value as FiltrosState['dia'])}
+                            className="appearance-none border rounded-full p-3 w-full"
+                        >
+                            <option value="todos">Qualquer dia</option>
+                            <option value="Segunda">Segunda</option>
+                            <option value="Terça">Terça</option>
+                            <option value="Quarta">Quarta</option>
+                            <option value="Quinta">Quinta</option>
+                            <option value="Sexta">Sexta</option>
+                        </select>
+                        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                            <ArrowDownNarrowWide size={23} />
+                        </span>
+                    </div>
+
+                    <input
+                        type="text"
+                        className="border rounded-full w-full flex items-center px-3 min-h-[43px]"
+                        placeholder="Pesquise pelo nome..."
+                        value={buscaNome}
+                        onChange={(e) => setBuscaNome(e.target.value)}
+                    />
+
+                    <h2 className="mt-3 flex items-center justify-center text-lg font-semibold col-span-full">
+                        {disciplinasFiltradas.length} Disciplinas encontradas
+                    </h2>
+                </div>
+
+                <ul className="grid grid-cols-2 md:grid-cols-4 gap-4 items-stretch">
+                    {disciplinasFiltradas.map((d) => {
+                        const { cardClasses, titleClasses } = generateDisciplinaClasses(d.id);
+                        return (
+                            <li key={d.id} className={cardClasses + ' text-sm'}>
+                                <p className={titleClasses + ' break-words'}>{d.nome}</p>
+                                <p> {d.professor}</p>
+
+                                <span className="text-sm mt-2">
+                                    Horário:
+                                    <ul className="list-disc pl-4">
+                                        {d.horarios?.map((h, i) => (
+                                            <li key={i}>{`${h.dia} ${h.inicio} - ${h.fim}`}</li>
+                                        ))}
+                                    </ul>
+                                </span>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
+        </>
     );
 }
