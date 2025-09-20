@@ -42,7 +42,7 @@ export default function HorarioManager() {
     const allEvents = useMemo(() => {
         const disciplinas = getDisciplinasByIds(DisciplinasDisponiveis);
         return buildEvents(disciplinas);
-    }, [DisciplinasDisponiveis]);
+    }, [DisciplinasDisponiveis, getDisciplinasByIds]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -69,7 +69,7 @@ export default function HorarioManager() {
         });
 
         return { visibleEvents: eventosVisiveis, totalCargaHoraria: cargaHoraria };
-    }, [allEvents, selectedDiscs, hideNonSelected]);
+    }, [allEvents, selectedDiscs, hideNonSelected, getDisciplinasByIds]);
 
     const salvarImagem = async () => {
         setLoading(true);

@@ -147,5 +147,6 @@ function searchDisciplinaId(name: string, Disciplina: Disciplina[]): number {
 const DisciplinasObrigatorias = processDisciplinas();
 const DisciplinasEquivalentes = processEquivalentes(DisciplinasObrigatorias);
 
-export { DisciplinasObrigatorias, DisciplinasEquivalentes };
-export default { DisciplinasObrigatorias, DisciplinasEquivalentes };
+const Disciplinas = { DisciplinasObrigatorias, DisciplinasEquivalentes };
+
+export default Disciplinas;

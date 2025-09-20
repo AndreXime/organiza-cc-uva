@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { useDisciplinaStore } from '../disciplinas/disciplinaStore';
 
-export type FiltrosState = {
+export type FiltrosType = {
     professor: string;
     periodo: string;
     buscaNome: string;
@@ -10,51 +10,56 @@ export type FiltrosState = {
     dia: 'todos' | 'Segunda' | 'Terça' | 'Quarta' | 'Quinta' | 'Sexta';
 };
 
+type FiltrosState = {
+    filtros: FiltrosType;
+    disciplinasFiltradas: Disciplina[];
+};
+
 type FiltroActions = {
-    setProfessor: (professor: string) => void;
-    setJaFez: (status: FiltrosState['jaFez']) => void;
-    setPeriodo: (periodo: string) => void;
-    setTurno: (turno: FiltrosState['turno']) => void;
-    setDia: (dia: FiltrosState['dia']) => void;
-    resetFiltros: () => void;
-    setBuscaNome: (busca: string) => void; // NOVA ACTION
+    setFiltro: <K extends keyof FiltrosType>(campo: K, valor: FiltrosType[K]) => void;
+    filtrarDisciplinas: () => void;
 };
 
-const initialState: FiltrosState = {
-    professor: 'todos',
-    jaFez: 'todos',
-    periodo: 'todos',
-    turno: 'todos',
-    buscaNome: '',
-    dia: 'todos',
-};
+export const useFiltroStore = create<FiltrosState & FiltroActions>((set, get) => ({
+    // Estados iniciais
+    filtros: {
+        professor: 'todos',
+        jaFez: 'todos',
+        periodo: 'todos',
+        turno: 'todos',
+        buscaNome: '',
+        dia: 'todos',
+    },
+    disciplinasFiltradas: [],
 
-export const useFiltroStore = create<FiltrosState & FiltroActions>((set) => ({
-    ...initialState,
-    setProfessor: (professor) => set({ professor }),
-    setBuscaNome: (busca) => set({ buscaNome: busca }),
-    setJaFez: (status) => set({ jaFez: status }),
-    setPeriodo: (periodo) => set({ periodo }),
-    setTurno: (turno) => set({ turno }),
-    setDia: (dia) => set({ dia }),
-    resetFiltros: () => set(initialState),
+    // Açõesx
+    filtrarDisciplinas: () => {
+        const { filtros } = get();
+        const { DisciplinasTotais, DisciplinasFeitas } = useDisciplinaStore.getState();
+
+        set({
+            disciplinasFiltradas: DisciplinasTotais.filter(
+                (d) =>
+                    filtroPorProfessor(d, filtros.professor) &&
+                    filtroPorStatus(d, filtros.jaFez, DisciplinasFeitas) &&
+                    filtroPorPeriodo(d, filtros.periodo) &&
+                    filtroPorTurno(d, filtros.turno) &&
+                    filtroPorDia(d, filtros.dia) &&
+                    filtroPorNome(d, filtros.buscaNome)
+            ),
+        });
+    },
+
+    setFiltro: (campo, valor) => {
+        set((state) => ({
+            filtros: {
+                ...state.filtros,
+                [campo]: valor,
+            },
+        }));
+        get().filtrarDisciplinas();
+    },
 }));
-
-export function FiltrarDisciplina(Disciplinas: Disciplina[]) {
-    const { professor, jaFez, periodo, turno, dia, buscaNome } = useFiltroStore.getState();
-
-    const { DisciplinasFeitas } = useDisciplinaStore.getState();
-
-    return Disciplinas.filter(
-        (d) =>
-            filtroPorProfessor(d, professor) &&
-            filtroPorStatus(d, jaFez, DisciplinasFeitas) &&
-            filtroPorPeriodo(d, periodo) &&
-            filtroPorTurno(d, turno) &&
-            filtroPorDia(d, dia) &&
-            filtroPorNome(d, buscaNome)
-    );
-}
 
 function filtroPorProfessor(disciplina: Disciplina, professor: string): boolean {
     if (professor === 'todos') return true;

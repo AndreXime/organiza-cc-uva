@@ -1,27 +1,17 @@
 import { generateDisciplinaClasses } from '@/lib/utils';
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
-import { FiltrarDisciplina, FiltrosState, useFiltroStore } from '@/store/ui/filtroStore';
+import { FiltrosType, useFiltroStore } from '@/store/ui/filtroStore';
 import { ArrowDownNarrowWide } from 'lucide-react';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 export default function FiltroDisciplinas() {
     const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
-    const DisciplinasFeitas = useDisciplinaStore((state) => state.DisciplinasFeitas);
 
-    const {
-        professor,
-        jaFez,
-        periodo,
-        turno,
-        dia,
-        buscaNome,
-        setProfessor,
-        setJaFez,
-        setPeriodo,
-        setTurno,
-        setDia,
-        setBuscaNome,
-    } = useFiltroStore();
+    const { filtros, setFiltro, disciplinasFiltradas, filtrarDisciplinas } = useFiltroStore();
+
+    useEffect(() => {
+        filtrarDisciplinas();
+    }, [filtrarDisciplinas]);
 
     const professoresUnicos = useMemo(() => {
         const nomes = DisciplinasTotais.map((d) => d.professor.trim());
@@ -44,10 +34,6 @@ export default function FiltroDisciplinas() {
         });
     }, [DisciplinasTotais]);
 
-    const disciplinasFiltradas = useMemo(() => {
-        return FiltrarDisciplina(DisciplinasTotais);
-    }, [DisciplinasTotais, DisciplinasFeitas, professor, jaFez, periodo, turno, dia, buscaNome]);
-
     return (
         <>
             <div className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl">
@@ -60,8 +46,8 @@ export default function FiltroDisciplinas() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-sm">
                     <div className="relative w-full">
                         <select
-                            value={professor}
-                            onChange={(e) => setProfessor(e.target.value)}
+                            value={filtros.professor}
+                            onChange={(e) => setFiltro('professor', e.target.value)}
                             className="appearance-none border rounded-full p-3 w-full"
                         >
                             <option value="todos">Todos os professores</option>
@@ -78,8 +64,8 @@ export default function FiltroDisciplinas() {
 
                     <div className="relative w-full">
                         <select
-                            value={jaFez}
-                            onChange={(e) => setJaFez(e.target.value as FiltrosState['jaFez'])}
+                            value={filtros.jaFez}
+                            onChange={(e) => setFiltro('jaFez', e.target.value as FiltrosType['jaFez'])}
                             className="appearance-none border rounded-full p-3 w-full"
                         >
                             <option value="todos">Todas as situações</option>
@@ -94,8 +80,8 @@ export default function FiltroDisciplinas() {
 
                     <div className="relative w-full">
                         <select
-                            value={periodo}
-                            onChange={(e) => setPeriodo(e.target.value)}
+                            value={filtros.periodo}
+                            onChange={(e) => setFiltro('periodo', e.target.value)}
                             className="appearance-none border rounded-full p-3 w-full"
                         >
                             <option value="todos">Todos os períodos</option>
@@ -113,8 +99,8 @@ export default function FiltroDisciplinas() {
 
                     <div className="relative w-full">
                         <select
-                            value={turno}
-                            onChange={(e) => setTurno(e.target.value as FiltrosState['turno'])}
+                            value={filtros.turno}
+                            onChange={(e) => setFiltro('turno', e.target.value as FiltrosType['turno'])}
                             className="appearance-none border rounded-full p-3 w-full"
                         >
                             <option value="todos">Qualquer turno</option>
@@ -129,8 +115,8 @@ export default function FiltroDisciplinas() {
 
                     <div className="relative w-full">
                         <select
-                            value={dia}
-                            onChange={(e) => setDia(e.target.value as FiltrosState['dia'])}
+                            value={filtros.dia}
+                            onChange={(e) => setFiltro('dia', e.target.value as FiltrosType['dia'])}
                             className="appearance-none border rounded-full p-3 w-full"
                         >
                             <option value="todos">Qualquer dia</option>
@@ -149,8 +135,8 @@ export default function FiltroDisciplinas() {
                         type="text"
                         className="border rounded-full w-full flex items-center px-3 min-h-[43px]"
                         placeholder="Pesquise pelo nome..."
-                        value={buscaNome}
-                        onChange={(e) => setBuscaNome(e.target.value)}
+                        value={filtros.buscaNome}
+                        onChange={(e) => setFiltro('buscaNome', e.target.value)}
                     />
 
                     <h2 className="mt-3 flex items-center justify-center text-lg font-semibold col-span-full">

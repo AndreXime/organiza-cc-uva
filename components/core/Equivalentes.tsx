@@ -45,7 +45,7 @@ export default function Equivalentes() {
         grupos.sort((a, b) => a.peso - b.peso);
 
         return grupos;
-    }, [DisciplinasEquivalentes]);
+    }, [DisciplinasEquivalentes, DisciplinasDisponiveis, DisciplinasFeitas, getDisciplinaByName]);
 
     return (
         <>

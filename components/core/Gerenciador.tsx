@@ -67,7 +67,7 @@ export default function GerenciadorInterativo() {
                 ,
             ])
         );
-    }, [mostrarFeitas, DisciplinasPorPeriodo, DisciplinasFeitas]);
+    }, [mostrarFeitas, DisciplinasPorPeriodo, DisciplinasFeitas, DisciplinasDisponiveis, getDisciplinasByIds]);
 
     return (
         <>
