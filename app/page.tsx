@@ -4,6 +4,7 @@ import Equivalentes from '@/components/core/Equivalentes';
 import FiltroDisciplinas from '@/components/core/Filtrar';
 import Gerenciador from '@/components/core/Gerenciador';
 import HorarioManager from '@/components/core/HorarioManager';
+import Planejador from '@/components/core/Planejador';
 import Sobre from '@/components/core/SobreProjeto';
 import Popup from '@/components/ui/Popup';
 import Tabs from '@/components/ui/Tabs';
@@ -24,6 +25,8 @@ export default function Home() {
                 return <Equivalentes />;
             case 'filtro':
                 return <FiltroDisciplinas />;
+            case 'planejador': // Novo case
+                return <Planejador />;
         }
     };
 
