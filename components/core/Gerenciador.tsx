@@ -6,7 +6,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { SkeletonSection } from '../ui/LoadingSkeleton';
 import { useUIStore } from '@/store/ui/uiStore';
-import { generateDisciplinaClasses } from '@/lib/utils';
+import { generateDisciplinaClasses } from '@/lib/utils/utils';
 
 export default function GerenciadorInterativo() {
     const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);

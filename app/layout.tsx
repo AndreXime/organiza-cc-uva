@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Disciplinas from '@/lib/csvToObject';
+import Disciplinas from '@/lib/utils/csvToObject';
 import StoreInitializer from '@/store/disciplinas/DisciplinaStoreInitilizer';
 
 const inter = Inter({

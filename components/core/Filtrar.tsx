@@ -1,4 +1,4 @@
-import { generateDisciplinaClasses } from '@/lib/utils';
+import { generateDisciplinaClasses } from '@/lib/utils/utils';
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { FiltrosType, useFiltroStore } from '@/store/ui/filtroStore';
 import { ArrowDownNarrowWide } from 'lucide-react';

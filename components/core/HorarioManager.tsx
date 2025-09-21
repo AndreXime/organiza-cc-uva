@@ -4,7 +4,7 @@ import { Calendar } from 'react-big-calendar';
 import { format, startOfWeek } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { setHoursAndMinutes, getDateForWeekday, localizer } from '@/lib/CalendarHelper';
+import { setHoursAndMinutes, getDateForWeekday, localizer } from '@/lib/helpers/CalendarHelper';
 import html2canvas from 'html2canvas-pro';
 import { Download, Eye, EyeOff } from 'lucide-react';
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';

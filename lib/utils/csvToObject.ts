@@ -2,7 +2,7 @@ import fs from 'fs';
 import { parse } from 'csv-parse/sync';
 
 function processDisciplinas(): Disciplina[] {
-    const conteudo = fs.readFileSync('./lib/Disciplinas.csv', 'utf-8');
+    const conteudo = fs.readFileSync('./data/Disciplinas.csv', 'utf-8');
     const registros = parse(conteudo, {
         columns: true,
         skip_empty_lines: true,
@@ -31,7 +31,7 @@ function processDisciplinas(): Disciplina[] {
 }
 
 function processEquivalentes(Disciplinas: Disciplina[]): Equivalente[] {
-    const conteudo = fs.readFileSync('./lib/Equivalentes.csv', 'utf-8');
+    const conteudo = fs.readFileSync('./data/Equivalentes.csv', 'utf-8');
     const registros = parse(conteudo, {
         columns: true,
         skip_empty_lines: true,
