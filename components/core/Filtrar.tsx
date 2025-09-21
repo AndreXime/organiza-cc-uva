@@ -148,13 +148,27 @@ export default function FiltroDisciplinas() {
                     {disciplinasFiltradas.map((d) => {
                         const { cardClasses, titleClasses } = generateDisciplinaClasses(d.id);
                         return (
-                            <li key={d.id} className={cardClasses + ' text-sm'}>
-                                <p className={titleClasses + ' break-words'}>{d.nome}</p>
-                                <p> {d.professor}</p>
-
+                            <li key={d.id} className={cardClasses + ' text-sm gap-1'}>
+                                <span className={titleClasses + ' break-words'}>{d.nome}</span>
+                                <span>{d.professor}</span>
+                                {d.requisitos && d.requisitos.length > 0 ? (
+                                    <span>
+                                        Pré-requisitos:
+                                        <ul className="list-disc list-inside">
+                                            {d.requisitos.map((req) => (
+                                                <li key={req.id}>
+                                                    {DisciplinasTotais.find((d) => d.id === req.id)?.nome ||
+                                                        'Disciplina não encontrada'}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </span>
+                                ) : (
+                                    <span>Sem pré-requisitos</span>
+                                )}
                                 <span className="text-sm mt-2">
                                     Horário:
-                                    <ul className="list-disc pl-4">
+                                    <ul className="list-disc list-inside">
                                         {d.horarios?.map((h, i) => (
                                             <li key={i}>{`${h.dia} ${h.inicio} - ${h.fim}`}</li>
                                         ))}

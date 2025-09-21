@@ -127,7 +127,7 @@ export default function GerenciadorInterativo() {
                                             onClick={() => toggleDisc(disciplina.id)}
                                             key={disciplina.id}
                                             disabled={estáBloqueada}
-                                            className={cardClasses}
+                                            className={cardClasses + ' cursor-pointer'}
                                         >
                                             <strong className={titleClasses}>{disciplina.nome}</strong>
                                             <span className="text-xs mt-2 font-semibold">

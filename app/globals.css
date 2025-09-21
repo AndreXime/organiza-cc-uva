@@ -8,8 +8,8 @@ body {
 
 @utility course-item {
     transition: all 0.2s ease-in-out;
-    @apply text-left shadow rounded p-4 border border-gray-200 flex flex-col justify-between;
-    @apply cursor-pointer disabled:cursor-not-allowed;
+    @apply text-left shadow rounded p-4 border border-gray-200 flex flex-col;
+    @apply disabled:cursor-not-allowed;
 }
 
 .course-item:hover {
