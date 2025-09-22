@@ -26,7 +26,6 @@ type PlanejadorActions = {
 export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
     persist(
         (set, get) => ({
-            // Estados iniciais
             planejamento: [],
             semestreEmEdicao: null,
 
@@ -144,6 +143,7 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
                     ),
                 }));
             },
+
             getConflitos: (semestre) => {
                 const { DisciplinasTotais } = useDisciplinaStore.getState();
                 const disciplinasDoSemestre = semestre.disciplinas
@@ -199,6 +199,7 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
         }),
         {
             name: 'planejador',
+            partialize: (state) => ({ planejamento: state.planejamento }),
         }
     )
 );

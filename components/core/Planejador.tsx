@@ -39,9 +39,9 @@ export default function Planejador() {
                         cada um deles.
                     </p>
                     <p>
-                        Clique em Adicionar semestre e depois em Adicionar disciplina e aparecerão as disciplinas
-                        disponíveis no momento. Mais disciplinas ficarão disponíveis em outros semestres, pois o sistema
-                        leva em conta as que você planejou nos semestres anteriores.
+                        Clique em Adicionar semestre e editar semestre depois clique no dropdown Adicionar disciplina e
+                        aparecerão as disciplinas disponíveis no momento. Mais disciplinas ficarão disponíveis em outros
+                        semestres, pois o sistema leva em conta as que você planejou nos semestres anteriores.
                     </p>
                     <p>
                         As disciplinas em <span className="text-yellow-600 font-bold">amarelo</span> querem dizer que há

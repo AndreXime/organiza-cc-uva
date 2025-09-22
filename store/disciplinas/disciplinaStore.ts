@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { legacyStorageAdapter } from './storageAdapter';
+import { disciplinaStorageAdapter } from '../lib/storageAdapter';
 import { serverData } from './DisciplinaStoreInitilizer';
 
 export interface DisciplinaState {
@@ -30,8 +30,6 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 
             recalculateDisponiveis: () => {
                 const { DisciplinasTotais, DisciplinasFeitas } = get();
-
-                // Lógica de `calcularDisponiveis` agora está aqui dentro
                 const novasDisponiveis = new Set(
                     DisciplinasTotais.filter((d) => {
                         if (DisciplinasFeitas.has(d.id)) return false; // Não está feita
@@ -110,9 +108,9 @@ export const useDisciplinaStore = create<DisciplinaState>()(
             },
         }),
         {
-            name: 'disciplinas', // Equivalente a localStorage.getItem('disciplinas')
+            name: 'disciplinas',
+            storage: disciplinaStorageAdapter,
             partialize: (state) => ({ DisciplinasFeitas: state.DisciplinasFeitas }),
-            storage: legacyStorageAdapter,
         }
     )
 );
