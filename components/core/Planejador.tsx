@@ -45,8 +45,8 @@ export default function Planejador() {
                     </p>
                     <p>
                         As disciplinas em <span className="text-yellow-600 font-bold">amarelo</span> querem dizer que há
-                        um conflito de horario com alguma outra disciplina do mesmo semestre. Mas há a possibilidade de
-                        mudar horarios entre os semestres.
+                        um conflito de horario com alguma outra disciplina do mesmo semestre. Mas há a possibilidade das
+                        disciplinas mudarem de horarios entre os semestres.
                     </p>
                     <div className="text-center mt-4">
                         <button onClick={adicionarSemestre} className="btn-primary">

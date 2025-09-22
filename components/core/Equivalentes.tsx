@@ -52,9 +52,8 @@ export default function Equivalentes() {
             <div className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl">
                 <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Disciplinas Equivalentes</h2>
                 <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base">
-                    Nessa seção está presentes todas as disciplinas equivalentes até o momento, pode ser que algumas
-                    estejam fora fluxo de quando podia ser aceitas para o nosso curso, deve-se consultar outra fonte
-                    antes de tomar qualquer ação de matricular-se nelas.
+                    Nessa seção está presentes todas as disciplinas equivalentes até o momento, pode ser que algumas no
+                    futuro não sejam mais aceitas porque sairão do fluxo esperado.
                 </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
