@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { uiStorageAdapter } from './storageAdapter';
 
 export interface UIState {
     Tab: string;
@@ -67,7 +66,6 @@ export const useUIStore = create<UIState>()(
         }),
         {
             name: 'selectedDiscs',
-            storage: uiStorageAdapter,
             partialize: (state) => ({ selectedDiscs: state.selectedDiscs }),
         }
     )
