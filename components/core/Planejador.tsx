@@ -2,6 +2,7 @@
 
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { usePlanejadorStore } from '@/store/ui/planejadorStore';
+import { useUIStore } from '@/store/ui/uiStore';
 
 export default function Planejador() {
     const {
@@ -18,15 +19,16 @@ export default function Planejador() {
     } = usePlanejadorStore();
     const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
 
-    /** TODO: Fazer um modal de confirmação mais bonito */
     const handleRemoverSemestre = (ano: number, semestre: number) => {
-        if (
-            window.confirm(
-                `Tem certeza que deseja remover o semestre ${ano}.${semestre}? Todas as disciplinas planejadas nele serão perdidas.`
-            )
-        ) {
-            removerSemestre(ano, semestre);
-        }
+        const { openModal } = useUIStore.getState();
+
+        openModal(
+            `Tem certeza que deseja remover o semestre ${ano}.${semestre}?\n Todas as disciplinas planejadas nele serão perdidas.`,
+            () => {
+                // Esta função só será chamada se o usuário clicar em "Sim"
+                removerSemestre(ano, semestre);
+            }
+        );
     };
 
     return (

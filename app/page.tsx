@@ -6,6 +6,7 @@ import Gerenciador from '@/components/core/Gerenciador';
 import HorarioManager from '@/components/core/HorarioManager';
 import Planejador from '@/components/core/Planejador';
 import Sobre from '@/components/core/SobreProjeto';
+import Modal from '@/components/ui/Modal';
 import Popup from '@/components/ui/Popup';
 import Tabs from '@/components/ui/Tabs';
 import { useUIStore } from '@/store/ui/uiStore';
@@ -25,7 +26,7 @@ export default function Home() {
                 return <Equivalentes />;
             case 'filtro':
                 return <FiltroDisciplinas />;
-            case 'planejador': // Novo case
+            case 'planejador':
                 return <Planejador />;
         }
     };
@@ -45,6 +46,7 @@ export default function Home() {
             </main>
 
             <Popup />
+            <Modal />
         </main>
     );
 }

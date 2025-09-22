@@ -13,8 +13,14 @@ export interface UIState {
     setMessage: (message: string) => void;
     setExpandedMode: (expanded: boolean) => void;
     setMostrarFeitas: (mostrar: boolean) => void;
-
     toggleSelectedDisc: (discId: number) => void;
+
+    modalMessage: string;
+    onConfirmAction: (() => void) | null;
+
+    // Função para abrir o modal, configurando a mensagem e a ação
+    openModal: (message: string, onConfirm: () => void) => void;
+    closeModal: () => void;
 }
 
 let messageTimer: NodeJS.Timeout;
@@ -27,6 +33,8 @@ export const useUIStore = create<UIState>()(
             selectedDiscs: [],
             hideNonSelected: false,
             message: '',
+            modalMessage: '',
+            onConfirmAction: null,
             expandedMode: true,
             mostrarFeitas: true,
 
@@ -35,6 +43,20 @@ export const useUIStore = create<UIState>()(
             setHideNonSelected: (hide) => set({ hideNonSelected: hide }),
             setExpandedMode: (expanded) => set({ expandedMode: expanded }),
             setMostrarFeitas: (mostrar) => set({ mostrarFeitas: mostrar }),
+            openModal: (message, onConfirm) => {
+                set({
+                    modalMessage: message,
+                    onConfirmAction: onConfirm,
+                });
+            },
+
+            closeModal: () => {
+                set({
+                    modalMessage: '',
+                    onConfirmAction: null,
+                });
+            },
+
             setMessage: (message) => {
                 // Limpa qualquer timer
                 clearTimeout(messageTimer);
@@ -48,6 +70,7 @@ export const useUIStore = create<UIState>()(
                     }, 5000);
                 }
             },
+
             toggleSelectedDisc: (discId) =>
                 set((state) => {
                     const isSelected = state.selectedDiscs.includes(discId);
