@@ -52,3 +52,5 @@ id,nome,periodo,horarios,requisitos,carga_horaria,professor
 39,Matemática Comercial e Financeira,Optativa,4IJKL,,60,Jose Hamilton
 41,Metaheuristicas,Optativa,4BCDE,23,60,Gilzamir Ferreira
 38,Tópicos Avançados em Banco de Dados,Optativa,2NOPQ," 25",60,Lorena Pereira
+47,Optativa Eletiva 1,Optativa,,,60,Qualquer
+48,Optativa Eletiva 2,Optativa,,,60,Qualquer
