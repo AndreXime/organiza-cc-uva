@@ -1,10 +1,11 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useDisciplinaStore } from '../disciplinas/disciplinaStore';
 
 export type PlanejamentoType = {
     ano: number;
     semestre: number;
-    disciplinas: number[]; // Array of discipline IDs
+    disciplinas: number[];
 };
 
 type PlanejadorState = {
@@ -19,8 +20,9 @@ type PlanejadorActions = {
     concluirEdicao: () => void;
     adicionarDisciplina: (disciplinaId: number) => void;
     removerDisciplina: (disciplinaId: number) => void;
+    getDisciplinasDisponiveisParaSelecao: (semestre: PlanejamentoType, index: number) => Disciplina[];
+    getConflitos: (semestre: PlanejamentoType) => Set<number>;
 };
-
 export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
     persist(
         (set, get) => ({
@@ -129,6 +131,7 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
                     ),
                 }));
             },
+
             removerDisciplina: (disciplinaId) => {
                 const { semestreEmEdicao } = get();
                 if (!semestreEmEdicao) return;
@@ -140,6 +143,58 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
                             : p
                     ),
                 }));
+            },
+            getConflitos: (semestre) => {
+                const { DisciplinasTotais } = useDisciplinaStore.getState();
+                const disciplinasDoSemestre = semestre.disciplinas
+                    .map((id) => DisciplinasTotais.find((d) => d.id === id))
+                    .filter((d): d is Disciplina => !!d);
+
+                const conflitosSet = new Set<number>();
+                for (let i = 0; i < disciplinasDoSemestre.length; i++) {
+                    for (let j = i + 1; j < disciplinasDoSemestre.length; j++) {
+                        const discA = disciplinasDoSemestre[i];
+                        const discB = disciplinasDoSemestre[j];
+                        if (!discA.horarios || !discB.horarios) continue;
+                        for (const horarioA of discA.horarios) {
+                            for (const horarioB of discB.horarios) {
+                                if (
+                                    horarioA.dia === horarioB.dia &&
+                                    horarioA.inicio < horarioB.fim &&
+                                    horarioA.fim > horarioB.inicio
+                                ) {
+                                    conflitosSet.add(discA.id);
+                                    conflitosSet.add(discB.id);
+                                }
+                            }
+                        }
+                    }
+                }
+                return conflitosSet;
+            },
+
+            getDisciplinasDisponiveisParaSelecao: (semestre, index) => {
+                const { DisciplinasTotais, DisciplinasFeitas } = useDisciplinaStore.getState();
+                const { planejamento } = get();
+
+                const disciplinasNaoFeitas = DisciplinasTotais.filter((d) => !DisciplinasFeitas.has(d.id));
+                const requisitosCumpridos = new Set([
+                    ...DisciplinasFeitas,
+                    ...planejamento.slice(0, index).flatMap((p) => p.disciplinas),
+                ]);
+
+                return disciplinasNaoFeitas.filter((d) => {
+                    const jaPlanejadaEmOutroSemestre = planejamento.some(
+                        (p, i) => i !== index && p.disciplinas.includes(d.id)
+                    );
+                    if (jaPlanejadaEmOutroSemestre || semestre.disciplinas.includes(d.id)) {
+                        return false;
+                    }
+                    if (d.requisitos?.length) {
+                        return d.requisitos.every((req) => requisitosCumpridos.has(req.id));
+                    }
+                    return true;
+                });
             },
         }),
         {

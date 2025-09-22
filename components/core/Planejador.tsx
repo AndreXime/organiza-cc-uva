@@ -2,7 +2,6 @@
 
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { usePlanejadorStore } from '@/store/ui/planejadorStore';
-import { useMemo } from 'react';
 
 export default function Planejador() {
     const {
@@ -14,19 +13,10 @@ export default function Planejador() {
         adicionarDisciplina,
         removerDisciplina,
         removerSemestre,
+        getDisciplinasDisponiveisParaSelecao,
+        getConflitos,
     } = usePlanejadorStore();
-    const { DisciplinasTotais, DisciplinasFeitas } = useDisciplinaStore();
-
-    const disciplinasNaoFeitas = useMemo(() => {
-        return DisciplinasTotais.filter((d) => !DisciplinasFeitas.has(d.id));
-    }, [DisciplinasFeitas, DisciplinasTotais]);
-
-    // Pega os IDs de todas as disciplinas em todos os semestres, exceto o que está em edição
-    const disciplinasPlanejadasFora = new Set(
-        planejamento
-            .filter((p) => !(p.ano === semestreEmEdicao?.ano && p.semestre === semestreEmEdicao?.semestre))
-            .flatMap((p) => p.disciplinas)
-    );
+    const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
 
     /** TODO: Fazer um modal de confirmação mais bonito */
     const handleRemoverSemestre = (ano: number, semestre: number) => {
@@ -41,69 +31,55 @@ export default function Planejador() {
 
     return (
         <div className="space-y-8">
-            <div className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl flex justify-center items-center flex-col">
-                <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Planejador de Curso</h2>
-                <p className="text-sm md:text-base max-w-3xl">
-                    Adicione os próximos semestres que você pretende cursar e planeje quais disciplinas fazer em cada um
-                    deles.
-                </p>
-                <p className="max-w-3xl">
-                    Clique em Adicionar semestre e depois em Adicionar disciplina e aparecerão as disciplinas
-                    disponíveis no momento. Mais disciplinas ficarão disponíveis em outros semestres, pois o sistema
-                    leva em conta as que você planejou nos semestres anteriores.
-                </p>
-                <div className="text-center mt-4">
-                    <button onClick={adicionarSemestre} className="btn-primary">
-                        Adicionar Semestre
-                    </button>
+            <div className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl flex justify-center">
+                <div className="text-sm md:text-base max-w-4xl flex justify-center items-center flex-col">
+                    <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Planejador de Curso</h2>
+                    <p>
+                        Adicione os próximos semestres que você pretende cursar e planeje quais disciplinas fazer em
+                        cada um deles.
+                    </p>
+                    <p>
+                        Clique em Adicionar semestre e depois em Adicionar disciplina e aparecerão as disciplinas
+                        disponíveis no momento. Mais disciplinas ficarão disponíveis em outros semestres, pois o sistema
+                        leva em conta as que você planejou nos semestres anteriores.
+                    </p>
+                    <p>
+                        As disciplinas em <span className="text-yellow-600 font-bold">amarelo</span> querem dizer que há
+                        um conflito de horario com alguma outra disciplina do mesmo semestre. Mas há a possibilidade de
+                        mudar horarios entre os semestres.
+                    </p>
+                    <div className="text-center mt-4">
+                        <button onClick={adicionarSemestre} className="btn-primary">
+                            Adicionar Semestre
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 gap-8">
                 {planejamento.map((semestre, index) => {
+                    const disciplinasDisponiveis = getDisciplinasDisponiveisParaSelecao(semestre, index);
+                    const conflitos = getConflitos(semestre);
+
                     const emEdicao =
                         semestreEmEdicao?.ano === semestre.ano && semestreEmEdicao?.semestre === semestre.semestre;
-
-                    // Requisitos cumpridos = Disciplinas já feitas + disciplinas planejadas em semestres ANTERIORES
-                    const requisitosCumpridos = new Set([
-                        ...DisciplinasFeitas,
-                        ...planejamento.slice(0, index).flatMap((p) => p.disciplinas),
-                    ]);
-
-                    // Disciplinas já planejadas em QUALQUER semestre (para evitar duplicatas)
-                    const todasDisciplinasPlanejadas = new Set(planejamento.flatMap((p) => p.disciplinas));
-
-                    const disciplinasDisponiveisParaSelecao = disciplinasNaoFeitas.filter((d) => {
-                        // Regra 1: Não pode já estar planejada no semestre atual
-                        if (semestre.disciplinas.includes(d.id)) return false;
-
-                        // Regra 2: Não pode já estar planejada em NENHUM outro semestre
-                        if (todasDisciplinasPlanejadas.has(d.id) && !semestre.disciplinas.includes(d.id)) return false;
-
-                        // Regra 3: Todos os pré-requisitos devem estar no conjunto de 'requisitosCumpridos'
-                        if (d.requisitos && d.requisitos.length > 0) {
-                            return d.requisitos.every((req) => requisitosCumpridos.has(req.id));
-                        }
-
-                        return true; // Se não tem requisitos e passou nas outras regras, está disponível
-                    });
 
                     return (
                         <div
                             key={`${semestre.ano}-${semestre.semestre}`}
                             className="bg-white p-6 rounded-lg shadow-sm border"
                         >
-                            <div className="flex justify-between items-center mb-4">
-                                <h3 className="text-lg font-bold">
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className="text-lg font-bold flex flex-col md:flex-row md:items-center gap-3">
                                     {semestre.ano}.{semestre.semestre}{' '}
                                     {emEdicao && (
-                                        <span className="font-normal text-sm ml-3">
+                                        <span className="font-normal text-sm    ">
                                             Clique na disciplina para remover
                                         </span>
                                     )}
                                 </h3>
                                 {emEdicao ? (
-                                    <span className="flex gap-6">
+                                    <span className="flex flex-col md:flex-row gap-7 items-center">
                                         <button
                                             onClick={() => handleRemoverSemestre(semestre.ano, semestre.semestre)}
                                             className="text-sm font-semibold text-red-600 hover:text-red-800"
@@ -127,16 +103,20 @@ export default function Planejador() {
                                 )}
                             </div>
 
-                            <div className="grid grid-cols-3 gap-4">
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                 {semestre.disciplinas.map((disciplinaId) => {
                                     const disciplina = DisciplinasTotais.find((d) => d.id === disciplinaId);
+                                    const temConflito = conflitos.has(disciplinaId);
+                                    const bgColor = temConflito ? 'bg-yellow-50' : 'bg-blue-50';
+                                    const textColor = temConflito ? 'text-yellow-800' : 'text-blue-800';
+
                                     return (
                                         <div
                                             key={disciplinaId}
                                             onClick={emEdicao ? () => removerDisciplina(disciplinaId) : undefined}
-                                            className="course-item bg-blue-50 gap-1 p-2 rounded cursor-pointer select-none"
+                                            className={`course-item ${bgColor} gap-1 p-3 rounded select-none relative`}
                                         >
-                                            <span className="font-bold text-blue-800">{disciplina?.nome}</span>
+                                            <span className={`font-bold ${textColor}`}>{disciplina?.nome}</span>{' '}
                                             <span>{disciplina?.professor}</span>
                                             <span>
                                                 {disciplina?.horarios
@@ -161,7 +141,7 @@ export default function Planejador() {
                                         <option value="" disabled>
                                             Adicionar disciplina...
                                         </option>
-                                        {disciplinasDisponiveisParaSelecao.map((d) => (
+                                        {disciplinasDisponiveis.map((d) => (
                                             <option key={d.id} value={d.id}>
                                                 {d.nome}
                                             </option>
