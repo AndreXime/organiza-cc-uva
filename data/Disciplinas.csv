@@ -1,6 +1,6 @@
 id,nome,periodo,horarios,requisitos,carga_horaria,professor
 2,Cálculo I,1° Período,2BC 4BCDE,,80,Marcus Fabio
-5,Inglês,1° Período,,,60,Não informado
+5,Inglês,1° Período,,,60,
 4,Introdução à Ciência da Computação,1° Período,5BCDE,,60,Eder Jacques
 1,Lógica de Programação,1° Período,2IJKL 3IJKL,,100,Walisson Ferreira
 3,Lógica Matemática,1° Período,3BCDE 4IJ,,80,Hudson Costa
@@ -52,5 +52,23 @@ id,nome,periodo,horarios,requisitos,carga_horaria,professor
 39,Matemática Comercial e Financeira,Optativa,4IJKL,,60,Jose Hamilton
 41,Metaheuristicas,Optativa,4BCDE,23,60,Gilzamir Ferreira
 38,Tópicos Avançados em Banco de Dados,Optativa,2NOPQ," 25",60,Lorena Pereira
-47,Optativa Eletiva 1,Optativa,,,60,Qualquer
-48,Optativa Eletiva 2,Optativa,,,60,Qualquer
+47,Optativa Eletiva 1,Optativa,,,60,Qualquer um
+48,Optativa Eletiva 2,Optativa,,,60,Qualquer um
+49,Linguagem de Programacao II,Optativa,,8,60,
+50,Introducao a Economia,Optativa,,,60,
+51,Redes Neurais Artificiais,Optativa,,"11,17",60,
+52,Informatica na Educacao,Optativa,,,60,
+53,Processamento Digital de Imagens,Optativa,,"10,17,16",60,
+54,Contabilidade Geral,Optativa,,,60,
+55,Governanca de Ti,Optativa,,,60,
+56,Gerenciamento de Redes de Computadores,Optativa,,30,60,
+57,Direito e Legislacao,Optativa,,,60,
+58,Desenvolvimento de Jogos,Optativa,,"10,13,16,26",60,
+59,Teoria dos Grafos,Optativa,,6,60,
+60,Computacao Algebrica,Optativa,,2,60,
+61,Desafios de Programacao,Optativa,,,60,
+62,Topicos Avancados em Engenharia de Software,Optativa,,24,60,
+63,Programacao Linear,Optativa,,11,60,
+64,Hardware Basico,Optativa,,,60,
+65,Gerencia de Projetos,Optativa,,,60,
+66,Linguagem de Programacao III,Optativa,,49,60,

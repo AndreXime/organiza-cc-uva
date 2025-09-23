@@ -85,17 +85,19 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 
             // Ação para inicializar o estado com dados do servidor
             init: (data) => {
-                const DisciplinasPorPeriodo = data.DisciplinasObrigatorias.reduce<Record<string, Set<number>>>(
-                    (acc, disc) => {
-                        if (!acc[disc.periodo]) acc[disc.periodo] = new Set();
-                        acc[disc.periodo].add(disc.id);
-                        return acc;
-                    },
-                    {}
-                );
+                const DisciplinasPorPeriodo = data.DisciplinasCurso.reduce<Record<string, Set<number>>>((acc, disc) => {
+                    // Varias disciplinas optativas não são mais ofertadas
+                    if (disc.periodo === 'Optativa' && !disc.professor) {
+                        disc.periodo = 'Não ofertadas';
+                    }
+
+                    if (!acc[disc.periodo]) acc[disc.periodo] = new Set();
+                    acc[disc.periodo].add(disc.id);
+                    return acc;
+                }, {});
 
                 set({
-                    DisciplinasTotais: data.DisciplinasObrigatorias,
+                    DisciplinasTotais: data.DisciplinasCurso,
                     DisciplinasEquivalentes: data.DisciplinasEquivalentes,
                     DisciplinasPorPeriodo,
                 });

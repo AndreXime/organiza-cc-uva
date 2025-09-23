@@ -105,10 +105,8 @@ export default function GerenciadorInterativo() {
                 </div>
             </div>
 
-            <ProgressBar
-                total={DisciplinasTotais.filter((disc) => disc.periodo != 'Optativa').length || 50}
-                current={DisciplinasFeitas.size || 0}
-            />
+            <ProgressBar />
+
             {!loading ? (
                 <>
                     {Object.entries(disciplinasVisiveis).map(([periodo, disciplinas]) => (
@@ -131,7 +129,8 @@ export default function GerenciadorInterativo() {
                                         >
                                             <strong className={titleClasses}>{disciplina.nome}</strong>
                                             <span className="text-xs mt-2 font-semibold">
-                                                {disciplina.professor} - {disciplina.carga_horaria} horas
+                                                {disciplina.professor ? `${disciplina.professor} - ` : ''}{' '}
+                                                {disciplina.carga_horaria} horas
                                             </span>
                                             {disciplina.requisitos && disciplina.requisitos.length > 0 ? (
                                                 <ul className="list-disc list-inside mt-2 text-xs">

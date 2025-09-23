@@ -191,9 +191,13 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
                     if (jaPlanejadaEmOutroSemestre || semestre.disciplinas.includes(d.id)) {
                         return false;
                     }
+                    if (d.periodo == 'Não ofertadas') {
+                        return false;
+                    }
                     if (d.requisitos?.length) {
                         return d.requisitos.every((req) => requisitosCumpridos.has(req.id));
                     }
+
                     return true;
                 });
             },

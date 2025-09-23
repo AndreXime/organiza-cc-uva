@@ -1,8 +1,8 @@
 import fs from 'fs';
 import { parse } from 'csv-parse/sync';
 
-function processDisciplinas(): Disciplina[] {
-    const conteudo = fs.readFileSync('./data/Disciplinas.csv', 'utf-8');
+export function processDisciplinas(csvPath: string): Disciplina[] {
+    const conteudo = fs.readFileSync(csvPath, 'utf-8');
     const registros = parse(conteudo, {
         columns: true,
         skip_empty_lines: true,
@@ -30,8 +30,8 @@ function processDisciplinas(): Disciplina[] {
         .toSorted((a, b) => a.id - b.id);
 }
 
-function processEquivalentes(Disciplinas: Disciplina[]): Equivalente[] {
-    const conteudo = fs.readFileSync('./data/Equivalentes.csv', 'utf-8');
+export function processEquivalentes(csvPath: string, Disciplinas: Disciplina[]): Equivalente[] {
+    const conteudo = fs.readFileSync(csvPath, 'utf-8');
     const registros = parse(conteudo, {
         columns: true,
         skip_empty_lines: true,
@@ -143,10 +143,3 @@ function searchDisciplinaId(name: string, Disciplina: Disciplina[]): number {
     }
     return DisciplinaEncontrada.id;
 }
-
-const DisciplinasObrigatorias = processDisciplinas();
-const DisciplinasEquivalentes = processEquivalentes(DisciplinasObrigatorias);
-
-const Disciplinas = { DisciplinasObrigatorias, DisciplinasEquivalentes };
-
-export default Disciplinas;

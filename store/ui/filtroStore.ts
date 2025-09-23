@@ -75,11 +75,11 @@ function filtroPorStatus(disciplina: Disciplina, jaFez: string, disciplinasFeita
 
 const filtroPorPeriodo = (disciplina: Disciplina, periodo: string): boolean => {
     if (periodo === 'todos') {
-        return true;
+        return disciplina.periodo.toLowerCase() !== 'não ofertadas';
     }
 
     if (periodo === 'todos_sem_optativas') {
-        return disciplina.periodo.toLowerCase() !== 'optativa';
+        return disciplina.periodo.toLowerCase() !== 'optativa' && disciplina.periodo.toLowerCase() !== 'não ofertadas';
     }
 
     return disciplina.periodo === periodo;

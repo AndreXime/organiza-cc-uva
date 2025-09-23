@@ -14,7 +14,7 @@ export default function FiltroDisciplinas() {
     }, [filtrarDisciplinas]);
 
     const professoresUnicos = useMemo(() => {
-        const nomes = DisciplinasTotais.map((d) => d.professor.trim());
+        const nomes = DisciplinasTotais.map((d) => d.professor?.trim());
         return Array.from(new Set(nomes)).sort();
     }, [DisciplinasTotais]);
 
@@ -51,11 +51,14 @@ export default function FiltroDisciplinas() {
                             className="appearance-none border rounded-full p-3 w-full"
                         >
                             <option value="todos">Todos os professores</option>
-                            {professoresUnicos.map((prof, i) => (
-                                <option key={i} value={prof}>
-                                    {prof}
-                                </option>
-                            ))}
+                            {professoresUnicos.map((prof, i) => {
+                                if (prof == '') return null;
+                                return (
+                                    <option key={i} value={prof}>
+                                        {prof}
+                                    </option>
+                                );
+                            })}
                         </select>
                         <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
                             <ArrowDownNarrowWide size={23} />
@@ -84,8 +87,8 @@ export default function FiltroDisciplinas() {
                             onChange={(e) => setFiltro('periodo', e.target.value)}
                             className="appearance-none border rounded-full p-3 w-full"
                         >
-                            <option value="todos">Todos os períodos</option>
-                            <option value="todos_sem_optativas">Todos (Exceto Optativas)</option>
+                            <option value="todos">Todas as disciplinas</option>
+                            <option value="todos_sem_optativas">Todos exceto optativas</option>
                             {periodosUnicos.map((p, i) => (
                                 <option key={i} value={p}>
                                     {p}
@@ -166,14 +169,16 @@ export default function FiltroDisciplinas() {
                                 ) : (
                                     <span>Sem pré-requisitos</span>
                                 )}
-                                <span className="text-sm mt-2">
-                                    Horário:
-                                    <ul className="list-disc list-inside">
-                                        {d.horarios?.map((h, i) => (
-                                            <li key={i}>{`${h.dia} ${h.inicio} - ${h.fim}`}</li>
-                                        ))}
-                                    </ul>
-                                </span>
+                                {!!d.horarios && d.horarios.length && (
+                                    <span className="text-sm mt-2">
+                                        Horário:
+                                        <ul className="list-disc list-inside">
+                                            {d.horarios?.map((h, i) => (
+                                                <li key={i}>{`${h.dia} ${h.inicio} - ${h.fim}`}</li>
+                                            ))}
+                                        </ul>
+                                    </span>
+                                )}
                             </li>
                         );
                     })}

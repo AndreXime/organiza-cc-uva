@@ -1,10 +1,20 @@
-type ProgressBarProps = {
-    current: number; // valor atual
-    total: number; // valor total
-};
+import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
+import { useMemo } from 'react';
 
-export default function ProgressBar({ current, total }: ProgressBarProps) {
-    const percentage = Math.min((current / total) * 100, 100);
+export default function ProgressBar() {
+    const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
+    const DisciplinasFeitas = useDisciplinaStore((state) => state.DisciplinasFeitas);
+
+    const percentage = useMemo(() => {
+        const obrigatorias = DisciplinasTotais.filter((disc) => disc.periodo !== 'Optativa');
+        const optativas = DisciplinasTotais.filter((disc) => disc.periodo === 'Optativa');
+        const optativasLimitadas = optativas.slice(0, 7);
+
+        // total final
+        const totalContagem = obrigatorias.length + optativasLimitadas.length;
+
+        return Math.min((DisciplinasFeitas.size / totalContagem) * 100, 100);
+    }, [DisciplinasTotais, DisciplinasFeitas]);
 
     const getBgColor = (percent: number = percentage) => {
         if (percent < 20) return 'bg-red-500';
@@ -26,12 +36,12 @@ export default function ProgressBar({ current, total }: ProgressBarProps) {
         <div className="mb-10 px-4 md:px-0">
             <div className={'flex justify-between mb-1 font-medium ' + getTextColor()}>
                 <span className="text-base">Progresso do Curso</span>
-                <span className="text-sm">{percentage.toFixed(2)}%</span>
+                <span className="text-sm">{(percentage || 0).toFixed(2)}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div
                     className={'h-2.5 rounded-full transition-all duration-500 ' + getBgColor()}
-                    style={{ width: `${percentage}%` }}
+                    style={{ width: `${percentage || 0}%` }}
                 ></div>
             </div>
         </div>

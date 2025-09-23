@@ -15,7 +15,7 @@ interface Disciplina {
     requisitos?: Requisito[];
     horarios?: Horario[];
     carga_horaria: number;
-    professor: string;
+    professor?: string;
 }
 
 interface Equivalente {

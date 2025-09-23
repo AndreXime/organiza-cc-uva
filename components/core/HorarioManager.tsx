@@ -21,7 +21,7 @@ function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
                 title: disc.nome,
                 start: setHoursAndMinutes(date, sh, sm),
                 end: setHoursAndMinutes(date, eh, em),
-                subtitle: [disc.periodo, disc.professor],
+                subtitle: [disc.periodo, disc.professor || ''],
                 selected: false,
             };
         })
