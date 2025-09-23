@@ -15,7 +15,11 @@ export default function Modal() {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
             <div className="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
-                <p className="mb-6 text-center text-gray-800">{modalMessage}</p>
+                <p className="mb-6 text-center text-gray-800">
+                    {modalMessage.split('\n').map((value, index) => (
+                        <p key={index}>{value}</p>
+                    ))}
+                </p>
 
                 <div className="flex justify-end space-x-4">
                     <button

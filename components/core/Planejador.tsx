@@ -3,6 +3,7 @@
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { usePlanejadorStore } from '@/store/ui/planejadorStore';
 import { useUIStore } from '@/store/ui/uiStore';
+import { Plus, Sparkles } from 'lucide-react';
 
 export default function Planejador() {
     const {
@@ -16,6 +17,7 @@ export default function Planejador() {
         removerSemestre,
         getDisciplinasDisponiveisParaSelecao,
         getConflitos,
+        preencherAutomaticamente,
     } = usePlanejadorStore();
     const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
 
@@ -27,6 +29,19 @@ export default function Planejador() {
             () => {
                 // Esta função só será chamada se o usuário clicar em "Sim"
                 removerSemestre(ano, semestre);
+            }
+        );
+    };
+
+    const handlePreencherAuto = () => {
+        const { openModal } = useUIStore.getState();
+
+        openModal(
+            `Isso apagará seu planejamento atual e criará um novo, otimizado para concluir o curso no menor tempo possível.\n
+             O algoritmo pode sugerir uma carga irrealista, com várias disciplinas no mesmo semestre, mas nunca gera conflitos de horário.\n
+             Deseja continuar?`,
+            () => {
+                preencherAutomaticamente();
             }
         );
     };
@@ -50,9 +65,14 @@ export default function Planejador() {
                         um conflito de horario com alguma outra disciplina do mesmo semestre. Mas há a possibilidade das
                         disciplinas mudarem de horarios entre os semestres.
                     </p>
-                    <div className="text-center mt-4">
+                    <div className="text-center mt-4 flex justify-center gap-4">
                         <button onClick={adicionarSemestre} className="btn-primary">
+                            <Plus size={22} />
                             Adicionar Semestre
+                        </button>
+                        <button onClick={handlePreencherAuto} className="btn-primary">
+                            <Sparkles size={20} fill="yellow" />
+                            Preencher automaticamente
                         </button>
                     </div>
                 </div>

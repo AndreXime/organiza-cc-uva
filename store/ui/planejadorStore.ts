@@ -22,6 +22,7 @@ type PlanejadorActions = {
     removerDisciplina: (disciplinaId: number) => void;
     getDisciplinasDisponiveisParaSelecao: (semestre: PlanejamentoType, index: number) => Disciplina[];
     getConflitos: (semestre: PlanejamentoType) => Set<number>;
+    preencherAutomaticamente: () => void;
 };
 export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
     persist(
@@ -195,6 +196,69 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
                     }
                     return true;
                 });
+            },
+
+            preencherAutomaticamente: () => {
+                const { DisciplinasTotais, DisciplinasFeitas } = useDisciplinaStore.getState();
+
+                const disciplinasAPlanejar = DisciplinasTotais.filter((d) => !DisciplinasFeitas.has(d.id));
+                const disciplinasJaPlanejadas = new Set<number>();
+                const novoPlanejamento: PlanejamentoType[] = [];
+                const requisitosCumpridos = new Set<number>([...DisciplinasFeitas]);
+
+                const temConflito = (disciplina: Disciplina, outras: Disciplina[]): boolean => {
+                    if (!disciplina.horarios) return false;
+                    for (const outra of outras) {
+                        if (!outra.horarios) continue;
+                        for (const h1 of disciplina.horarios) {
+                            for (const h2 of outra.horarios) {
+                                if (h1.dia === h2.dia && h1.inicio < h2.fim && h1.fim > h2.inicio) return true;
+                            }
+                        }
+                    }
+                    return false;
+                };
+
+                while (disciplinasJaPlanejadas.size < disciplinasAPlanejar.length) {
+                    const disponiveis = disciplinasAPlanejar.filter(
+                        (d) =>
+                            !disciplinasJaPlanejadas.has(d.id) &&
+                            (!d.requisitos || d.requisitos.every((req) => requisitosCumpridos.has(req.id)))
+                    );
+
+                    if (disponiveis.length === 0) {
+                        console.error(
+                            'Não foi possível planejar todas as disciplinas. Verifique se há ciclos de pré-requisitos ou disciplinas sem horário.'
+                        );
+                        break;
+                    }
+
+                    const semestreAtual: Disciplina[] = [];
+                    for (const disciplina of disponiveis) {
+                        if (!temConflito(disciplina, semestreAtual)) {
+                            semestreAtual.push(disciplina);
+                        }
+                    }
+
+                    const idsDoSemestre = semestreAtual.map((d) => d.id);
+                    const ultimo = novoPlanejamento[novoPlanejamento.length - 1];
+                    let ano, semestre;
+                    if (ultimo) {
+                        ano = ultimo.semestre === 1 ? ultimo.ano : ultimo.ano + 1;
+                        semestre = ultimo.semestre === 1 ? 2 : 1;
+                    } else {
+                        const data = new Date();
+                        ano = data.getFullYear();
+                        semestre = data.getMonth() < 7 ? 1 : 2;
+                    }
+
+                    novoPlanejamento.push({ ano, semestre, disciplinas: idsDoSemestre });
+                    idsDoSemestre.forEach((id) => {
+                        disciplinasJaPlanejadas.add(id);
+                        requisitosCumpridos.add(id);
+                    });
+                }
+                set({ planejamento: novoPlanejamento, semestreEmEdicao: null });
             },
         }),
         {
