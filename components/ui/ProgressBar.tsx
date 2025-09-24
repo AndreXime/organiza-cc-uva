@@ -6,14 +6,27 @@ export default function ProgressBar() {
     const DisciplinasFeitas = useDisciplinaStore((state) => state.DisciplinasFeitas);
 
     const percentage = useMemo(() => {
-        const obrigatorias = DisciplinasTotais.filter((disc) => disc.periodo !== 'Optativa');
-        const optativas = DisciplinasTotais.filter((disc) => disc.periodo === 'Optativa');
-        const optativasLimitadas = optativas.slice(0, 7);
+        const disciplinasObrigatorias = DisciplinasTotais.filter(
+            (disc) => disc.periodo !== 'Optativa' && disc.periodo !== 'Não ofertadas'
+        );
+        const numMaxOptativas = 7;
 
-        // total final
-        const totalContagem = obrigatorias.length + optativasLimitadas.length;
+        const totalDeDisciplinasContabilizadas = disciplinasObrigatorias.length + numMaxOptativas;
 
-        return Math.min((DisciplinasFeitas.size / totalContagem) * 100, 100);
+        const obrigatoriasFeitasArray = Array.from(DisciplinasFeitas).filter((idFeita) =>
+            disciplinasObrigatorias.some((disc) => disc.id === idFeita)
+        );
+
+        const optativasFeitasArray = Array.from(DisciplinasFeitas).filter(
+            (idFeita) => !disciplinasObrigatorias.some((disc) => disc.id === idFeita)
+        );
+
+        // Limita a contagem de optativas feitas a no máximo 7
+        const optativasFeitas = Math.min(optativasFeitasArray.length, numMaxOptativas);
+
+        const totalFeitas = obrigatoriasFeitasArray.length + optativasFeitas;
+
+        return Math.min((totalFeitas / totalDeDisciplinasContabilizadas) * 100, 100);
     }, [DisciplinasTotais, DisciplinasFeitas]);
 
     const getBgColor = (percent: number = percentage) => {
