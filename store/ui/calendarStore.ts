@@ -25,7 +25,7 @@ export const useCalendarStore = create<CalendarState>()(
             totalCargaHoraria: 0,
             hideNonSelected: false,
 
-            // Açõesx
+            // Constroi todos os events possiveis
             buildEvents: (DisciplinasDisponiveis: Set<number>) => {
                 const getDisciplinasByIds = useDisciplinaStore.getState().getDisciplinasByIds;
 
@@ -51,6 +51,7 @@ export const useCalendarStore = create<CalendarState>()(
                 get().calculateVisibleEvents();
             },
 
+            // Constroi os events considerando os criterios do usuario
             calculateVisibleEvents: () => {
                 const getDisciplinasByIds = useDisciplinaStore.getState().getDisciplinasByIds;
                 const { selectedDiscs, allEvents, hideNonSelected } = get();
@@ -69,10 +70,17 @@ export const useCalendarStore = create<CalendarState>()(
                 const eventosVisiveis = allEvents.filter((ev) => {
                     if (selectedDiscs.includes(ev.id)) {
                         return true; // Se está selecionado sempre manter
-                    } else {
-                        const hasConflict = selectedEvents.some((sel) => ev.start < sel.end && ev.end > sel.start);
-                        return !hasConflict; // Manter apenas se não tiver conflito.
                     }
+
+                    // Pega todos os eventos da disciplina do evento atual
+                    const eventosDaDisc = allEvents.filter((e) => e.id === ev.id);
+
+                    // Verifica se algum evento da disciplina conflita com algum evento selecionado
+                    const hasConflict = eventosDaDisc.some((ed) =>
+                        selectedEvents.some((sel) => ed.start < sel.end && ed.end > sel.start)
+                    );
+
+                    return !hasConflict;
                 });
 
                 set({ visibleEvents: eventosVisiveis, totalCargaHoraria: cargaHoraria });
