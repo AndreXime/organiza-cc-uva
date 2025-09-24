@@ -38,12 +38,12 @@ export default function GerenciadorInterativo() {
             const estaDisponivel = DisciplinasDisponiveis.has(disciplina.id);
 
             if (foiFeita) {
-                return 2; // Feitas têm o maior peso, vão para o final
+                return 1; // Feitas vão para o meio
             }
             if (estaDisponivel) {
-                return 0; // Disponíveis têm o menor peso, vêm primeiro
+                return 0; // Disponíveis vêm primeiro
             }
-            return 1; // Bloqueadas ficam no meio
+            return 2; // Bloqueadas ficam no final
         };
 
         if (mostrarFeitas) {

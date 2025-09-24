@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { useDisciplinaStore } from '../disciplinas/disciplinaStore';
 
-export type PlanejamentoType = {
+type PlanejamentoType = {
     ano: number;
     semestre: number;
     disciplinas: number[];

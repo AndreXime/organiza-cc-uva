@@ -4,73 +4,25 @@ import { Calendar } from 'react-big-calendar';
 import { format, startOfWeek } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { setHoursAndMinutes, getDateForWeekday, localizer } from '@/lib/helpers/CalendarHelper';
+import { localizer } from '@/lib/helpers/CalendarHelper';
 import html2canvas from 'html2canvas-pro';
 import { Download, Eye, EyeOff } from 'lucide-react';
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
-import { useUIStore } from '@/store/ui/uiStore';
 import SectionHeader from '../ui/SectionHeader';
-
-function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
-    return disciplinas.flatMap((disc) =>
-        (disc.horarios || []).map((h) => {
-            const date = getDateForWeekday(h.dia);
-            const [sh, sm] = h.inicio.split(':').map(Number);
-            const [eh, em] = h.fim.split(':').map(Number);
-            return {
-                id: disc.id,
-                title: disc.nome,
-                start: setHoursAndMinutes(date, sh, sm),
-                end: setHoursAndMinutes(date, eh, em),
-                subtitle: [disc.periodo, disc.professor || ''],
-                selected: false,
-            };
-        })
-    );
-}
+import { useCalendarStore } from '@/store/ui/calendarStore';
 
 export default function HorarioManager() {
     const DisciplinasDisponiveis = useDisciplinaStore((state) => state.DisciplinasDisponiveis);
-    const getDisciplinasByIds = useDisciplinaStore((state) => state.getDisciplinasByIds);
 
-    const toggleSelectedDisc = useUIStore((state) => state.toggleSelectedDisc);
-    const selectedDiscs = useUIStore((state) => state.selectedDiscs);
-    const hideNonSelected = useUIStore((state) => state.hideNonSelected);
-    const setHideNonSelected = useUIStore((state) => state.setHideNonSelected);
-
+    const { visibleEvents, totalCargaHoraria, toggleSelectedDisc, selectedDiscs, hideNonSelected, setHideNonSelected } =
+        useCalendarStore();
     const [loading, setLoading] = useState(false);
 
-    const allEvents = useMemo(() => {
-        const disciplinas = getDisciplinasByIds(DisciplinasDisponiveis);
-        return buildEvents(disciplinas);
-    }, [DisciplinasDisponiveis, getDisciplinasByIds]);
+    useMemo(() => {
+        useCalendarStore.getState().buildEvents(DisciplinasDisponiveis);
+    }, [DisciplinasDisponiveis]);
 
     const calendarRef = useRef<HTMLDivElement>(null);
-
-    // Disciplinas selecionadas ou que não colidem com nenhum selecionado
-    const { visibleEvents, totalCargaHoraria } = useMemo(() => {
-        const cargaHoraria = getDisciplinasByIds(new Set(selectedDiscs)).reduce(
-            (sum, disc) => sum + disc.carga_horaria,
-            0
-        );
-
-        const selectedEvents = allEvents.filter((ev) => selectedDiscs.includes(ev.id));
-
-        if (hideNonSelected) {
-            return { visibleEvents: selectedEvents, totalCargaHoraria: cargaHoraria };
-        }
-
-        const eventosVisiveis = allEvents.filter((ev) => {
-            if (selectedDiscs.includes(ev.id)) {
-                return true; // Se está selecionado sempre manter
-            } else {
-                const hasConflict = selectedEvents.some((sel) => ev.start < sel.end && ev.end > sel.start);
-                return !hasConflict; // Manter apenas se não tiver conflito.
-            }
-        });
-
-        return { visibleEvents: eventosVisiveis, totalCargaHoraria: cargaHoraria };
-    }, [allEvents, selectedDiscs, hideNonSelected, getDisciplinasByIds]);
 
     const salvarImagem = async () => {
         setLoading(true);
