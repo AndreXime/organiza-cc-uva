@@ -7,6 +7,7 @@ import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { SkeletonSection } from '../ui/LoadingSkeleton';
 import { useUIStore } from '@/store/ui/uiStore';
 import { generateDisciplinaClasses } from '@/lib/utils/utils';
+import SectionHeader from '../ui/SectionHeader';
 
 export default function GerenciadorInterativo() {
     const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
@@ -71,9 +72,8 @@ export default function GerenciadorInterativo() {
 
     return (
         <>
-            <div className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl">
-                <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Gerenciador de Disciplinas</h2>
-                <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base">
+            <SectionHeader title="Gerenciador de Disciplinas">
+                <p>
                     As disciplinas em <span className="font-bold text-green-600">verde</span> estão marcadas como{' '}
                     <span className="font-bold text-green-600">Concluídas</span>, e as em
                     <span className="font-bold text-blue-600"> azul</span> estão
@@ -103,7 +103,7 @@ export default function GerenciadorInterativo() {
                         </button>
                     </p>
                 </div>
-            </div>
+            </SectionHeader>
 
             <ProgressBar />
 

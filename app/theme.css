@@ -1,0 +1,58 @@
+:root {
+    --background: #f9fafb; /* gray-50 */
+    --foreground: #1f2937; /* gray-800 */
+
+    --header-primary: #1447e6; /*text-blue-700*/
+    --header-secondary: #6a7282; /*text-gray-500*/
+
+    /* Cores do componente NAV */
+    --card: #ffffff; /* bg-white */
+    --primary: #2563eb; /* bg-blue-600 */
+    --primary-foreground: #ffffff; /* text-white */
+    --muted-foreground: #4b5563; /* text-gray-600 */
+    --accent: #f3f4f6; /* hover:bg-gray-100 */
+
+    /* Cores do SectionHeader */
+    --info-background: #eff6ff; /* bg-blue-50 */
+    --info-border: #bfdbfe; /* border-blue-200 */
+    --info-foreground: #1e40af; /* text-blue-800 */
+}
+
+.dark {
+    --background: #343434; /* gray-950 */
+    --foreground: #f9fafb; /* gray-50 */
+
+    --header-primary: #60a5fa; /* blue-400 */
+    --header-secondary: #9ca3af; /* gray-400 */
+
+    /* Cores do componente NAV */
+    --card: #111827; /* bg-gray-900 */
+    --primary: #3b82f6; /* bg-blue-500 */
+    --primary-foreground: #f9fafb; /* text-gray-50 */
+    --muted-foreground: #6b7280; /* text-gray-500 */
+    --accent: #1f2937; /* hover:bg-gray-800 */
+
+    /* Cores do SectionHeader */
+    --info-background: #172554; /* bg-blue-950 */
+    --info-border: #1e40af; /* border-blue-800 */
+    --info-foreground: #60a5fa; /* text-blue-400 */
+}
+
+@theme {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-header-primary: var(--header-primary);
+    --color-header-secondary: var(--header-secondary);
+
+    /* Cores do componente NAV */
+    --color-card: var(--card);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+
+    /* Cores do SectionHeader */
+    --color-info-background: var(--info-background);
+    --color-info-border: var(--info-border);
+    --color-info-foreground: var(--info-foreground);
+}

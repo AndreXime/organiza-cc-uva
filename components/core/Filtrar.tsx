@@ -3,6 +3,7 @@ import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { FiltrosType, useFiltroStore } from '@/store/ui/filtroStore';
 import { ArrowDownNarrowWide } from 'lucide-react';
 import { useEffect, useMemo } from 'react';
+import SectionHeader from '../ui/SectionHeader';
 
 export default function FiltroDisciplinas() {
     const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
@@ -36,12 +37,10 @@ export default function FiltroDisciplinas() {
 
     return (
         <>
-            <div className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl">
-                <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Pesquisar Disciplinas</h2>
-                <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base">
-                    Pesquise e filtre as disciplinas com base em qualquer critérios.
-                </p>
-            </div>
+            <SectionHeader title="Pesquisar Disciplinas">
+                <p>Pesquise e filtre as disciplinas com base em qualquer critérios.</p>
+            </SectionHeader>
+
             <div className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-sm">
                     <div className="relative w-full">

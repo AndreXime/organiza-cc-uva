@@ -24,7 +24,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     return (
         <html lang="pt-br">
             <StoreInitializer data={{ DisciplinasCurso, DisciplinasEquivalentes }} />
-            <body className={`${inter.variable} antialiased`}>{children}</body>
+            <body className={`${inter.variable} antialiased bg-background`}>{children}</body>
         </html>
     );
 }

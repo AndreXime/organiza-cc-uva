@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import { SiTypescript, SiTailwindcss, SiNextdotjs, SiGithub } from 'react-icons/si';
 import DisciplinaTable from '../ui/DisciplinaTable';
-import { Footprints, BadgeCheck, LibraryBig, Clock } from 'lucide-react';
+import { Footprints, BadgeCheck, LibraryBig, Clock, Pickaxe, Sun, Moon } from 'lucide-react';
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 
 export default function Sobre() {
@@ -41,6 +41,28 @@ export default function Sobre() {
     return (
         <>
             <div className="max-w-7xl mx-auto space-y-12">
+                <div>
+                    <h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2 flex flex-row items-center">
+                        Temas de cores{' '}
+                        <span className="inline-flex gap-2 ml-5 font-bold  text-base text-yellow-500">
+                            <Pickaxe /> Em construção
+                        </span>
+                    </h3>
+                    <div className="flex gap-4">
+                        <button
+                            className="bg-white border-black text-black border-1 p-4 py-3 rounded-full inline-flex gap-2"
+                            onClick={() => document.documentElement.classList.remove('dark')}
+                        >
+                            Tema Claro <Sun />
+                        </button>
+                        <button
+                            className="bg-black border-white text-white border-1 p-4 py-3 rounded-full inline-flex gap-2"
+                            onClick={() => document.documentElement.classList.add('dark')}
+                        >
+                            Tema Escuro <Moon />
+                        </button>
+                    </div>
+                </div>
                 <div>
                     <h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2">
                         Estatísticas de progresso

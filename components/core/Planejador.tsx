@@ -4,6 +4,7 @@ import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { usePlanejadorStore } from '@/store/ui/planejadorStore';
 import { useUIStore } from '@/store/ui/uiStore';
 import { Plus, Sparkles } from 'lucide-react';
+import SectionHeader from '../ui/SectionHeader';
 
 export default function Planejador() {
     const {
@@ -48,35 +49,30 @@ export default function Planejador() {
 
     return (
         <div className="space-y-8">
-            <div className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl flex justify-center">
-                <div className="text-sm md:text-base max-w-4xl flex justify-center items-center flex-col">
-                    <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Planejador de Curso</h2>
-                    <p>
-                        Adicione os próximos semestres que você pretende cursar e planeje quais disciplinas fazer em
-                        cada um deles.
-                    </p>
-                    <p>
-                        Clique em Adicionar semestre e editar semestre depois clique no dropdown Adicionar disciplina e
-                        aparecerão as disciplinas disponíveis no momento. Mais disciplinas ficarão disponíveis em outros
-                        semestres, pois o sistema leva em conta as que você planejou nos semestres anteriores.
-                    </p>
-                    <p>
-                        As disciplinas em <span className="text-yellow-600 font-bold">amarelo</span> querem dizer que há
-                        um conflito de horario com alguma outra disciplina do mesmo semestre. Mas há a possibilidade das
-                        disciplinas mudarem de horarios entre os semestres.
-                    </p>
-                    <div className="text-center mt-4 flex justify-center gap-4">
-                        <button onClick={adicionarSemestre} className="btn-primary">
-                            <Plus size={22} />
-                            Adicionar Semestre
-                        </button>
-                        <button onClick={handlePreencherAuto} className="btn-primary">
-                            <Sparkles size={20} fill="yellow" />
-                            Preencher automaticamente
-                        </button>
-                    </div>
+            <SectionHeader title="Planejador de Curso">
+                <p>
+                    Adicione os próximos semestres que você pretende cursar e planeje quais disciplinas fazer em cada um
+                    deles.
+                    <br />
+                    Clique em Adicionar semestre e editar semestre depois clique no dropdown Adicionar disciplina e
+                    aparecerão as disciplinas disponíveis no momento. Mais disciplinas ficarão disponíveis em outros
+                    semestres, pois o sistema leva em conta as que você planejou nos semestres anteriores.
+                    <br />
+                    As disciplinas em <span className="text-yellow-600 font-bold">amarelo</span> querem dizer que há um
+                    conflito de horario com alguma outra disciplina do mesmo semestre. Mas há a possibilidade das
+                    disciplinas mudarem de horarios entre os semestres.
+                </p>
+                <div className="text-center mt-4 flex justify-center gap-4">
+                    <button onClick={adicionarSemestre} className="btn-primary">
+                        <Plus size={22} />
+                        Adicionar Semestre
+                    </button>
+                    <button onClick={handlePreencherAuto} className="btn-primary">
+                        <Sparkles size={20} fill="yellow" />
+                        Preencher automaticamente
+                    </button>
                 </div>
-            </div>
+            </SectionHeader>
 
             <div className="grid grid-cols-1 gap-8">
                 {planejamento.map((semestre, index) => {

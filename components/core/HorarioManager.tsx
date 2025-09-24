@@ -9,6 +9,7 @@ import html2canvas from 'html2canvas-pro';
 import { Download, Eye, EyeOff } from 'lucide-react';
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { useUIStore } from '@/store/ui/uiStore';
+import SectionHeader from '../ui/SectionHeader';
 
 function buildEvents(disciplinas: Disciplina[]): CalendarEvent[] {
     return disciplinas.flatMap((disc) =>
@@ -93,18 +94,15 @@ export default function HorarioManager() {
 
     return (
         <>
-            <header className="text-center mb-10 p-6 bg-blue-50 border border-blue-200 rounded-xl">
-                <h2 className="text-xl md:text-2xl font-semibold text-blue-800 mb-2">Organizador de horarios</h2>
-                <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base mb-4">
+            <SectionHeader title="Organizador de horarios">
+                <p>
                     A grade abaixo mostra os horários das disciplinas que estão disponíveis na aba{' '}
                     <span className="font-semibold text-blue-600">Gerenciador de Disciplinas</span>. Você pode clicar
                     nos cards para <span className="font-semibold text-[#7608c4]">marcar como selecionada</span> , isso
                     fará ocultar disciplina que tenham conflito com ela, você pode usar isso para planejar as
                     disciplinas com base nos horarios.
                 </p>
-                <p className="text-gray-600 mx-auto text-sm md:text-base mb-4 font-semibold">
-                    Total de horas das disciplinas selecionadas: {totalCargaHoraria} horas
-                </p>
+                <p className="font-semibold">Total de horas das disciplinas selecionadas: {totalCargaHoraria} horas</p>
                 <p className="flex flex-wrap flex-row gap-4 items-center justify-center">
                     <button
                         onClick={() => setHideNonSelected(!hideNonSelected)}
@@ -126,7 +124,8 @@ export default function HorarioManager() {
                         <Download size={20} /> Salvar horarios como imagem
                     </button>
                 </p>
-            </header>
+            </SectionHeader>
+
             <div className="relative overflow-x-auto lg:overflow-visible">
                 <div
                     ref={calendarRef}

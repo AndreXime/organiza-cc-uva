@@ -1,9 +1,10 @@
 @import 'tailwindcss';
 
+@import './theme.css';
+
 body {
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
-    @apply bg-gray-50 text-gray-800;
 }
 
 @utility course-item {
