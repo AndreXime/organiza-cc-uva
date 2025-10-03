@@ -205,7 +205,9 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
             preencherAutomaticamente: () => {
                 const { DisciplinasTotais, DisciplinasFeitas } = useDisciplinaStore.getState();
 
-                const disciplinasAPlanejar = DisciplinasTotais.filter((d) => !DisciplinasFeitas.has(d.id));
+                const disciplinasAPlanejar = DisciplinasTotais.filter(
+                    (d) => !DisciplinasFeitas.has(d.id) && !(d.periodo == 'Não ofertadas')
+                );
                 const disciplinasJaPlanejadas = new Set<number>();
                 const novoPlanejamento: PlanejamentoType[] = [];
                 const requisitosCumpridos = new Set<number>([...DisciplinasFeitas]);

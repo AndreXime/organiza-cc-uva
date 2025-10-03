@@ -86,7 +86,6 @@ export const useDisciplinaStore = create<DisciplinaState>()(
             // Ação para inicializar o estado com dados do servidor
             init: (data) => {
                 const DisciplinasPorPeriodo = data.DisciplinasCurso.reduce<Record<string, Set<number>>>((acc, disc) => {
-                    // Varias disciplinas optativas não são mais ofertadas
                     if (disc.periodo === 'Optativa' && !disc.professor) {
                         disc.periodo = 'Não ofertadas';
                     }
@@ -96,10 +95,26 @@ export const useDisciplinaStore = create<DisciplinaState>()(
                     return acc;
                 }, {});
 
+                // Ordenar: normais primeiro (1°, 2°, ...), depois optativas e não ofertadas
+                const periodosOrdenados = Object.keys(DisciplinasPorPeriodo).sort((a, b) => {
+                    const getWeight = (p: string) => {
+                        if (/^\d+°/.test(p)) return parseInt(p); // pega número do período
+                        if (p === 'Optativa') return 9998; // Joga optativa para ser antepenultimo
+                        if (p === 'Não ofertadas') return 9999; // Joga para o final
+                        return 10000;
+                    };
+                    return getWeight(a) - getWeight(b);
+                });
+
+                const DisciplinasPorPeriodoOrdenado: Record<string, Set<number>> = {};
+                for (const periodo of periodosOrdenados) {
+                    DisciplinasPorPeriodoOrdenado[periodo] = DisciplinasPorPeriodo[periodo];
+                }
+
                 set({
                     DisciplinasTotais: data.DisciplinasCurso,
                     DisciplinasEquivalentes: data.DisciplinasEquivalentes,
-                    DisciplinasPorPeriodo,
+                    DisciplinasPorPeriodo: DisciplinasPorPeriodoOrdenado,
                 });
 
                 get().recalculateDisponiveis();

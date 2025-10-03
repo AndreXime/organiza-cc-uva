@@ -44,6 +44,8 @@ id,nome,periodo,horarios,requisitos,carga_horaria,professor
 36,Laboratório de Desenvolvimento de Software,8° Período,2NOPQ,"25,29",60,Thales Damasceno
 37,Projeto de Conclusão de Curso TCC,8° Período,3FH 5FH,"15,25,23,31,33",60,Lorena Pereira
 
+67,Trabalho de Conclusão de Curso TCC,9° Período,2FH 6FH,37,60,Lorena Pereira
+
 43,Empreendedorismo,Optativa,3IJKL,,60,Raimundo Inacio
 42,Estágio Supervisionado,Optativa,4IJKL,,60,Thales Damasceno
 44,Introdução a Administração,Optativa,4NOPQ,,60,Marcio de Vasconcelos
