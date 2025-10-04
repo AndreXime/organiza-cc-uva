@@ -30,19 +30,29 @@ export default function ProgressBar() {
     }, [DisciplinasTotais, DisciplinasFeitas]);
 
     const getBgColor = (percent: number = percentage) => {
+        if (percent < 10) return 'bg-red-600';
         if (percent < 20) return 'bg-red-500';
+        if (percent < 30) return 'bg-orange-600';
         if (percent < 40) return 'bg-orange-500';
-        if (percent < 60) return 'bg-yellow-500';
-        if (percent < 80) return 'bg-green-500';
-        return 'bg-blue-600';
+        if (percent < 50) return 'bg-yellow-500';
+        if (percent < 60) return 'bg-yellow-400';
+        if (percent < 70) return 'bg-amber-500';
+        if (percent < 80) return 'bg-lime-500';
+        if (percent < 90) return 'bg-green-500';
+        return 'bg-emerald-600';
     };
 
     const getTextColor = (percent: number = percentage) => {
+        if (percent < 10) return 'text-red-600';
         if (percent < 20) return 'text-red-500';
+        if (percent < 30) return 'text-orange-600';
         if (percent < 40) return 'text-orange-500';
+        if (percent < 50) return 'text-yellow-600';
         if (percent < 60) return 'text-yellow-500';
-        if (percent < 80) return 'text-green-500';
-        return 'text-blue-600';
+        if (percent < 70) return 'text-amber-500';
+        if (percent < 80) return 'text-lime-500';
+        if (percent < 90) return 'text-green-500';
+        return 'text-emerald-600';
     };
 
     return (
