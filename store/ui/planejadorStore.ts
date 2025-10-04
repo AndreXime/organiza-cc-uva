@@ -205,9 +205,24 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
             preencherAutomaticamente: () => {
                 const { DisciplinasTotais, DisciplinasFeitas } = useDisciplinaStore.getState();
 
-                const disciplinasAPlanejar = DisciplinasTotais.filter(
-                    (d) => !DisciplinasFeitas.has(d.id) && !(d.periodo == 'Não ofertadas')
+                const optativasJaFeitas = DisciplinasTotais.filter(
+                    (d) => d.periodo === 'optativa' && DisciplinasFeitas.has(d.id)
+                ).length;
+
+                const limiteDeNovasOptativas = Math.max(0, 8 - optativasJaFeitas);
+
+                const obrigatoriasAPlanejar = DisciplinasTotais.filter(
+                    (d) => !DisciplinasFeitas.has(d.id) && d.periodo !== 'optativa' && d.periodo !== 'Não ofertadas'
                 );
+
+                const optativasAPlanejar = DisciplinasTotais.filter(
+                    (d) => !DisciplinasFeitas.has(d.id) && d.periodo === 'optativa'
+                );
+
+                const optativasLimitadas = optativasAPlanejar.slice(0, limiteDeNovasOptativas);
+
+                const disciplinasAPlanejar = [...obrigatoriasAPlanejar, ...optativasLimitadas];
+
                 const disciplinasJaPlanejadas = new Set<number>();
                 const novoPlanejamento: PlanejamentoType[] = [];
                 const requisitosCumpridos = new Set<number>([...DisciplinasFeitas]);
@@ -231,13 +246,6 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
                             !disciplinasJaPlanejadas.has(d.id) &&
                             (!d.requisitos || d.requisitos.every((req) => requisitosCumpridos.has(req.id)))
                     );
-
-                    if (disponiveis.length === 0) {
-                        console.error(
-                            'Não foi possível planejar todas as disciplinas. Verifique se há ciclos de pré-requisitos ou disciplinas sem horário.'
-                        );
-                        break;
-                    }
 
                     const semestreAtual: Disciplina[] = [];
                     for (const disciplina of disponiveis) {
