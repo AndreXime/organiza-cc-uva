@@ -1,33 +1,7 @@
-import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
-import { useMemo } from 'react';
+import useCalculateProgress from '@/lib/hooks/useCalculateProgress';
 
 export default function ProgressBar() {
-    const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
-    const DisciplinasFeitas = useDisciplinaStore((state) => state.DisciplinasFeitas);
-
-    const percentage = useMemo(() => {
-        const disciplinasObrigatorias = DisciplinasTotais.filter(
-            (disc) => disc.periodo !== 'Optativa' && disc.periodo !== 'Não ofertadas'
-        );
-        const numMaxOptativas = 7;
-
-        const totalDeDisciplinasContabilizadas = disciplinasObrigatorias.length + numMaxOptativas;
-
-        const obrigatoriasFeitasArray = Array.from(DisciplinasFeitas).filter((idFeita) =>
-            disciplinasObrigatorias.some((disc) => disc.id === idFeita)
-        );
-
-        const optativasFeitasArray = Array.from(DisciplinasFeitas).filter(
-            (idFeita) => !disciplinasObrigatorias.some((disc) => disc.id === idFeita)
-        );
-
-        // Limita a contagem de optativas feitas a no máximo 7
-        const optativasFeitas = Math.min(optativasFeitasArray.length, numMaxOptativas);
-
-        const totalFeitas = obrigatoriasFeitasArray.length + optativasFeitas;
-
-        return Math.min((totalFeitas / totalDeDisciplinasContabilizadas) * 100, 100);
-    }, [DisciplinasTotais, DisciplinasFeitas]);
+    const { percentage } = useCalculateProgress();
 
     const getBgColor = (percent: number = percentage) => {
         if (percent < 10) return 'bg-red-600';

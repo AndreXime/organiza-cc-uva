@@ -32,6 +32,7 @@ export const useDisciplinaStore = create<DisciplinaState>()(
                 const { DisciplinasTotais, DisciplinasFeitas } = get();
                 const novasDisponiveis = new Set(
                     DisciplinasTotais.filter((d) => {
+                        if (d.periodo == 'Não ofertadas') return false; // Não ofertada
                         if (DisciplinasFeitas.has(d.id)) return false; // Não está feita
                         if (!d.requisitos?.length) return true; // Não tem requisitos
                         // Todos os requisitos estão no conjunto de disciplinas feitas

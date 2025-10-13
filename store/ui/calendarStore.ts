@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { useDisciplinaStore } from '../disciplinas/disciplinaStore';
-import { getDateForWeekday, setHoursAndMinutes } from '@/lib/helpers/CalendarHelper';
+import { getDateForWeekday, setHoursAndMinutes } from '@/lib/CalendarHelper';
 
 export interface CalendarState {
     selectedDiscs: number[];

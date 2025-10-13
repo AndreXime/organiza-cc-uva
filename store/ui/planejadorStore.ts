@@ -206,17 +206,17 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
                 const { DisciplinasTotais, DisciplinasFeitas } = useDisciplinaStore.getState();
 
                 const optativasJaFeitas = DisciplinasTotais.filter(
-                    (d) => d.periodo === 'optativa' && DisciplinasFeitas.has(d.id)
+                    (d) => d.periodo === 'Optativa' && DisciplinasFeitas.has(d.id)
                 ).length;
 
-                const limiteDeNovasOptativas = Math.max(0, 8 - optativasJaFeitas);
+                const limiteDeNovasOptativas = Math.max(0, 7 - optativasJaFeitas);
 
                 const obrigatoriasAPlanejar = DisciplinasTotais.filter(
-                    (d) => !DisciplinasFeitas.has(d.id) && d.periodo !== 'optativa' && d.periodo !== 'Não ofertadas'
+                    (d) => !DisciplinasFeitas.has(d.id) && d.periodo !== 'Optativa' && d.periodo !== 'Não ofertadas'
                 );
 
                 const optativasAPlanejar = DisciplinasTotais.filter(
-                    (d) => !DisciplinasFeitas.has(d.id) && d.periodo === 'optativa'
+                    (d) => !DisciplinasFeitas.has(d.id) && d.periodo === 'Optativa'
                 );
 
                 const optativasLimitadas = optativasAPlanejar.slice(0, limiteDeNovasOptativas);
