@@ -6,7 +6,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { SkeletonSection } from '../ui/LoadingSkeleton';
 import { useUIStore } from '@/store/ui/uiStore';
-import { generateDisciplinaClasses } from '@/lib/utils/utils';
+import { generateDisciplinaClasses } from '@/lib/utils';
 import SectionHeader from '../ui/SectionHeader';
 
 export default function GerenciadorInterativo() {

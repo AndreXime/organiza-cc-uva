@@ -4,17 +4,18 @@ import { SiTypescript, SiTailwindcss, SiNextdotjs, SiGithub } from 'react-icons/
 import DisciplinaTable from '../ui/DisciplinaTable';
 import { Footprints, BadgeCheck, LibraryBig, Clock, Pickaxe, Sun, Moon } from 'lucide-react';
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
+import useCalculateProgress from '@/lib/hooks/useCalculateProgress';
 
 export default function Sobre() {
-    const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
-    const DisciplinasFeitas = useDisciplinaStore((state) => state.DisciplinasFeitas);
     const DisciplinasDisponiveis = useDisciplinaStore((state) => state.DisciplinasDisponiveis);
     const getDisciplinasByIds = useDisciplinaStore((state) => state.getDisciplinasByIds);
+
+    const { totalFeitas, faltantes } = useCalculateProgress();
 
     const stats = [
         {
             title: 'Disciplinas concluídas',
-            value: DisciplinasFeitas.size,
+            value: totalFeitas,
             icon: BadgeCheck,
             color: 'text-green-600',
         },
@@ -25,8 +26,8 @@ export default function Sobre() {
             color: 'text-blue-600',
         },
         {
-            title: 'Disciplinas para concluir todas',
-            value: DisciplinasTotais.length - DisciplinasFeitas.size,
+            title: 'Disciplinas para o curso',
+            value: faltantes,
             icon: Clock,
             color: 'text-orange-600',
         },

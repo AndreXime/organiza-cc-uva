@@ -1,4 +1,4 @@
-import { generateDisciplinaClasses } from '@/lib/utils/utils';
+import { generateDisciplinaClasses } from '@/lib/utils';
 import { useDisciplinaStore } from '@/store/disciplinas/disciplinaStore';
 import { useMemo } from 'react';
 import SectionHeader from '../ui/SectionHeader';
