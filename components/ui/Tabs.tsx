@@ -24,7 +24,7 @@ export default function Tabs() {
                 ${
                     Tab === tab.path
                         ? 'text-primary-foreground bg-primary shadow-md'
-                        : 'text-muted-foreground hover:bg-accent'
+                        : 'text-foreground hover:bg-accent'
                 }`}
                     >
                         {tab.label}

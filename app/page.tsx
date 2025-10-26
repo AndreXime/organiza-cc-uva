@@ -37,7 +37,7 @@ export default function Home() {
                 <h1 className="text-3xl md:text-4xl font-bold text-header-primary">
                     Gerenciador de Progresso Acadêmico
                 </h1>
-                <p className="text-header-secondary mt-2">
+                <p className="text-foreground mt-2">
                     Para o curso de Ciência da Computação da Universidade Estadual do Vale do Acaraú
                 </p>
             </header>

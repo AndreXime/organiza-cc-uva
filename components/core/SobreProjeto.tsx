@@ -43,7 +43,7 @@ export default function Sobre() {
         <>
             <div className="max-w-7xl mx-auto space-y-12">
                 <div>
-                    <h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2 flex flex-row items-center">
+                    <h3 className="text-xl font-bold mb-4 text-foreground border-b-2 border-gray-200 pb-2 flex flex-row items-center">
                         Temas de cores{' '}
                         <span className="inline-flex gap-2 ml-5 font-bold  text-base text-yellow-500">
                             <Pickaxe /> Em construção

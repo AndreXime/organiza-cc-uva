@@ -19,7 +19,7 @@
 }
 
 .dark {
-    --background: #343434; /* gray-950 */
+    --background: #292929; /* gray-950 */
     --foreground: #f9fafb; /* gray-50 */
 
     --header-primary: #60a5fa; /* blue-400 */
