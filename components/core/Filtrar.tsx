@@ -86,7 +86,7 @@ export default function FiltroDisciplinas() {
                             onChange={(e) => setFiltro('periodo', e.target.value)}
                             className="appearance-none border rounded-full p-3 w-full"
                         >
-                            <option value="todos">Todas as disciplinas</option>
+                            <option value="todos">Todas as disciplinas ofertadas</option>
                             <option value="todos_sem_optativas">Todos exceto optativas</option>
                             {periodosUnicos.map((p, i) => (
                                 <option key={i} value={p}>
