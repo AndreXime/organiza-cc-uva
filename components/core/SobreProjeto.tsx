@@ -26,7 +26,7 @@ export default function Sobre() {
             color: 'text-blue-600',
         },
         {
-            title: 'Disciplinas para o curso',
+            title: 'Disciplinas para terminar o curso',
             value: faltantes,
             icon: Clock,
             color: 'text-orange-600',
