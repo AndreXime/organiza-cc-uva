@@ -56,7 +56,7 @@ export default function HorarioManager() {
 
 	return (
 		<>
-			{mode !== "minimal" && (
+			{mode !== "minimal" ? (
 				<SectionHeader title="Organizador de horarios">
 					<p>
 						A grade abaixo mostra os horários das disciplinas que estão
@@ -103,6 +103,34 @@ export default function HorarioManager() {
 						</button>
 					</p>
 				</SectionHeader>
+			) : (
+				<p className="flex flex-wrap flex-row gap-4 items-center justify-center mt-4 mb-10">
+					<button
+						type="button"
+						onClick={() => setHideNonSelected(!hideNonSelected)}
+						disabled={selectedDiscs.length === 0}
+						className="btn-primary"
+					>
+						{hideNonSelected ? (
+							<>
+								<Eye size={20} /> Mostrar disciplinas não selecionadas
+							</>
+						) : (
+							<>
+								<EyeOff size={20} />
+								Esconder disciplinas não selecionadas
+							</>
+						)}
+					</button>
+					<button
+						type="button"
+						disabled={loading}
+						className="btn-primary"
+						onClick={salvarImagem}
+					>
+						<Download size={20} /> Salvar horarios como imagem
+					</button>
+				</p>
 			)}
 
 			<div className="relative overflow-x-auto lg:overflow-visible">

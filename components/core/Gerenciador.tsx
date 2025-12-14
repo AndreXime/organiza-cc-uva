@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import ProgressBar from "../ui/ProgressBar";
 import { Eye, EyeOff } from "lucide-react";
 import { useDisciplinaStore } from "@/store/disciplinas/disciplinaStore";
@@ -10,30 +10,24 @@ import { generateDisciplinaClasses } from "@/lib/utils";
 import SectionHeader from "../ui/SectionHeader";
 
 export default function GerenciadorInterativo() {
-	const DisciplinasTotais = useDisciplinaStore(
-		(state) => state.DisciplinasTotais,
-	);
-	const DisciplinasFeitas = useDisciplinaStore(
-		(state) => state.DisciplinasFeitas,
-	);
-	const DisciplinasDisponiveis = useDisciplinaStore(
-		(state) => state.DisciplinasDisponiveis,
-	);
-	const DisciplinasPorPeriodo = useDisciplinaStore(
-		(state) => state.DisciplinasPorPeriodo,
-	);
-	const toggleDisciplina = useDisciplinaStore(
-		(state) => state.toggleDisciplina,
-	);
-	const getDisciplinasByIds = useDisciplinaStore(
-		(state) => state.getDisciplinasByIds,
-	);
+	const {
+		DisciplinasTotais,
+		DisciplinasDisponiveis,
+		DisciplinasEquivalentes,
+		DisciplinasPorPeriodo,
+		DisciplinasFeitas,
+		toggleDisciplina,
+		getDisciplinasByIds,
+	} = useDisciplinaStore();
+
 	const loading = useDisciplinaStore((state) => state.loading);
 	const mode = useUIStore((state) => state.mode);
 
 	const mostrarFeitas = useUIStore((state) => state.mostrarFeitas);
 	const setMostrarFeitas = useUIStore((state) => state.setMostrarFeitas);
 	const setMessage = useUIStore((state) => state.setMessage);
+
+	const [expandEquivalente, setExpandEquivalente] = useState<number>();
 
 	// Função pra clicar e alternar se já fez ou não
 	function toggleDisc(id: number) {
@@ -45,6 +39,18 @@ export default function GerenciadorInterativo() {
 	}
 
 	const disciplinasVisiveis: Record<string, Disciplina[]> = useMemo(() => {
+		const gruposMap = new Map<
+			string,
+			(typeof DisciplinasEquivalentes)[number][]
+		>();
+
+		// Agrupa as disciplinas pelo equivaleNome
+		DisciplinasEquivalentes.forEach((disciplina) => {
+			const key = disciplina.equivaleNome;
+			if (!gruposMap.has(key)) gruposMap.set(key, []);
+			gruposMap.get(key)!.push(disciplina);
+		});
+
 		// Função para calcular o peso para ordenação
 		const getSortWeight = (disciplina: Disciplina): number => {
 			const foiFeita = DisciplinasFeitas.has(disciplina.id);
@@ -65,6 +71,14 @@ export default function GerenciadorInterativo() {
 				Object.entries(DisciplinasPorPeriodo).map(([periodo, disciplinas]) => [
 					periodo,
 					getDisciplinasByIds(disciplinas)
+						.map((disciplina) => {
+							const equivalentes = gruposMap.get(disciplina.nome);
+							if (!equivalentes) {
+								return disciplina;
+							}
+							disciplina.equivalentes = equivalentes;
+							return disciplina;
+						})
 						.slice()
 						.sort((a, b) => getSortWeight(a) - getSortWeight(b)),
 				]),
@@ -76,9 +90,17 @@ export default function GerenciadorInterativo() {
 			Object.entries(DisciplinasPorPeriodo).map(([periodo, disciplinas]) => [
 				periodo,
 				getDisciplinasByIds(disciplinas)
+					.map((disciplina) => {
+						const equivalentes = gruposMap.get(disciplina.nome);
+						if (!equivalentes) {
+							return disciplina;
+						}
+						disciplina.equivalentes = equivalentes;
+						return disciplina;
+					})
 					.filter((disc) => !DisciplinasFeitas.has(disc.id))
 					.sort((a, b) => getSortWeight(a) - getSortWeight(b)),
-				,
+				undefined,
 			]),
 		);
 	}, [
@@ -86,12 +108,13 @@ export default function GerenciadorInterativo() {
 		DisciplinasPorPeriodo,
 		DisciplinasFeitas,
 		DisciplinasDisponiveis,
+		DisciplinasEquivalentes,
 		getDisciplinasByIds,
 	]);
 
 	return (
 		<>
-			{mode !== "minimal" && (
+			{mode !== "minimal" ? (
 				<SectionHeader title="Gerenciador de Disciplinas">
 					<p>
 						As disciplinas em{" "}
@@ -130,6 +153,27 @@ export default function GerenciadorInterativo() {
 						</p>
 					</div>
 				</SectionHeader>
+			) : (
+				<div className="flex flex-wrap gap-4 items-center justify-center my-4">
+					<p className="flex flex-wrap flex-row gap-4 items-center justify-center">
+						<button
+							type="button"
+							disabled={DisciplinasFeitas.size === 0}
+							onClick={() => setMostrarFeitas(!mostrarFeitas)}
+							className="btn-primary"
+						>
+							{mostrarFeitas ? (
+								<>
+									<EyeOff size={20} /> Esconder disciplinas feitas
+								</>
+							) : (
+								<>
+									<Eye size={20} /> Mostrar todas disciplinas
+								</>
+							)}
+						</button>
+					</p>
+				</div>
 			)}
 
 			<ProgressBar />
@@ -148,10 +192,13 @@ export default function GerenciadorInterativo() {
 									return (
 										<button
 											type="button"
-											onClick={() => toggleDisc(disciplina.id)}
+											onClick={() => {
+												if (!estáBloqueada) {
+													toggleDisc(disciplina.id);
+												}
+											}}
 											key={disciplina.id}
-											disabled={estáBloqueada}
-											className={`${cardClasses} cursor-pointer`}
+											className={`${cardClasses}`}
 										>
 											<strong className={titleClasses}>
 												{disciplina.nome}
@@ -177,6 +224,51 @@ export default function GerenciadorInterativo() {
 													Sem pré-requisitos
 												</p>
 											)}
+											<div className="flex justify-center flex-col mt-3">
+												{disciplina.equivalentes &&
+													disciplina.equivalentes.length > 0 && (
+														<>
+															<span
+																className="cursor-pointer py-1 text-xs bg-blue-600 hover:bg-blue-500 rounded-full text-white w-1/2 text-center"
+																onClick={(e) => {
+																	e.stopPropagation();
+																	setExpandEquivalente(
+																		disciplina.id !== expandEquivalente
+																			? disciplina.id
+																			: undefined,
+																	);
+																}}
+															>
+																{expandEquivalente === disciplina.id
+																	? "Esconder equivalentes"
+																	: "Ver equivalentes"}
+															</span>
+															{expandEquivalente === disciplina.id && (
+																<span className="text-xs mt-2 font-bold flex-col flex gap-1">
+																	Equivalentes:
+																	<div className="flex flex-col gap-2 font-normal">
+																		{disciplina.equivalentes.map(
+																			(equivalente, index) => (
+																				<span key={index}>
+																					<span className="font-semibold">
+																						{equivalente.curso}
+																					</span>
+																					<div className="flex flex-col">
+																						{disciplina.horarios?.map((h) => (
+																							<span
+																								key={`${h.dia} ${h.inicio} - ${h.fim}`}
+																							>{`${h.dia} ${h.inicio} - ${h.fim}`}</span>
+																						))}
+																					</div>
+																				</span>
+																			),
+																		)}
+																	</div>
+																</span>
+															)}
+														</>
+													)}
+											</div>
 										</button>
 									);
 								})}

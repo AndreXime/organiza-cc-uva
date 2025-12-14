@@ -52,26 +52,24 @@ export default function Planejador() {
 
 	return (
 		<div className="space-y-8">
-			{
+			{mode !== "minimal" ? (
 				<SectionHeader title="Planejador de Curso">
-					{mode !== "minimal" && (
-						<p>
-							Adicione os próximos semestres que você pretende cursar e planeje
-							quais disciplinas fazer em cada um deles.
-							<br />
-							Clique em Adicionar semestre e editar semestre depois clique no
-							dropdown Adicionar disciplina e aparecerão as disciplinas
-							disponíveis no momento. Mais disciplinas ficarão disponíveis em
-							outros semestres, pois o sistema leva em conta as que você
-							planejou nos semestres anteriores.
-							<br />
-							As disciplinas em{" "}
-							<span className="text-yellow-600 font-bold">amarelo</span> querem
-							dizer que há um conflito de horario com alguma outra disciplina do
-							mesmo semestre. Mas há a possibilidade das disciplinas mudarem de
-							horarios entre os semestres.
-						</p>
-					)}
+					<p>
+						Adicione os próximos semestres que você pretende cursar e planeje
+						quais disciplinas fazer em cada um deles.
+						<br />
+						Clique em Adicionar semestre e editar semestre depois clique no
+						dropdown Adicionar disciplina e aparecerão as disciplinas
+						disponíveis no momento. Mais disciplinas ficarão disponíveis em
+						outros semestres, pois o sistema leva em conta as que você planejou
+						nos semestres anteriores.
+						<br />
+						As disciplinas em{" "}
+						<span className="text-yellow-600 font-bold">amarelo</span> querem
+						dizer que há um conflito de horario com alguma outra disciplina do
+						mesmo semestre. Mas há a possibilidade das disciplinas mudarem de
+						horarios entre os semestres.
+					</p>
 					<div className="text-center mt-4 flex justify-center gap-4">
 						<button
 							type="button"
@@ -91,7 +89,26 @@ export default function Planejador() {
 						</button>
 					</div>
 				</SectionHeader>
-			}
+			) : (
+				<div className="text-center mt-4 flex justify-center gap-4">
+					<button
+						type="button"
+						onClick={adicionarSemestre}
+						className="btn-primary"
+					>
+						<Plus size={22} />
+						Adicionar Semestre
+					</button>
+					<button
+						type="button"
+						onClick={handlePreencherAuto}
+						className="btn-primary"
+					>
+						<Sparkles size={20} fill="yellow" />
+						Preencher automaticamente
+					</button>
+				</div>
+			)}
 
 			<div className="grid grid-cols-1 gap-8">
 				{planejamento.map((semestre, index) => {
