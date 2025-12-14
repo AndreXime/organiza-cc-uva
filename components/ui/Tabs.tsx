@@ -1,4 +1,4 @@
-import { useUIStore } from "@/store/ui/uiStore";
+import { useUIStore } from "@/store/uiStore";
 
 const botoes = [
 	{ label: "Gerenciador de Disciplinas", path: "gerenciador" },

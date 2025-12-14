@@ -1,0 +1,162 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { getDay, startOfWeek, parse, format, setDay } from "date-fns";
+import { ptBR } from "date-fns/locale/pt-BR";
+import { dateFnsLocalizer } from "react-big-calendar";
+import { useDisciplinaStore } from "@/store/disciplinaStore";
+
+export interface CalendarState {
+	selectedDiscs: number[];
+	hideNonSelected: boolean;
+	allEvents: CalendarEvent[];
+	visibleEvents: CalendarEvent[];
+	totalCargaHoraria: number;
+	setHideNonSelected: (hide: boolean) => void;
+	toggleSelectedDisc: (discId: number) => void;
+	buildEvents: (DisciplinasDisponiveis: Set<number>) => void;
+	calculateVisibleEvents: () => void;
+}
+
+const weekdays = {
+	Segunda: 1,
+	Terça: 2,
+	Quarta: 3,
+	Quinta: 4,
+	Sexta: 5,
+};
+
+function getDateForWeekday(
+	targetWeekday: Horario["dia"],
+	fromDate = new Date(),
+): Date {
+	const weekStart = startOfWeek(fromDate, { weekStartsOn: 1 });
+	return setDay(weekStart, weekdays[targetWeekday], { weekStartsOn: 1 });
+}
+
+function setHoursAndMinutes(base: Date, hours: number, minutes: number): Date {
+	const d = new Date(base);
+	d.setHours(hours, minutes, 0, 0);
+	return d;
+}
+
+// Configurar date-fns localizer
+export const localizer = dateFnsLocalizer({
+	format,
+	parse,
+	startOfWeek: (date: Date): Date => startOfWeek(date, { weekStartsOn: 1 }),
+	getDay,
+	locales: { "pt-BR": ptBR },
+});
+
+export const useCalendarStore = create<CalendarState>()(
+	persist(
+		(set, get) => ({
+			// Estado Inicial
+			selectedDiscs: [],
+			allEvents: [],
+			visibleEvents: [],
+			totalCargaHoraria: 0,
+			hideNonSelected: false,
+
+			// Constroi todos os events possiveis
+			buildEvents: (DisciplinasDisponiveis: Set<number>) => {
+				const getDisciplinasByIds =
+					useDisciplinaStore.getState().getDisciplinasByIds;
+
+				const disciplinas = getDisciplinasByIds(DisciplinasDisponiveis);
+
+				const allEvents = disciplinas.flatMap((disc) =>
+					(disc.horarios || []).map((h) => {
+						const date = getDateForWeekday(h.dia);
+						const [sh, sm] = h.inicio.split(":").map(Number);
+						const [eh, em] = h.fim.split(":").map(Number);
+						return {
+							id: disc.id,
+							title: disc.nome,
+							start: setHoursAndMinutes(date, sh, sm),
+							end: setHoursAndMinutes(date, eh, em),
+							subtitle: [disc.periodo, disc.professor || ""],
+							selected: false,
+						};
+					}),
+				);
+
+				set({ allEvents });
+				get().calculateVisibleEvents();
+			},
+
+			// Constroi os events considerando os criterios do usuario
+			calculateVisibleEvents: () => {
+				const getDisciplinasByIds =
+					useDisciplinaStore.getState().getDisciplinasByIds;
+				const { selectedDiscs, allEvents, hideNonSelected } = get();
+
+				const cargaHoraria = getDisciplinasByIds(new Set(selectedDiscs)).reduce(
+					(sum, disc) => sum + disc.carga_horaria,
+					0,
+				);
+
+				const selectedEvents = allEvents.filter((ev) =>
+					selectedDiscs.includes(ev.id),
+				);
+
+				if (hideNonSelected) {
+					return {
+						visibleEvents: selectedEvents,
+						totalCargaHoraria: cargaHoraria,
+					};
+				}
+
+				const eventosVisiveis = allEvents.filter((ev) => {
+					if (selectedDiscs.includes(ev.id)) {
+						return true; // Se está selecionado sempre manter
+					}
+
+					// Pega todos os eventos da disciplina do evento atual
+					const eventosDaDisc = allEvents.filter((e) => e.id === ev.id);
+
+					// Verifica se algum evento da disciplina conflita com algum evento selecionado
+					const hasConflict = eventosDaDisc.some((ed) =>
+						selectedEvents.some(
+							(sel) => ed.start < sel.end && ed.end > sel.start,
+						),
+					);
+
+					return !hasConflict;
+				});
+
+				set({
+					visibleEvents: eventosVisiveis,
+					totalCargaHoraria: cargaHoraria,
+				});
+			},
+
+			setHideNonSelected: (hide) => {
+				set({ hideNonSelected: hide });
+				get().calculateVisibleEvents();
+			},
+
+			toggleSelectedDisc: (discId) => {
+				set((state) => {
+					const isSelected = state.selectedDiscs.includes(discId);
+					if (isSelected) {
+						// Se já estiver selecionado, remove
+						return {
+							selectedDiscs: state.selectedDiscs.filter((id) => id !== discId),
+						};
+					} else {
+						// Se não, adiciona
+						return {
+							selectedDiscs: [...state.selectedDiscs, discId],
+						};
+					}
+				});
+				get().calculateVisibleEvents();
+			},
+		}),
+		{
+			name: "selectedDiscs",
+			partialize: (state) => ({ selectedDiscs: state.selectedDiscs }),
+		},
+	),
+);

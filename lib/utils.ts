@@ -1,4 +1,4 @@
-import { useDisciplinaStore } from "@/store/disciplinas/disciplinaStore";
+import { useDisciplinaStore } from "@/store/disciplinaStore";
 /**
  * Gera classes tailwind com base no status do usuario em certa disciplina
  */

@@ -1,6 +1,10 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import type { serverData } from "./DisciplinaStoreInitilizer";
+import { persist, type PersistStorage } from "zustand/middleware";
+
+export type serverData = {
+	DisciplinasCurso: Disciplina[];
+	DisciplinasEquivalentes: Equivalente[];
+};
 
 export interface DisciplinaState {
 	DisciplinasFeitas: Set<number>;
@@ -15,6 +19,47 @@ export interface DisciplinaState {
 	getDisciplinasByIds: (ids: Set<number>) => Disciplina[];
 	getDisciplinaByName: (name: string) => Disciplina | undefined;
 }
+
+const storageAdapter: PersistStorage<
+	Pick<DisciplinaState, "DisciplinasFeitas">
+> = {
+	getItem: (name) => {
+		const str = localStorage.getItem(name);
+		if (!str) {
+			return {
+				state: {
+					DisciplinasFeitas: new Set(),
+				},
+				version: 0,
+			};
+		}
+
+		const storedValue = JSON.parse(str);
+
+		// Garante que o array seja convertido para um Set.
+		// `storedValue.state.DisciplinasFeitas` virá como um array após o JSON.parse.
+		if (storedValue.state?.DisciplinasFeitas) {
+			storedValue.state.DisciplinasFeitas = new Set(
+				storedValue.state.DisciplinasFeitas,
+			);
+		}
+
+		return storedValue;
+	},
+	setItem: (name, newValue) => {
+		// Antes de salvar, convertemos o Set para um Array para que o JSON.stringify funcione corretamente.
+		const newState = {
+			...newValue,
+			state: {
+				...newValue.state,
+				DisciplinasFeitas: Array.from(newValue.state.DisciplinasFeitas || []),
+			},
+		};
+
+		localStorage.setItem(name, JSON.stringify(newState));
+	},
+	removeItem: (name) => localStorage.removeItem(name),
+};
 
 export const useDisciplinaStore = create<DisciplinaState>()(
 	persist(
@@ -131,6 +176,7 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 		}),
 		{
 			name: "disciplinas-feitas",
+			storage: storageAdapter,
 			partialize: (state) => ({ DisciplinasFeitas: state.DisciplinasFeitas }),
 		},
 	),

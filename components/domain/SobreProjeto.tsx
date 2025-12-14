@@ -17,9 +17,9 @@ import {
 	File,
 	FileText,
 } from "lucide-react";
-import { useDisciplinaStore } from "@/store/disciplinas/disciplinaStore";
-import useCalculateProgress from "@/lib/hooks/useCalculateProgress";
-import { useUIStore } from "@/store/ui/uiStore";
+import { useDisciplinaStore } from "@/store/disciplinaStore";
+import useCalculateProgress from "@/hooks/useCalculateProgress";
+import { useUIStore } from "@/store/uiStore";
 
 export default function Sobre() {
 	const DisciplinasDisponiveis = useDisciplinaStore(

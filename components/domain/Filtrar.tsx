@@ -1,10 +1,10 @@
 import { generateDisciplinaClasses } from "@/lib/utils";
-import { useDisciplinaStore } from "@/store/disciplinas/disciplinaStore";
-import { FiltrosType, useFiltroStore } from "@/store/ui/filtroStore";
+import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { ArrowDownNarrowWide } from "lucide-react";
 import { useEffect, useMemo } from "react";
-import SectionHeader from "../ui/SectionHeader";
-import { useUIStore } from "@/store/ui/uiStore";
+import { useUIStore } from "@/store/uiStore";
+import { type FiltrosType, useFiltroStore } from "../../store/filtroStore";
+import SectionHeader from "@/components/ui/SectionHeader";
 
 export default function FiltroDisciplinas() {
 	const DisciplinasTotais = useDisciplinaStore(
@@ -36,7 +36,7 @@ export default function FiltroDisciplinas() {
 			if (bIsOptativa) return -1; // "b" (Optativa) vai para o final
 
 			// Ordenação numérica para os demais
-			return parseInt(a) - parseInt(b);
+			return parseInt(a, 10) - parseInt(b, 10);
 		});
 	}, [DisciplinasTotais]);
 
@@ -169,8 +169,8 @@ export default function FiltroDisciplinas() {
 							d.id,
 						);
 						return (
-							<li key={d.id} className={cardClasses + " text-sm gap-1"}>
-								<span className={titleClasses + " break-words"}>{d.nome}</span>
+							<li key={d.id} className={`${cardClasses} text-sm gap-1`}>
+								<span className={`${titleClasses} break-words`}>{d.nome}</span>
 								<span>{d.professor}</span>
 								{d.requisitos && d.requisitos.length > 0 ? (
 									<span>

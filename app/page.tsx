@@ -1,14 +1,24 @@
 "use client";
 
-import FiltroDisciplinas from "@/components/core/Filtrar";
-import Gerenciador from "@/components/core/Gerenciador";
-import HorarioManager from "@/components/core/HorarioManager";
-import Planejador from "@/components/core/Planejador";
-import Sobre from "@/components/core/SobreProjeto";
+import FiltroDisciplinas from "@/components/domain/Filtrar";
+import Gerenciador from "@/components/domain/Gerenciador";
+import HorarioManager from "@/components/domain/HorarioManager";
+import Planejador from "@/components/domain/Planejador";
+import Sobre from "@/components/domain/SobreProjeto";
 import Modal from "@/components/ui/Modal";
 import Popup from "@/components/ui/Popup";
 import Tabs from "@/components/ui/Tabs";
-import { useUIStore } from "@/store/ui/uiStore";
+import { serverData, useDisciplinaStore } from "@/store/disciplinaStore";
+import { useUIStore } from "@/store/uiStore";
+import { useEffect } from "react";
+
+export function StoreInitializer({ data }: { data: serverData }) {
+	useEffect(() => {
+		useDisciplinaStore.getState().init(data);
+	}, [data]);
+
+	return null;
+}
 
 export default function Home() {
 	const Tab = useUIStore((state) => state.Tab);

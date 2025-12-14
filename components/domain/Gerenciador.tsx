@@ -1,12 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import ProgressBar from "../ui/ProgressBar";
 import { Eye, EyeOff } from "lucide-react";
-import { useDisciplinaStore } from "@/store/disciplinas/disciplinaStore";
-import { SkeletonSection } from "../ui/LoadingSkeleton";
-import { useUIStore } from "@/store/ui/uiStore";
+import { useDisciplinaStore } from "@/store/disciplinaStore";
+import { useUIStore } from "@/store/uiStore";
 import { generateDisciplinaClasses } from "@/lib/utils";
+import { SkeletonSection } from "../ui/LoadingSkeleton";
+import ProgressBar from "../ui/ProgressBar";
 import SectionHeader from "../ui/SectionHeader";
 
 export default function GerenciadorInterativo() {

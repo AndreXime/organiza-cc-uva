@@ -1,10 +1,10 @@
 "use client";
 
-import { useDisciplinaStore } from "@/store/disciplinas/disciplinaStore";
-import { usePlanejadorStore } from "@/store/ui/planejadorStore";
-import { useUIStore } from "@/store/ui/uiStore";
+import { useDisciplinaStore } from "@/store/disciplinaStore";
+import { useUIStore } from "@/store/uiStore";
 import { Plus, Sparkles } from "lucide-react";
 import SectionHeader from "../ui/SectionHeader";
+import { usePlanejadorStore } from "../../store/planejadorStore";
 
 export default function Planejador() {
 	const {
@@ -20,6 +20,7 @@ export default function Planejador() {
 		getConflitos,
 		preencherAutomaticamente,
 	} = usePlanejadorStore();
+
 	const DisciplinasTotais = useDisciplinaStore(
 		(state) => state.DisciplinasTotais,
 	);
