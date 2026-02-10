@@ -1,6 +1,7 @@
 {
 	"name": "disciplinas",
 	"version": "1.0.0",
+	"type": "module",
 	"private": true,
 	"scripts": {
 		"dev": "next dev --turbopack",
@@ -14,6 +15,7 @@
 		"html2canvas-pro": "^1.6.6",
 		"lucide-react": "^0.563.0",
 		"next": "^16.1.6",
+		"postcss": "^8.5.6",
 		"react": "^19.2.4",
 		"react-big-calendar": "^1.19.4",
 		"react-dom": "^19.2.4",
@@ -21,13 +23,13 @@
 		"zustand": "^5.0.11"
 	},
 	"devDependencies": {
-		"@tailwindcss/postcss": "^4",
+		"@tailwindcss/postcss": "^4.1.18",
 		"@types/node": "^25",
 		"@types/react": "^19",
 		"@types/react-big-calendar": "^1.16.3",
 		"@types/react-dom": "^19",
 		"eslint-config-next": "^16.1.6",
-		"tailwindcss": "^4",
+		"tailwindcss": "^4.1.18",
 		"typescript": "^5"
 	}
 }
