@@ -20,9 +20,7 @@ export interface DisciplinaState {
 	getDisciplinaByName: (name: string) => Disciplina | undefined;
 }
 
-const storageAdapter: PersistStorage<
-	Pick<DisciplinaState, "DisciplinasFeitas">
-> = {
+const storageAdapter: PersistStorage<Pick<DisciplinaState, "DisciplinasFeitas">> = {
 	getItem: (name) => {
 		const str = localStorage.getItem(name);
 		if (!str) {
@@ -34,17 +32,25 @@ const storageAdapter: PersistStorage<
 			};
 		}
 
-		const storedValue = JSON.parse(str);
+		try {
+			const storedValue = JSON.parse(str);
 
-		// Garante que o array seja convertido para um Set.
-		// `storedValue.state.DisciplinasFeitas` virá como um array após o JSON.parse.
-		if (storedValue.state?.DisciplinasFeitas) {
-			storedValue.state.DisciplinasFeitas = new Set(
-				storedValue.state.DisciplinasFeitas,
-			);
+			// Garante que o array seja convertido para um Set.
+			// `storedValue.state.DisciplinasFeitas` virá como um array após o JSON.parse.
+			if (storedValue.state?.DisciplinasFeitas) {
+				storedValue.state.DisciplinasFeitas = new Set(storedValue.state.DisciplinasFeitas);
+			}
+
+			return storedValue;
+		} catch {
+			// Json invalido retorna default
+			return {
+				state: {
+					DisciplinasFeitas: new Set(),
+				},
+				version: 0,
+			};
 		}
-
-		return storedValue;
 	},
 	setItem: (name, newValue) => {
 		// Antes de salvar, convertemos o Set para um Array para que o JSON.stringify funcione corretamente.
@@ -130,9 +136,7 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 
 			// Ação para inicializar o estado com dados do servidor
 			init: (data) => {
-				const DisciplinasPorPeriodo = data.DisciplinasCurso.reduce<
-					Record<string, Set<number>>
-				>((acc, disc) => {
+				const DisciplinasPorPeriodo = data.DisciplinasCurso.reduce<Record<string, Set<number>>>((acc, disc) => {
 					if (disc.periodo === "Optativa" && !disc.professor) {
 						disc.periodo = "Não ofertadas";
 					}
@@ -143,22 +147,19 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 				}, {});
 
 				// Ordenar: normais primeiro (1°, 2°, ...), depois optativas e não ofertadas
-				const periodosOrdenados = Object.keys(DisciplinasPorPeriodo).sort(
-					(a, b) => {
-						const getWeight = (p: string) => {
-							if (/^\d+°/.test(p)) return parseInt(p); // pega número do período
-							if (p === "Optativa") return 9998; // Joga optativa para ser antepenultimo
-							if (p === "Não ofertadas") return 9999; // Joga para o final
-							return 10000;
-						};
-						return getWeight(a) - getWeight(b);
-					},
-				);
+				const periodosOrdenados = Object.keys(DisciplinasPorPeriodo).sort((a, b) => {
+					const getWeight = (p: string) => {
+						if (/^\d+°/.test(p)) return parseInt(p); // pega número do período
+						if (p === "Optativa") return 9998; // Joga optativa para ser antepenultimo
+						if (p === "Não ofertadas") return 9999; // Joga para o final
+						return 10000;
+					};
+					return getWeight(a) - getWeight(b);
+				});
 
 				const DisciplinasPorPeriodoOrdenado: Record<string, Set<number>> = {};
 				for (const periodo of periodosOrdenados) {
-					DisciplinasPorPeriodoOrdenado[periodo] =
-						DisciplinasPorPeriodo[periodo];
+					DisciplinasPorPeriodoOrdenado[periodo] = DisciplinasPorPeriodo[periodo];
 				}
 
 				set({
