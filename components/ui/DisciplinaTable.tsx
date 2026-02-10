@@ -2,25 +2,17 @@ import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useState } from "react";
 
 export default function DisciplinaTable() {
-	const DisciplinasTotais = useDisciplinaStore(
-		(state) => state.DisciplinasTotais,
-	);
+	const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
 
 	const [mostrarTudo, setMostrarTudo] = useState(false);
 
-	const disciplinasVisiveis = mostrarTudo
-		? DisciplinasTotais
-		: DisciplinasTotais.slice(0, 3);
+	const disciplinasVisiveis = mostrarTudo ? DisciplinasTotais : DisciplinasTotais.slice(0, 3);
 
 	return (
 		<>
 			<h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2 flex flex-row items-center gap-3">
 				Dados utilizados
-				<button
-					type="button"
-					className="btn-primary"
-					onClick={() => setMostrarTudo(!mostrarTudo)}
-				>
+				<button type="button" className="btn-primary" onClick={() => setMostrarTudo(!mostrarTudo)}>
 					{mostrarTudo ? "Mostrar menos" : "Mostrar tudo"}
 				</button>
 			</h3>
@@ -44,23 +36,13 @@ export default function DisciplinaTable() {
 								<td className="border px-2 py-1">{d.nome}</td>
 								<td className="border px-2 py-1">{d.periodo}</td>
 								<td className="border px-2 py-1">
-									{d.horarios
-										? d.horarios
-												.map((h) => `${h.dia} ${h.inicio}-${h.fim}`)
-												.join("; ")
-										: "–"}
+									{d.horarios ? d.horarios.map((h) => `${h.dia} ${h.inicio}-${h.fim}`).join("; ") : "–"}
 								</td>
 								<td className="border px-2 py-1">{d.professor}</td>
 								<td className="border px-2 py-1">{d.carga_horaria}</td>
 								<td className="border px-2 py-1 max-w-xs break-words">
 									{d.requisitos
-										? d.requisitos
-												.map(
-													(r) =>
-														DisciplinasTotais.find((disc) => disc.id === r.id)
-															?.nome,
-												)
-												.join(", ")
+										? d.requisitos.map((r) => DisciplinasTotais.find((disc) => disc.id === r.id)?.nome).join(", ")
 										: "–"}
 								</td>
 							</tr>

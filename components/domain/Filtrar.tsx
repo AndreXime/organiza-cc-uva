@@ -7,13 +7,10 @@ import { type FiltrosType, useFiltroStore } from "../../store/filtroStore";
 import SectionHeader from "@/components/ui/SectionHeader";
 
 export default function FiltroDisciplinas() {
-	const DisciplinasTotais = useDisciplinaStore(
-		(state) => state.DisciplinasTotais,
-	);
+	const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
 	const mode = useUIStore((state) => state.mode);
 
-	const { filtros, setFiltro, disciplinasFiltradas, filtrarDisciplinas } =
-		useFiltroStore();
+	const { filtros, setFiltro, disciplinasFiltradas, filtrarDisciplinas } = useFiltroStore();
 
 	useEffect(() => {
 		filtrarDisciplinas();
@@ -44,9 +41,7 @@ export default function FiltroDisciplinas() {
 		<>
 			{mode !== "minimal" && (
 				<SectionHeader title="Pesquisar Disciplinas">
-					<p>
-						Pesquise e filtre as disciplinas com base em qualquer critérios.
-					</p>
+					<p>Pesquise e filtre as disciplinas com base em qualquer critérios.</p>
 				</SectionHeader>
 			)}
 
@@ -76,9 +71,7 @@ export default function FiltroDisciplinas() {
 					<div className="relative w-full">
 						<select
 							value={filtros.jaFez}
-							onChange={(e) =>
-								setFiltro("jaFez", e.target.value as FiltrosType["jaFez"])
-							}
+							onChange={(e) => setFiltro("jaFez", e.target.value as FiltrosType["jaFez"])}
 							className="appearance-none border rounded-full p-3 w-full"
 						>
 							<option value="todos">Todas as situações</option>
@@ -98,9 +91,7 @@ export default function FiltroDisciplinas() {
 							className="appearance-none border rounded-full p-3 w-full"
 						>
 							<option value="todos">Todas disciplinas ofertadas</option>
-							<option value="todos_sem_optativas">
-								Todos exceto optativas
-							</option>
+							<option value="todos_sem_optativas">Todos exceto optativas</option>
 							{periodosUnicos.map((p, i) => (
 								<option key={i} value={p}>
 									{p}
@@ -115,9 +106,7 @@ export default function FiltroDisciplinas() {
 					<div className="relative w-full">
 						<select
 							value={filtros.turno}
-							onChange={(e) =>
-								setFiltro("turno", e.target.value as FiltrosType["turno"])
-							}
+							onChange={(e) => setFiltro("turno", e.target.value as FiltrosType["turno"])}
 							className="appearance-none border rounded-full p-3 w-full"
 						>
 							<option value="todos">Qualquer turno</option>
@@ -133,9 +122,7 @@ export default function FiltroDisciplinas() {
 					<div className="relative w-full">
 						<select
 							value={filtros.dia}
-							onChange={(e) =>
-								setFiltro("dia", e.target.value as FiltrosType["dia"])
-							}
+							onChange={(e) => setFiltro("dia", e.target.value as FiltrosType["dia"])}
 							className="appearance-none border rounded-full p-3 w-full"
 						>
 							<option value="todos">Qualquer dia</option>
@@ -165,9 +152,7 @@ export default function FiltroDisciplinas() {
 
 				<ul className="grid grid-cols-2 md:grid-cols-4 gap-4 items-stretch">
 					{disciplinasFiltradas.map((d) => {
-						const { cardClasses, titleClasses } = generateDisciplinaClasses(
-							d.id,
-						);
+						const { cardClasses, titleClasses } = generateDisciplinaClasses(d.id);
 						return (
 							<li key={d.id} className={`${cardClasses} text-sm gap-1`}>
 								<span className={`${titleClasses} break-words`}>{d.nome}</span>
@@ -178,8 +163,7 @@ export default function FiltroDisciplinas() {
 										<ul className="list-disc list-inside">
 											{d.requisitos.map((req) => (
 												<li key={req.id}>
-													{DisciplinasTotais.find((d) => d.id === req.id)
-														?.nome || "Disciplina não encontrada"}
+													{DisciplinasTotais.find((d) => d.id === req.id)?.nome || "Disciplina não encontrada"}
 												</li>
 											))}
 										</ul>

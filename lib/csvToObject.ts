@@ -13,9 +13,7 @@ export function processDisciplinas(csvPath: string): Disciplina[] {
 			validarDisciplina(row); // Throw error se invalido
 			const horarios = parseHorarios(row.horarios);
 
-			const requisitos = row.requisitos
-				? row.requisitos.split(",").map((id: string) => ({ id: Number(id) }))
-				: [];
+			const requisitos = row.requisitos ? row.requisitos.split(",").map((id: string) => ({ id: Number(id) })) : [];
 
 			return {
 				id: Number(row.id),
@@ -30,10 +28,7 @@ export function processDisciplinas(csvPath: string): Disciplina[] {
 		.toSorted((a, b) => a.id - b.id);
 }
 
-export function processEquivalentes(
-	csvPath: string,
-	Disciplinas: Disciplina[],
-): Equivalente[] {
+export function processEquivalentes(csvPath: string, Disciplinas: Disciplina[]): Equivalente[] {
 	const conteudo = fs.readFileSync(csvPath, "utf-8");
 	const registros = parse(conteudo, {
 		columns: true,
@@ -121,10 +116,7 @@ function validarDisciplina(row: any) {
 	if (typeof row.professor !== "string") {
 		erros.push("Campo professor inválido");
 	}
-	if (
-		row.requisitos &&
-		!row.requisitos.split(",").every((r: string) => !Number.isNaN(Number(r)))
-	) {
+	if (row.requisitos && !row.requisitos.split(",").every((r: string) => !Number.isNaN(Number(r)))) {
 		erros.push("Campo requisitos inválido");
 	}
 	if (

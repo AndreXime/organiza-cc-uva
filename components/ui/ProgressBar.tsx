@@ -31,9 +31,7 @@ export default function ProgressBar() {
 
 	return (
 		<div className="mb-10 px-4 md:px-0">
-			<div
-				className={`flex justify-between mb-1 font-medium ${getTextColor()}`}
-			>
+			<div className={`flex justify-between mb-1 font-medium ${getTextColor()}`}>
 				<span className="text-base">Progresso do Curso</span>
 				<span className="text-sm">{(percentage || 0).toFixed(2)}%</span>
 			</div>

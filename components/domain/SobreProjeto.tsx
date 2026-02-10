@@ -1,33 +1,14 @@
 import Link from "next/link";
-import {
-	SiTypescript,
-	SiTailwindcss,
-	SiNextdotjs,
-	SiGithub,
-} from "react-icons/si";
+import { SiTypescript, SiTailwindcss, SiNextdotjs, SiGithub } from "react-icons/si";
 import DisciplinaTable from "../ui/DisciplinaTable";
-import {
-	Footprints,
-	BadgeCheck,
-	LibraryBig,
-	Clock,
-	Pickaxe,
-	Sun,
-	Moon,
-	File,
-	FileText,
-} from "lucide-react";
+import { Footprints, BadgeCheck, LibraryBig, Clock, Pickaxe, Sun, Moon, File, FileText } from "lucide-react";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import useCalculateProgress from "@/hooks/useCalculateProgress";
 import { useUIStore } from "@/store/uiStore";
 
 export default function Sobre() {
-	const DisciplinasDisponiveis = useDisciplinaStore(
-		(state) => state.DisciplinasDisponiveis,
-	);
-	const getDisciplinasByIds = useDisciplinaStore(
-		(state) => state.getDisciplinasByIds,
-	);
+	const DisciplinasDisponiveis = useDisciplinaStore((state) => state.DisciplinasDisponiveis);
+	const getDisciplinasByIds = useDisciplinaStore((state) => state.getDisciplinasByIds);
 	const setMode = useUIStore((state) => state.setMode);
 	const mode = useUIStore((state) => state.mode);
 
@@ -54,9 +35,7 @@ export default function Sobre() {
 		},
 		{
 			title: "Próxima disciplina disponível",
-			value:
-				getDisciplinasByIds(DisciplinasDisponiveis)[0]?.nome ||
-				"Você concluiu todas as disciplinas!",
+			value: getDisciplinasByIds(DisciplinasDisponiveis)[0]?.nome || "Você concluiu todas as disciplinas!",
 			icon: Footprints,
 			color: "text-purple-600",
 		},
@@ -113,25 +92,15 @@ export default function Sobre() {
 				<h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2">
 					Estatísticas de progresso
 				</h3>
-				<div
-					id="stats-container"
-					className="grid grid-cols-1 sm:grid-cols-2 gap-4"
-				>
+				<div id="stats-container" className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					{stats.map((stat) => (
-						<div
-							key={stat.title}
-							className="stat-card bg-white p-4 rounded-lg shadow-sm border flex items-center"
-						>
+						<div key={stat.title} className="stat-card bg-white p-4 rounded-lg shadow-sm border flex items-center">
 							<div className="text-3xl mr-4">
 								<stat.icon size={35} className={stat.color} />
 							</div>
 							<div>
-								<h4 className="font-bold text-gray-500 text-sm">
-									{stat.title}
-								</h4>
-								<div className={`text-xl font-semibold ${stat.color}`}>
-									{stat.value}
-								</div>
+								<h4 className="font-bold text-gray-500 text-sm">{stat.title}</h4>
+								<div className={`text-xl font-semibold ${stat.color}`}>{stat.value}</div>
 							</div>
 						</div>
 					))}
@@ -144,12 +113,10 @@ export default function Sobre() {
 					</div>
 					<div className="bg-white p-6 rounded-lg shadow-sm border">
 						<p className="text-gray-600 leading-relaxed">
-							A ideia surgiu da necessidade recorrente de montar uma tabela no
-							Excel todo semestre para verificar os conflitos de horário e os
-							pré-requisitos das disciplinas. Este projeto visa simplificar esse
-							processo, oferecendo uma ferramenta interativa e visual para os
-							estudantes de Ciências da Computação da Universidade Estadual do
-							Vale do Acaraú.
+							A ideia surgiu da necessidade recorrente de montar uma tabela no Excel todo semestre para verificar os
+							conflitos de horário e os pré-requisitos das disciplinas. Este projeto visa simplificar esse processo,
+							oferecendo uma ferramenta interativa e visual para os estudantes de Ciências da Computação da Universidade
+							Estadual do Vale do Acaraú.
 						</p>
 					</div>
 					<div>
@@ -172,13 +139,10 @@ export default function Sobre() {
 						</div>
 					</div>
 					<div className="text-center">
-						<h3 className="text-xl font-bold mb-4 text-gray-700">
-							Gostou do Projeto?
-						</h3>
+						<h3 className="text-xl font-bold mb-4 text-gray-700">Gostou do Projeto?</h3>
 						<p className="text-gray-600 mb-4">
-							Se quiser sugerir alguma melhoria, você pode abrir uma{" "}
-							<strong className="font-semibold">issue</strong> ou um{" "}
-							<strong className="font-semibold">pull request</strong>.
+							Se quiser sugerir alguma melhoria, você pode abrir uma <strong className="font-semibold">issue</strong> ou
+							um <strong className="font-semibold">pull request</strong>.
 						</p>
 						<Link
 							href="https://github.com/AndreXime/organiza-cc-uva"

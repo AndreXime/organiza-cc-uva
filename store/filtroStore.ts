@@ -16,70 +16,57 @@ type FiltrosState = {
 };
 
 type FiltroActions = {
-	setFiltro: <K extends keyof FiltrosType>(
-		campo: K,
-		valor: FiltrosType[K],
-	) => void;
+	setFiltro: <K extends keyof FiltrosType>(campo: K, valor: FiltrosType[K]) => void;
 	filtrarDisciplinas: () => void;
 };
 
-export const useFiltroStore = create<FiltrosState & FiltroActions>(
-	(set, get) => ({
-		// Estados iniciais
-		filtros: {
-			professor: "todos",
-			jaFez: "todos",
-			periodo: "todos",
-			turno: "todos",
-			buscaNome: "",
-			dia: "todos",
-		},
-		disciplinasFiltradas: [],
+export const useFiltroStore = create<FiltrosState & FiltroActions>((set, get) => ({
+	// Estados iniciais
+	filtros: {
+		professor: "todos",
+		jaFez: "todos",
+		periodo: "todos",
+		turno: "todos",
+		buscaNome: "",
+		dia: "todos",
+	},
+	disciplinasFiltradas: [],
 
-		// Açõesx
-		filtrarDisciplinas: () => {
-			const { filtros } = get();
-			const { DisciplinasTotais, DisciplinasFeitas } =
-				useDisciplinaStore.getState();
+	// Açõesx
+	filtrarDisciplinas: () => {
+		const { filtros } = get();
+		const { DisciplinasTotais, DisciplinasFeitas } = useDisciplinaStore.getState();
 
-			set({
-				disciplinasFiltradas: DisciplinasTotais.filter(
-					(d) =>
-						filtroPorProfessor(d, filtros.professor) &&
-						filtroPorStatus(d, filtros.jaFez, DisciplinasFeitas) &&
-						filtroPorPeriodo(d, filtros.periodo) &&
-						filtroPorTurno(d, filtros.turno) &&
-						filtroPorDia(d, filtros.dia) &&
-						filtroPorNome(d, filtros.buscaNome),
-				),
-			});
-		},
+		set({
+			disciplinasFiltradas: DisciplinasTotais.filter(
+				(d) =>
+					filtroPorProfessor(d, filtros.professor) &&
+					filtroPorStatus(d, filtros.jaFez, DisciplinasFeitas) &&
+					filtroPorPeriodo(d, filtros.periodo) &&
+					filtroPorTurno(d, filtros.turno) &&
+					filtroPorDia(d, filtros.dia) &&
+					filtroPorNome(d, filtros.buscaNome),
+			),
+		});
+	},
 
-		setFiltro: (campo, valor) => {
-			set((state) => ({
-				filtros: {
-					...state.filtros,
-					[campo]: valor,
-				},
-			}));
-			get().filtrarDisciplinas();
-		},
-	}),
-);
+	setFiltro: (campo, valor) => {
+		set((state) => ({
+			filtros: {
+				...state.filtros,
+				[campo]: valor,
+			},
+		}));
+		get().filtrarDisciplinas();
+	},
+}));
 
-function filtroPorProfessor(
-	disciplina: Disciplina,
-	professor: string,
-): boolean {
+function filtroPorProfessor(disciplina: Disciplina, professor: string): boolean {
 	if (professor === "todos") return true;
 	return disciplina.professor === professor;
 }
 
-function filtroPorStatus(
-	disciplina: Disciplina,
-	jaFez: string,
-	disciplinasFeitas: Set<number>,
-): boolean {
+function filtroPorStatus(disciplina: Disciplina, jaFez: string, disciplinasFeitas: Set<number>): boolean {
 	const jaFoiFeita = disciplinasFeitas.has(disciplina.id);
 	if (jaFez === "sim") return jaFoiFeita;
 	if (jaFez === "nao") return !jaFoiFeita;
@@ -92,10 +79,7 @@ const filtroPorPeriodo = (disciplina: Disciplina, periodo: string): boolean => {
 	}
 
 	if (periodo === "todos_sem_optativas") {
-		return (
-			disciplina.periodo.toLowerCase() !== "optativa" &&
-			disciplina.periodo.toLowerCase() !== "não ofertadas"
-		);
+		return disciplina.periodo.toLowerCase() !== "optativa" && disciplina.periodo.toLowerCase() !== "não ofertadas";
 	}
 
 	return disciplina.periodo === periodo;

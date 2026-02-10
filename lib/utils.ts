@@ -3,8 +3,7 @@ import { useDisciplinaStore } from "@/store/disciplinaStore";
  * Gera classes tailwind com base no status do usuario em certa disciplina
  */
 export function generateDisciplinaClasses(id: number) {
-	const { DisciplinasDisponiveis, DisciplinasFeitas } =
-		useDisciplinaStore.getState();
+	const { DisciplinasDisponiveis, DisciplinasFeitas } = useDisciplinaStore.getState();
 
 	const foiFeita = DisciplinasFeitas.has(id);
 	const estaDisponivel = DisciplinasDisponiveis.has(id);

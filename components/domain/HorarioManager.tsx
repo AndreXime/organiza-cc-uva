@@ -12,19 +12,11 @@ import { useCalendarStore, localizer } from "../../store/calendarStore";
 import { useUIStore } from "@/store/uiStore";
 
 export default function HorarioManager() {
-	const DisciplinasDisponiveis = useDisciplinaStore(
-		(state) => state.DisciplinasDisponiveis,
-	);
+	const DisciplinasDisponiveis = useDisciplinaStore((state) => state.DisciplinasDisponiveis);
 	const mode = useUIStore((state) => state.mode);
 
-	const {
-		visibleEvents,
-		totalCargaHoraria,
-		toggleSelectedDisc,
-		selectedDiscs,
-		hideNonSelected,
-		setHideNonSelected,
-	} = useCalendarStore();
+	const { visibleEvents, totalCargaHoraria, toggleSelectedDisc, selectedDiscs, hideNonSelected, setHideNonSelected } =
+		useCalendarStore();
 	const [loading, setLoading] = useState(false);
 
 	useMemo(() => {
@@ -58,22 +50,13 @@ export default function HorarioManager() {
 			{mode !== "minimal" ? (
 				<SectionHeader title="Organizador de horarios">
 					<p>
-						A grade abaixo mostra os horários das disciplinas que estão
-						disponíveis na aba{" "}
-						<span className="font-semibold text-blue-600">
-							Gerenciador de Disciplinas
-						</span>
-						. Você pode clicar nos cards para{" "}
-						<span className="font-semibold text-[#7608c4]">
-							marcar como selecionada
-						</span>{" "}
-						, isso fará ocultar disciplina que tenham conflito com ela, você
-						pode usar isso para planejar as disciplinas com base nos horarios.
+						A grade abaixo mostra os horários das disciplinas que estão disponíveis na aba{" "}
+						<span className="font-semibold text-blue-600">Gerenciador de Disciplinas</span>. Você pode clicar nos cards
+						para <span className="font-semibold text-[#7608c4]">marcar como selecionada</span> , isso fará ocultar
+						disciplina que tenham conflito com ela, você pode usar isso para planejar as disciplinas com base nos
+						horarios.
 					</p>
-					<p className="font-semibold">
-						Total de horas das disciplinas selecionadas: {totalCargaHoraria}{" "}
-						horas
-					</p>
+					<p className="font-semibold">Total de horas das disciplinas selecionadas: {totalCargaHoraria} horas</p>
 					<p className="flex flex-wrap flex-row gap-4 items-center justify-center">
 						<button
 							type="button"
@@ -92,12 +75,7 @@ export default function HorarioManager() {
 								</>
 							)}
 						</button>
-						<button
-							type="button"
-							disabled={loading}
-							className="btn-primary"
-							onClick={salvarImagem}
-						>
+						<button type="button" disabled={loading} className="btn-primary" onClick={salvarImagem}>
 							<Download size={20} /> Salvar horarios como imagem
 						</button>
 					</p>
@@ -121,12 +99,7 @@ export default function HorarioManager() {
 							</>
 						)}
 					</button>
-					<button
-						type="button"
-						disabled={loading}
-						className="btn-primary"
-						onClick={salvarImagem}
-					>
+					<button type="button" disabled={loading} className="btn-primary" onClick={salvarImagem}>
 						<Download size={20} /> Salvar horarios como imagem
 					</button>
 				</p>
@@ -167,19 +140,13 @@ export default function HorarioManager() {
 							dayFormat: (date) => {
 								const dayName = format(date, "EEEE", { locale: ptBR });
 								// Tira o feira dos dias das semanas
-								return (
-									dayName.charAt(0).toUpperCase() + dayName.slice(1)
-								).split("-")[0];
+								return (dayName.charAt(0).toUpperCase() + dayName.slice(1)).split("-")[0];
 							},
 							timeGutterFormat: "HH:mm",
 							eventTimeRangeFormat: ({ start, end }) =>
-								`${format(start, "HH:mm", { locale: ptBR })} - ${format(
-									end,
-									"HH:mm",
-									{
-										locale: ptBR,
-									},
-								)}`,
+								`${format(start, "HH:mm", { locale: ptBR })} - ${format(end, "HH:mm", {
+									locale: ptBR,
+								})}`,
 						}}
 						toolbar={false}
 						components={{
@@ -195,9 +162,7 @@ export default function HorarioManager() {
 									</div>
 								);
 							},
-							timeGutterHeader: () => (
-								<div className="py-1 text-xs font-semibold">Horário</div>
-							),
+							timeGutterHeader: () => <div className="py-1 text-xs font-semibold">Horário</div>,
 						}}
 						dayLayoutAlgorithm="no-overlap"
 						allDayAccessor={() => false}

@@ -20,10 +20,7 @@ type PlanejadorActions = {
 	concluirEdicao: () => void;
 	adicionarDisciplina: (disciplinaId: number) => void;
 	removerDisciplina: (disciplinaId: number) => void;
-	getDisciplinasDisponiveisParaSelecao: (
-		semestre: PlanejamentoType,
-		index: number,
-	) => Disciplina[];
+	getDisciplinasDisponiveisParaSelecao: (semestre: PlanejamentoType, index: number) => Disciplina[];
 	getConflitos: (semestre: PlanejamentoType) => Set<number>;
 	preencherAutomaticamente: () => void;
 };
@@ -43,10 +40,7 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
 
 				if (ultimoSemestre) {
 					// Se já existe um semestre, calcula o próximo
-					novoAno =
-						ultimoSemestre.semestre === 1
-							? ultimoSemestre.ano
-							: ultimoSemestre.ano + 1;
+					novoAno = ultimoSemestre.semestre === 1 ? ultimoSemestre.ano : ultimoSemestre.ano + 1;
 					novoSemestre = ultimoSemestre.semestre === 1 ? 2 : 1;
 				} else {
 					// Se for o primeiro semestre, calcula baseado na data atual
@@ -73,9 +67,7 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
 			removerSemestre: (ano, semestre) => {
 				set((state) => {
 					const planejamentoAtual = [...state.planejamento];
-					const indexParaRemover = planejamentoAtual.findIndex(
-						(p) => p.ano === ano && p.semestre === semestre,
-					);
+					const indexParaRemover = planejamentoAtual.findIndex((p) => p.ano === ano && p.semestre === semestre);
 
 					if (indexParaRemover === -1) return state;
 
@@ -89,10 +81,7 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
 						let semestreRecalculado: number;
 
 						if (semestreAnterior) {
-							anoRecalculado =
-								semestreAnterior.semestre === 1
-									? semestreAnterior.ano
-									: semestreAnterior.ano + 1;
+							anoRecalculado = semestreAnterior.semestre === 1 ? semestreAnterior.ano : semestreAnterior.ano + 1;
 							semestreRecalculado = semestreAnterior.semestre === 1 ? 2 : 1;
 						} else {
 							// Se o primeiro item foi removido, recalcula com base na data atual
@@ -110,14 +99,11 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
 					}
 
 					const semestreRemovidoEstavaEmEdicao =
-						state.semestreEmEdicao?.ano === ano &&
-						state.semestreEmEdicao?.semestre === semestre;
+						state.semestreEmEdicao?.ano === ano && state.semestreEmEdicao?.semestre === semestre;
 
 					return {
 						planejamento: planejamentoAtual,
-						semestreEmEdicao: semestreRemovidoEstavaEmEdicao
-							? null
-							: state.semestreEmEdicao,
+						semestreEmEdicao: semestreRemovidoEstavaEmEdicao ? null : state.semestreEmEdicao,
 					};
 				});
 			},
@@ -136,8 +122,7 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
 
 				set((state) => ({
 					planejamento: state.planejamento.map((p) =>
-						p.ano === semestreEmEdicao.ano &&
-						p.semestre === semestreEmEdicao.semestre
+						p.ano === semestreEmEdicao.ano && p.semestre === semestreEmEdicao.semestre
 							? { ...p, disciplinas: [...p.disciplinas, disciplinaId] }
 							: p,
 					),
@@ -150,13 +135,10 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
 
 				set((state) => ({
 					planejamento: state.planejamento.map((p) =>
-						p.ano === semestreEmEdicao.ano &&
-						p.semestre === semestreEmEdicao.semestre
+						p.ano === semestreEmEdicao.ano && p.semestre === semestreEmEdicao.semestre
 							? {
 									...p,
-									disciplinas: p.disciplinas.filter(
-										(id) => id !== disciplinaId,
-									),
+									disciplinas: p.disciplinas.filter((id) => id !== disciplinaId),
 								}
 							: p,
 					),
@@ -177,11 +159,7 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
 						if (!discA.horarios || !discB.horarios) continue;
 						for (const horarioA of discA.horarios) {
 							for (const horarioB of discB.horarios) {
-								if (
-									horarioA.dia === horarioB.dia &&
-									horarioA.inicio < horarioB.fim &&
-									horarioA.fim > horarioB.inicio
-								) {
+								if (horarioA.dia === horarioB.dia && horarioA.inicio < horarioB.fim && horarioA.fim > horarioB.inicio) {
 									conflitosSet.add(discA.id);
 									conflitosSet.add(discB.id);
 								}
@@ -193,26 +171,18 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
 			},
 
 			getDisciplinasDisponiveisParaSelecao: (semestre, index) => {
-				const { DisciplinasTotais, DisciplinasFeitas } =
-					useDisciplinaStore.getState();
+				const { DisciplinasTotais, DisciplinasFeitas } = useDisciplinaStore.getState();
 				const { planejamento } = get();
 
-				const disciplinasNaoFeitas = DisciplinasTotais.filter(
-					(d) => !DisciplinasFeitas.has(d.id),
-				);
+				const disciplinasNaoFeitas = DisciplinasTotais.filter((d) => !DisciplinasFeitas.has(d.id));
 				const requisitosCumpridos = new Set([
 					...DisciplinasFeitas,
 					...planejamento.slice(0, index).flatMap((p) => p.disciplinas),
 				]);
 
 				return disciplinasNaoFeitas.filter((d) => {
-					const jaPlanejadaEmOutroSemestre = planejamento.some(
-						(p, i) => i !== index && p.disciplinas.includes(d.id),
-					);
-					if (
-						jaPlanejadaEmOutroSemestre ||
-						semestre.disciplinas.includes(d.id)
-					) {
+					const jaPlanejadaEmOutroSemestre = planejamento.some((p, i) => i !== index && p.disciplinas.includes(d.id));
+					if (jaPlanejadaEmOutroSemestre || semestre.disciplinas.includes(d.id)) {
 						return false;
 					}
 					if (d.periodo === "Não ofertadas") {
@@ -227,8 +197,7 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
 			},
 
 			preencherAutomaticamente: () => {
-				const { DisciplinasTotais, DisciplinasFeitas } =
-					useDisciplinaStore.getState();
+				const { DisciplinasTotais, DisciplinasFeitas } = useDisciplinaStore.getState();
 
 				const optativasJaFeitas = DisciplinasTotais.filter(
 					(d) => d.periodo === "Optativa" && DisciplinasFeitas.has(d.id),
@@ -237,45 +206,28 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
 				const limiteDeNovasOptativas = Math.max(0, 7 - optativasJaFeitas);
 
 				const obrigatoriasAPlanejar = DisciplinasTotais.filter(
-					(d) =>
-						!DisciplinasFeitas.has(d.id) &&
-						d.periodo !== "Optativa" &&
-						d.periodo !== "Não ofertadas",
+					(d) => !DisciplinasFeitas.has(d.id) && d.periodo !== "Optativa" && d.periodo !== "Não ofertadas",
 				);
 
 				const optativasAPlanejar = DisciplinasTotais.filter(
 					(d) => !DisciplinasFeitas.has(d.id) && d.periodo === "Optativa",
 				);
 
-				const optativasLimitadas = optativasAPlanejar.slice(
-					0,
-					limiteDeNovasOptativas,
-				);
+				const optativasLimitadas = optativasAPlanejar.slice(0, limiteDeNovasOptativas);
 
-				const disciplinasAPlanejar = [
-					...obrigatoriasAPlanejar,
-					...optativasLimitadas,
-				];
+				const disciplinasAPlanejar = [...obrigatoriasAPlanejar, ...optativasLimitadas];
 
 				const disciplinasJaPlanejadas = new Set<number>();
 				const novoPlanejamento: PlanejamentoType[] = [];
 				const requisitosCumpridos = new Set<number>([...DisciplinasFeitas]);
 
-				const temConflito = (
-					disciplina: Disciplina,
-					outras: Disciplina[],
-				): boolean => {
+				const temConflito = (disciplina: Disciplina, outras: Disciplina[]): boolean => {
 					if (!disciplina.horarios) return false;
 					for (const outra of outras) {
 						if (!outra.horarios) continue;
 						for (const h1 of disciplina.horarios) {
 							for (const h2 of outra.horarios) {
-								if (
-									h1.dia === h2.dia &&
-									h1.inicio < h2.fim &&
-									h1.fim > h2.inicio
-								)
-									return true;
+								if (h1.dia === h2.dia && h1.inicio < h2.fim && h1.fim > h2.inicio) return true;
 							}
 						}
 					}
@@ -286,8 +238,7 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
 					const disponiveis = disciplinasAPlanejar.filter(
 						(d) =>
 							!disciplinasJaPlanejadas.has(d.id) &&
-							(!d.requisitos ||
-								d.requisitos.every((req) => requisitosCumpridos.has(req.id))),
+							(!d.requisitos || d.requisitos.every((req) => requisitosCumpridos.has(req.id))),
 					);
 
 					const semestreAtual: Disciplina[] = [];

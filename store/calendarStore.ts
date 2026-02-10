@@ -25,10 +25,7 @@ const weekdays = {
 	Sexta: 5,
 };
 
-function getDateForWeekday(
-	targetWeekday: Horario["dia"],
-	fromDate = new Date(),
-): Date {
+function getDateForWeekday(targetWeekday: Horario["dia"], fromDate = new Date()): Date {
 	const weekStart = startOfWeek(fromDate, { weekStartsOn: 1 });
 	return setDay(weekStart, weekdays[targetWeekday], { weekStartsOn: 1 });
 }
@@ -60,8 +57,7 @@ export const useCalendarStore = create<CalendarState>()(
 
 			// Constroi todos os events possiveis
 			buildEvents: (DisciplinasDisponiveis: Set<number>) => {
-				const getDisciplinasByIds =
-					useDisciplinaStore.getState().getDisciplinasByIds;
+				const getDisciplinasByIds = useDisciplinaStore.getState().getDisciplinasByIds;
 
 				const disciplinas = getDisciplinasByIds(DisciplinasDisponiveis);
 
@@ -87,8 +83,7 @@ export const useCalendarStore = create<CalendarState>()(
 
 			// Constroi os events considerando os criterios do usuario
 			calculateVisibleEvents: () => {
-				const getDisciplinasByIds =
-					useDisciplinaStore.getState().getDisciplinasByIds;
+				const getDisciplinasByIds = useDisciplinaStore.getState().getDisciplinasByIds;
 				const { selectedDiscs, allEvents, hideNonSelected } = get();
 
 				const cargaHoraria = getDisciplinasByIds(new Set(selectedDiscs)).reduce(
@@ -96,9 +91,7 @@ export const useCalendarStore = create<CalendarState>()(
 					0,
 				);
 
-				const selectedEvents = allEvents.filter((ev) =>
-					selectedDiscs.includes(ev.id),
-				);
+				const selectedEvents = allEvents.filter((ev) => selectedDiscs.includes(ev.id));
 
 				if (hideNonSelected) {
 					return {
@@ -117,9 +110,7 @@ export const useCalendarStore = create<CalendarState>()(
 
 					// Verifica se algum evento da disciplina conflita com algum evento selecionado
 					const hasConflict = eventosDaDisc.some((ed) =>
-						selectedEvents.some(
-							(sel) => ed.start < sel.end && ed.end > sel.start,
-						),
+						selectedEvents.some((sel) => ed.start < sel.end && ed.end > sel.start),
 					);
 
 					return !hasConflict;

@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import {
-	processDisciplinas,
-	processEquivalentes,
-} from "@/lib/csvToObject";
+import { processDisciplinas, processEquivalentes } from "@/lib/csvToObject";
 import { StoreInitializer } from "./page";
 
 const inter = Inter({
@@ -14,27 +11,17 @@ const inter = Inter({
 
 export const metadata: Metadata = {
 	title: "Gerenciador de Progresso Acadêmico",
-	description:
-		"Para o curso de Ciência da Computação da Universidade Estadual do Vale do Acaraú",
+	description: "Para o curso de Ciência da Computação da Universidade Estadual do Vale do Acaraú",
 };
 
-export default async function RootLayout({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
 	const DisciplinasCurso = processDisciplinas("./data/Disciplinas.csv");
-	const DisciplinasEquivalentes = processEquivalentes(
-		"./data/Equivalentes.csv",
-		DisciplinasCurso,
-	);
+	const DisciplinasEquivalentes = processEquivalentes("./data/Equivalentes.csv", DisciplinasCurso);
 
 	return (
-		<html lang="pt-br">
+		<html lang="pt-BR">
 			<StoreInitializer data={{ DisciplinasCurso, DisciplinasEquivalentes }} />
-			<body className={`${inter.variable} antialiased bg-background`}>
-				{children}
-			</body>
+			<body className={`${inter.variable} antialiased bg-background`}>{children}</body>
 		</html>
 	);
 }

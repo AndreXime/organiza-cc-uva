@@ -6,7 +6,8 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"ignoreUnknown": false
+		"ignoreUnknown": true,
+		"includes": ["**", "!**/*.astro"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -14,6 +15,9 @@
 
 		"lineWidth": 120,
 		"formatWithErrors": true
+	},
+	"css": {
+		"parser": { "tailwindDirectives": true }
 	},
 	"linter": {
 		"enabled": true,
@@ -27,15 +31,14 @@
 			},
 			"style": {
 				"useImportType": "error"
+			},
+			"a11y": {
+				"noSvgWithoutTitle": "off",
+				"useButtonType": "off",
+				"noStaticElementInteractions": "off",
+				"useKeyWithClickEvents": "off"
 			}
 		}
 	},
-	"assist": {
-		"enabled": true,
-		"actions": {
-			"source": {
-				"organizeImports": "on"
-			}
-		}
-	}
+	"assist": { "actions": { "source": { "organizeImports": "on" } } }
 }
