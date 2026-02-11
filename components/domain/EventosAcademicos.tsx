@@ -45,8 +45,10 @@ export default function EventosAcademicos() {
 
 								return (
 									<div key={key}>
-										Periodo <strong>{key}</strong>{" "}
-										{diffInMs > 0 ? `faltam ${diffInDaysRounded} dias` : `passou faz ${diffInDaysRounded} dias`}
+										Período <strong>{key}</strong>:{" "}
+										{diffInMs > 0
+											? `${diffInDaysRounded} dias para o encerramento`
+											: `Encerrado há ${Math.abs(diffInDaysRounded)} dias`}
 									</div>
 								);
 							})}
