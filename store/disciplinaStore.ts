@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, type PersistStorage } from "zustand/middleware";
 
-export type serverData = {
+export type DisciplinaServerData = {
 	DisciplinasCurso: Disciplina[];
 	DisciplinasEquivalentes: Equivalente[];
 };
@@ -13,7 +13,7 @@ export interface DisciplinaState {
 	DisciplinasPorPeriodo: Record<string, Set<number>>;
 	DisciplinasDisponiveis: Set<number>;
 	loading: boolean;
-	init: (data: serverData) => void;
+	init: (data: DisciplinaServerData) => void;
 	recalculateDisponiveis: () => void;
 	toggleDisciplina: (id: number) => string | undefined;
 	getDisciplinasByIds: (ids: Set<number>) => Disciplina[];

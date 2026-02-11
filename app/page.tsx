@@ -1,5 +1,6 @@
 "use client";
 
+import EventosAcademicos from "@/components/domain/EventosAcademicos";
 import FiltroDisciplinas from "@/components/domain/Filtrar";
 import Gerenciador from "@/components/domain/Gerenciador";
 import HorarioManager from "@/components/domain/HorarioManager";
@@ -8,14 +9,22 @@ import Sobre from "@/components/domain/SobreProjeto";
 import Modal from "@/components/ui/Modal";
 import Popup from "@/components/ui/Popup";
 import Tabs from "@/components/ui/Tabs";
-import { serverData, useDisciplinaStore } from "@/store/disciplinaStore";
+import { useAcademicCalendarStore } from "@/store/academicCalendarStore";
+import { type DisciplinaServerData, useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
 import { useEffect } from "react";
 
-export function StoreInitializer({ data }: { data: serverData }) {
+export function StoreInitializer({
+	disciplinaServer,
+	academicEventsServer,
+}: {
+	disciplinaServer: DisciplinaServerData;
+	academicEventsServer: AcademicData;
+}) {
 	useEffect(() => {
-		useDisciplinaStore.getState().init(data);
-	}, [data]);
+		useDisciplinaStore.getState().init(disciplinaServer);
+		useAcademicCalendarStore.getState().init(academicEventsServer);
+	}, [disciplinaServer, academicEventsServer]);
 
 	return null;
 }
@@ -36,6 +45,8 @@ export default function Home() {
 				return <FiltroDisciplinas />;
 			case "planejador":
 				return <Planejador />;
+			case "academic-events":
+				return <EventosAcademicos />;
 		}
 	};
 
