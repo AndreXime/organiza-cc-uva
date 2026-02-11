@@ -27,7 +27,8 @@
 				"noUnusedImports": "error"
 			},
 			"suspicious": {
-				"noDuplicateAtImportRules": "error"
+				"noDuplicateAtImportRules": "error",
+				"noArrayIndexKey": "off"
 			},
 			"style": {
 				"useImportType": "error"
