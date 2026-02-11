@@ -21,8 +21,7 @@ export default function Tabs() {
 						type="button"
 						key={tab.path}
 						onClick={() => setTab(tab.path)}
-						// Adicionado 'flex items-center justify-center gap-2' para alinhar o badge
-						className={`px-4 py-2 text-sm font-semibold rounded-full flex items-center justify-center gap-2
+						className={`relative px-4 py-2 text-sm font-semibold rounded-full flex items-center justify-center
                         ${
 													Tab === tab.path
 														? "text-primary-foreground bg-primary shadow-md"
@@ -33,9 +32,9 @@ export default function Tabs() {
 					>
 						{tab.label}
 
-						{/* Elemento visual para 'isNew' */}
+						{/* Badge posicionado no canto superior direito */}
 						{tab.isNew && (
-							<span className="bg-emerald-500 text-white text-[10px] px-1.5 py-0.5 rounded-full uppercase tracking-wide shadow-sm">
+							<span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-[10px] px-1.5 py-0.5 rounded-full uppercase tracking-tight shadow-sm leading-none">
 								Novo
 							</span>
 						)}
