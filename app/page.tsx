@@ -16,15 +16,15 @@ import { useEffect } from "react";
 
 export function StoreInitializer({
 	disciplinaServer,
-	academicEventsServer,
+	academicDataServer,
 }: {
 	disciplinaServer: DisciplinaServerData;
-	academicEventsServer: AcademicData;
+	academicDataServer: AcademicData;
 }) {
 	useEffect(() => {
 		useDisciplinaStore.getState().init(disciplinaServer);
-		useAcademicCalendarStore.getState().init(academicEventsServer);
-	}, [disciplinaServer, academicEventsServer]);
+		useAcademicCalendarStore.getState().init(academicDataServer);
+	}, [disciplinaServer, academicDataServer]);
 
 	return null;
 }
