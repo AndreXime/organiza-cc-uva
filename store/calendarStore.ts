@@ -94,10 +94,11 @@ export const useCalendarStore = create<CalendarState>()(
 				const selectedEvents = allEvents.filter((ev) => selectedDiscs.includes(ev.id));
 
 				if (hideNonSelected) {
-					return {
+					set({
 						visibleEvents: selectedEvents,
 						totalCargaHoraria: cargaHoraria,
-					};
+					});
+					return;
 				}
 
 				const eventosVisiveis = allEvents.filter((ev) => {
