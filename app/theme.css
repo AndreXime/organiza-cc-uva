@@ -56,8 +56,8 @@
 	--muted: #9ca3af; /* gray-400 */
 
 	/* Cards de disciplina (Gerenciador / Filtro) */
-	--card-feita-bg: #14532d; /* green-950 */
-	--card-disponivel-bg: #172554; /* blue-950 */
+	--card-feita-bg: rgba(22, 101, 52, 0.6); /* green-800 90% */
+	--card-disponivel-bg: rgba(30, 58, 138, 0.6); /* blue-900 90% */
 	--card-bloqueada-bg: #1f2937; /* gray-800 */
 	--title-feita: #4ade80; /* green-400 */
 	--title-disponivel: #93c5fd; /* blue-300 */
