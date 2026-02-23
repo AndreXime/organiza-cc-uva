@@ -111,7 +111,7 @@ export default function HorarioManager() {
 					className="relative w-[1400px] lg:w-[95vw] pb-6 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:max-w-[1800px]"
 				>
 					<Calendar
-						className="text-black capitalize w-full"
+						className="text-foreground capitalize w-full"
 						defaultDate={startOfWeek(new Date(), { weekStartsOn: 1 })}
 						localizer={localizer}
 						defaultView="work_week"
@@ -135,7 +135,7 @@ export default function HorarioManager() {
 						startAccessor="start"
 						endAccessor="end"
 						titleAccessor="title"
-						dayPropGetter={() => ({ style: { backgroundColor: "#f9f9f9" } })}
+						dayPropGetter={() => ({ style: { backgroundColor: "var(--color-card)" } })}
 						formats={{
 							dayFormat: (date) => {
 								const dayName = format(date, "EEEE", { locale: ptBR });

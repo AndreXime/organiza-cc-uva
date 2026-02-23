@@ -14,8 +14,8 @@ export default function Modal() {
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-			<div className="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
-				<p className="mb-6 text-center text-gray-800">
+			<div className="w-full max-w-sm rounded-lg bg-card p-6 shadow-xl border border-border">
+				<p className="mb-6 text-center text-foreground">
 					{modalMessage.split("\n").map((value, index) => (
 						<span key={index}>{value}</span>
 					))}
@@ -25,7 +25,7 @@ export default function Modal() {
 					<button
 						type="button"
 						onClick={closeModal}
-						className="rounded-md bg-gray-200 px-4 py-2 text-gray-800 transition hover:bg-gray-300"
+						className="rounded-md bg-accent px-4 py-2 text-foreground transition hover:opacity-80"
 					>
 						Cancelar
 					</button>

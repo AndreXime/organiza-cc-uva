@@ -96,11 +96,11 @@ export default function Planejador() {
 					const emEdicao = semestreEmEdicao?.ano === semestre.ano && semestreEmEdicao?.semestre === semestre.semestre;
 
 					return (
-						<div key={`${semestre.ano}-${semestre.semestre}`} className="bg-white p-6 rounded-lg shadow-sm border">
+						<div key={`${semestre.ano}-${semestre.semestre}`} className="bg-card p-6 rounded-lg shadow-sm border border-border">
 							<div className="flex justify-between items-center mb-6">
-								<h3 className="text-lg font-bold flex flex-col md:flex-row md:items-center gap-3">
+								<h3 className="text-lg font-bold text-heading flex flex-col md:flex-row md:items-center gap-3">
 									{semestre.ano}.{semestre.semestre}{" "}
-									{emEdicao && <span className="font-normal text-sm    ">Clique na disciplina para remover</span>}
+									{emEdicao && <span className="font-normal text-sm text-muted">Clique na disciplina para remover</span>}
 								</h3>
 								{emEdicao ? (
 									<span className="flex flex-col md:flex-row gap-7 items-center">
@@ -134,14 +134,13 @@ export default function Planejador() {
 								{semestre.disciplinas.map((disciplinaId) => {
 									const disciplina = DisciplinasTotais.find((d) => d.id === disciplinaId);
 									const temConflito = conflitos.has(disciplinaId);
-									const bgColor = temConflito ? "bg-yellow-50" : "bg-blue-50";
-									const textColor = temConflito ? "text-yellow-800" : "text-blue-800";
+									const textColor = temConflito ? "text-title-conflito" : "text-title-disponivel";
 
 									return (
 										<div
 											key={disciplinaId}
 											onClick={emEdicao ? () => removerDisciplina(disciplinaId) : undefined}
-											className={`course-item ${bgColor} gap-1 p-3 rounded select-none relative`}
+											className="course-item bg-card text-foreground gap-1 p-3 rounded select-none relative"
 										>
 											<span className={`font-bold ${textColor}`}>{disciplina?.nome}</span>{" "}
 											<span>{disciplina?.professor}</span>
@@ -150,7 +149,7 @@ export default function Planejador() {
 									);
 								})}
 								{semestre.disciplinas.length === 0 && (
-									<p className="text-gray-500 text-sm italic">Nenhuma disciplina adicionada.</p>
+									<p className="text-muted text-sm italic">Nenhuma disciplina adicionada.</p>
 								)}
 							</div>
 
@@ -159,7 +158,7 @@ export default function Planejador() {
 									<select
 										value=""
 										onChange={(e) => adicionarDisciplina(Number(e.target.value))}
-										className="w-full border rounded p-2"
+										className="w-full border border-border rounded p-2 bg-card text-foreground"
 									>
 										<option value="" disabled>
 											Adicionar disciplina...

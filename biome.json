@@ -26,6 +26,7 @@
 			"correctness": {
 				"noUnusedImports": "error"
 			},
+			"complexity": { "noImportantStyles": "off" },
 			"suspicious": {
 				"noDuplicateAtImportRules": "error",
 				"noArrayIndexKey": "off"

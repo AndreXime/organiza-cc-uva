@@ -51,7 +51,7 @@ export default function FiltroDisciplinas() {
 						<select
 							value={filtros.professor}
 							onChange={(e) => setFiltro("professor", e.target.value)}
-							className="appearance-none border rounded-full p-3 w-full"
+							className="appearance-none border border-border rounded-full p-3 w-full bg-card text-foreground"
 						>
 							<option value="todos">Todos os professores</option>
 							{professoresUnicos.map((prof, i) => {
@@ -63,7 +63,7 @@ export default function FiltroDisciplinas() {
 								);
 							})}
 						</select>
-						<span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+						<span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-foreground">
 							<ArrowDownNarrowWide size={23} />
 						</span>
 					</div>
@@ -72,14 +72,14 @@ export default function FiltroDisciplinas() {
 						<select
 							value={filtros.jaFez}
 							onChange={(e) => setFiltro("jaFez", e.target.value as FiltrosType["jaFez"])}
-							className="appearance-none border rounded-full p-3 w-full"
+							className="appearance-none border border-border rounded-full p-3 w-full bg-card text-foreground"
 						>
 							<option value="todos">Todas as situações</option>
 							<option value="sim">Concluídas</option>
 							<option value="nao">Não concluídas</option>
 						</select>
 
-						<span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+						<span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-foreground">
 							<ArrowDownNarrowWide size={23} />
 						</span>
 					</div>
@@ -88,7 +88,7 @@ export default function FiltroDisciplinas() {
 						<select
 							value={filtros.periodo}
 							onChange={(e) => setFiltro("periodo", e.target.value)}
-							className="appearance-none border rounded-full p-3 w-full"
+							className="appearance-none border border-border rounded-full p-3 w-full bg-card text-foreground"
 						>
 							<option value="todos">Todas disciplinas ofertadas</option>
 							<option value="todos_sem_optativas">Todos exceto optativas</option>
@@ -98,7 +98,7 @@ export default function FiltroDisciplinas() {
 								</option>
 							))}
 						</select>
-						<span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+						<span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-foreground">
 							<ArrowDownNarrowWide size={23} />
 						</span>
 					</div>
@@ -107,14 +107,14 @@ export default function FiltroDisciplinas() {
 						<select
 							value={filtros.turno}
 							onChange={(e) => setFiltro("turno", e.target.value as FiltrosType["turno"])}
-							className="appearance-none border rounded-full p-3 w-full"
+							className="appearance-none border border-border rounded-full p-3 w-full bg-card text-foreground"
 						>
 							<option value="todos">Qualquer turno</option>
 							<option value="manha">Manhã</option>
 							<option value="tarde">Tarde</option>
 							<option value="noite">Noite</option>
 						</select>
-						<span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+						<span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-foreground">
 							<ArrowDownNarrowWide size={23} />
 						</span>
 					</div>
@@ -123,7 +123,7 @@ export default function FiltroDisciplinas() {
 						<select
 							value={filtros.dia}
 							onChange={(e) => setFiltro("dia", e.target.value as FiltrosType["dia"])}
-							className="appearance-none border rounded-full p-3 w-full"
+							className="appearance-none border border-border rounded-full p-3 w-full bg-card text-foreground"
 						>
 							<option value="todos">Qualquer dia</option>
 							<option value="Segunda">Segunda</option>
@@ -132,20 +132,20 @@ export default function FiltroDisciplinas() {
 							<option value="Quinta">Quinta</option>
 							<option value="Sexta">Sexta</option>
 						</select>
-						<span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+						<span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-foreground">
 							<ArrowDownNarrowWide size={23} />
 						</span>
 					</div>
 
 					<input
 						type="text"
-						className="border rounded-full w-full flex items-center px-3 min-h-[43px]"
+						className="border border-border rounded-full w-full flex items-center px-3 min-h-[43px] bg-card text-foreground placeholder:text-muted"
 						placeholder="Pesquise pelo nome..."
 						value={filtros.buscaNome}
 						onChange={(e) => setFiltro("buscaNome", e.target.value)}
 					/>
 
-					<h2 className="mt-3 flex items-center justify-center text-lg font-semibold col-span-full">
+					<h2 className="mt-3 flex items-center justify-center text-lg font-semibold col-span-full text-heading">
 						{disciplinasFiltradas.length} Disciplinas encontradas
 					</h2>
 				</div>

@@ -10,7 +10,7 @@ export default function DisciplinaTable() {
 
 	return (
 		<>
-			<h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2 flex flex-row items-center gap-3">
+			<h3 className="text-xl font-bold mb-4 text-heading border-b-2 border-border pb-2 flex flex-row items-center gap-3">
 				Dados utilizados
 				<button type="button" className="btn-primary" onClick={() => setMostrarTudo(!mostrarTudo)}>
 					{mostrarTudo ? "Mostrar menos" : "Mostrar tudo"}
@@ -19,7 +19,7 @@ export default function DisciplinaTable() {
 			<div className="overflow-x-auto">
 				<table className="min-w-full table-auto border-collapse">
 					<thead>
-						<tr className="bg-gray-100">
+						<tr className="bg-accent">
 							<th className="border px-2 py-1">ID</th>
 							<th className="border px-2 py-1">Nome</th>
 							<th className="border px-2 py-1">Período</th>
@@ -31,7 +31,7 @@ export default function DisciplinaTable() {
 					</thead>
 					<tbody>
 						{disciplinasVisiveis.map((d) => (
-							<tr key={d.id} className="even:bg-white odd:bg-gray-50">
+							<tr key={d.id} className="even:bg-card odd:bg-background">
 								<td className="border px-2 py-1">{d.id}</td>
 								<td className="border px-2 py-1">{d.nome}</td>
 								<td className="border px-2 py-1">{d.periodo}</td>

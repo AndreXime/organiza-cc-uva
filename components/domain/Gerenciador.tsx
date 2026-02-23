@@ -173,7 +173,7 @@ export default function GerenciadorInterativo() {
 			{!loading
 				? Object.entries(disciplinasVisiveis).map(([periodo, disciplinas]) => (
 						<section key={periodo} className="mb-8">
-							<h3 className="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-2">{periodo}</h3>
+							<h3 className="text-xl font-bold mb-4 text-heading border-b-2 border-border pb-2">{periodo}</h3>
 							<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
 								{disciplinas.map((disciplina) => {
 									const { cardClasses, titleClasses, estáBloqueada } = generateDisciplinaClasses(disciplina.id);
