@@ -18,9 +18,26 @@ export const metadata: Metadata = {
 const DisciplinasCurso = processDisciplinas("./data/Disciplinas.csv");
 const DisciplinasEquivalentes = processEquivalentes("./data/Equivalentes.csv", DisciplinasCurso);
 
+/**
+ * Script inline bloqueante para trocar o tema antes de renderizar
+ * Isso evita FOUC ao recuperar o tema escolhido assim que o usuario entra na pagina
+ */
+const themeCode = `
+(function() {
+	let theme = localStorage.getItem('theme');
+	const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+	if (!theme && supportDarkMode) theme = 'dark';
+	if (!theme) theme = 'light';
+	document.documentElement.classList.add(theme);
+})();`;
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="pt-BR">
+		<html lang="pt-BR" suppressHydrationWarning>
+			<head>
+				{/** biome-ignore lint/security/noDangerouslySetInnerHtml: "" */}
+				<script dangerouslySetInnerHTML={{ __html: themeCode }} />
+			</head>
 			<StoreInitializer
 				disciplinaServer={{ DisciplinasCurso, DisciplinasEquivalentes }}
 				academicDataServer={AcademicData}

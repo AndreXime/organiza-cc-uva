@@ -14,6 +14,17 @@ export default function Sobre() {
 
 	const { totalFeitas, faltantes } = useCalculateProgress();
 
+	function toggleTheme(theme: "light" | "dark") {
+		const html = document.documentElement;
+
+		const themeToRemove = theme === "light" ? "dark" : "light";
+
+		html.classList.remove(themeToRemove);
+		html.classList.add(theme);
+
+		localStorage.setItem("theme", theme);
+	}
+
 	const stats = [
 		{
 			title: "Disciplinas concluídas",
@@ -51,14 +62,14 @@ export default function Sobre() {
 					<button
 						type="button"
 						className="bg-card border border-border text-foreground p-4 px-3 rounded-full inline-flex gap-2"
-						onClick={() => document.documentElement.classList.remove("dark")}
+						onClick={() => toggleTheme("light")}
 					>
 						Tema Claro <Sun />
 					</button>
 					<button
 						type="button"
 						className="bg-black border border-border text-white p-4 px-3 rounded-full inline-flex gap-2"
-						onClick={() => document.documentElement.classList.add("dark")}
+						onClick={() => toggleTheme("dark")}
 					>
 						Tema Escuro <Moon />
 					</button>
@@ -86,9 +97,7 @@ export default function Sobre() {
 				</div>
 			</div>
 			<div>
-				<h3 className="text-xl font-bold mb-4 text-heading border-b-2 border-border pb-2">
-					Estatísticas de progresso
-				</h3>
+				<h3 className="text-xl font-bold mb-4 text-heading border-b-2 border-border pb-2">Estatísticas de progresso</h3>
 				<div id="stats-container" className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					{stats.map((stat) => (
 						<div
