@@ -29,5 +29,6 @@ export function generateDisciplinaClasses(id: number) {
 
 // Para o theme.css não ficar muito poluido em alguns componentes iram usar essa função pra decidir a classe tailwind
 export function getCurrentTheme() {
+	if (typeof window === "undefined") return "light";
 	return localStorage.getItem("theme") || "light";
 }

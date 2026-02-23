@@ -22,14 +22,15 @@ const DisciplinasEquivalentes = processEquivalentes("./data/Equivalentes.csv", D
  * Script inline bloqueante para trocar o tema antes de renderizar
  * Isso evita FOUC ao recuperar o tema escolhido assim que o usuario entra na pagina
  */
-const themeCode = `
-(function() {
-	let theme = localStorage.getItem('theme');
-	const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
-	if (!theme && supportDarkMode) theme = 'dark';
-	if (!theme) theme = 'light';
-	document.documentElement.classList.add(theme);
-})();`;
+const themeCode = `(function() {
+    let theme = localStorage.getItem('theme');
+	if (!theme) {
+		const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		theme = isDarkMode ? 'dark' : 'light';
+	}
+    document.documentElement.classList.add(theme);
+})();
+`;
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
