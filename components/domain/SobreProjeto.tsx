@@ -54,46 +54,62 @@ export default function Sobre() {
 
 	return (
 		<div className="max-w-7xl mx-auto space-y-12">
-			<div>
-				<h3 className="text-xl font-bold mb-4 text-heading border-b-2 border-border pb-2 flex flex-row items-center">
-					Temas de cores
-				</h3>
-				<div className="flex gap-4">
-					<button
-						type="button"
-						className="bg-card border border-border text-foreground p-4 px-3 rounded-full inline-flex gap-2"
-						onClick={() => toggleTheme("light")}
-					>
-						Tema Claro <Sun />
-					</button>
-					<button
-						type="button"
-						className="bg-black border border-border text-white p-4 px-3 rounded-full inline-flex gap-2"
-						onClick={() => toggleTheme("dark")}
-					>
-						Tema Escuro <Moon />
-					</button>
+			<div className="grid gap-8 md:grid-cols-2">
+				<div>
+					<h3 className="text-xl font-bold mb-4 text-heading border-b-2 border-border pb-2 flex flex-row items-center">
+						Temas de cores
+					</h3>
+					<div className="flex flex-wrap gap-3">
+						<button
+							type="button"
+							className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-4 py-2 text-sm font-medium text-foreground shadow-sm hover:bg-card hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+							onClick={() => toggleTheme("light")}
+						>
+							<Sun className="h-4 w-4 text-amber-500" />
+							<span>Tema claro</span>
+						</button>
+						<button
+							type="button"
+							className="inline-flex items-center gap-2 rounded-full border border-border bg-black px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-zinc-900 hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+							onClick={() => toggleTheme("dark")}
+						>
+							<Moon className="h-4 w-4 text-sky-300" />
+							<span>Tema escuro</span>
+						</button>
+					</div>
 				</div>
-			</div>
-			<div>
-				<h3 className="text-xl font-bold mb-4 text-heading border-b-2 border-border pb-2 flex flex-row items-center">
-					Modo de exibição
-				</h3>
-				<div className="flex gap-4">
-					<button
-						type="button"
-						className="bg-primary border-primary text-primary-foreground p-4 px-3 rounded-full inline-flex gap-2"
-						onClick={() => setMode("default")}
-					>
-						Modo padrão <FileText />
-					</button>
-					<button
-						type="button"
-						className="bg-purple-700 text-white p-4 px-3 rounded-full inline-flex items-center gap-2"
-						onClick={() => setMode("minimal")}
-					>
-						Modo minimalista <File />
-					</button>
+				<div>
+					<h3 className="text-xl font-bold mb-4 text-heading border-b-2 border-border pb-2 flex flex-row items-center">
+						Modo de exibição
+					</h3>
+					<div className="flex flex-wrap gap-3">
+						<button
+							type="button"
+							aria-pressed={mode === "default"}
+							className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+								mode === "default"
+									? "bg-primary border-primary text-primary-foreground shadow-sm"
+									: "bg-card border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
+							}`}
+							onClick={() => setMode("default")}
+						>
+							<FileText className="h-4 w-4" />
+							<span>Modo padrão</span>
+						</button>
+						<button
+							type="button"
+							aria-pressed={mode === "minimal"}
+							className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+								mode === "minimal"
+									? "bg-purple-700 border-purple-700 text-white shadow-sm"
+									: "bg-card border-border text-muted-foreground hover:border-purple-500/50 hover:text-foreground"
+							}`}
+							onClick={() => setMode("minimal")}
+						>
+							<File className="h-4 w-4" />
+							<span>Modo minimalista</span>
+						</button>
+					</div>
 				</div>
 			</div>
 			<div>
