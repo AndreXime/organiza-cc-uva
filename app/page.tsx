@@ -1,15 +1,15 @@
 "use client";
 
-import EventosAcademicos from "@/components/domain/EventosAcademicos";
-import FiltroDisciplinas from "@/components/domain/Filtrar";
-import Gerenciador from "@/components/domain/Gerenciador";
-import HorarioManager from "@/components/domain/HorarioManager";
-import Planejador from "@/components/domain/Planejador";
-import Sobre from "@/components/domain/SobreProjeto";
-import Modal from "@/components/ui/Modal";
-import Popup from "@/components/ui/Popup";
-import Tabs from "@/components/ui/Tabs";
-import { useAcademicCalendarStore } from "@/store/academicCalendarStore";
+import EventosAcademicos from "@/features/eventos-academicos/EventosAcademicos";
+import FiltroDisciplinas from "@/features/filtro/Filtrar";
+import Gerenciador from "@/features/gerenciador/Gerenciador";
+import HorarioManager from "@/features/horario/HorarioManager";
+import Planejador from "@/features/planejador/Planejador";
+import Sobre from "@/features/sobre/SobreProjeto";
+import Modal from "@/components/Modal";
+import Popup from "@/components/Popup";
+import Tabs from "@/components/Tabs";
+import { useAcademicCalendarStore } from "@/features/eventos-academicos/academicCalendarStore";
 import { type DisciplinaServerData, useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
 import { useEffect } from "react";

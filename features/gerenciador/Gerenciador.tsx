@@ -5,9 +5,9 @@ import { Eye, EyeOff, ShieldCheck, ShieldAlert, ShieldBan } from "lucide-react";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
 import { generateDisciplinaClasses } from "@/lib/utils";
-import { SkeletonSection } from "../ui/LoadingSkeleton";
-import ProgressBar from "../ui/ProgressBar";
-import SectionHeader from "../ui/SectionHeader";
+import { SkeletonSection } from "@/components/LoadingSkeleton";
+import ProgressBar from "@/features/gerenciador/ProgressBar";
+import SectionHeader from "@/components/SectionHeader";
 
 export default function GerenciadorInterativo() {
 	const {

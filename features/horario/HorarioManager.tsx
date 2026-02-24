@@ -7,8 +7,8 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import html2canvas from "html2canvas-pro";
 import { Download, Eye, EyeOff } from "lucide-react";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
-import SectionHeader from "../ui/SectionHeader";
-import { useCalendarStore, localizer } from "../../store/calendarStore";
+import SectionHeader from "@/components/SectionHeader";
+import { useCalendarStore, localizer } from "@/features/horario/calendarStore";
 import { useUIStore } from "@/store/uiStore";
 
 export default function HorarioManager() {

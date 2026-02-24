@@ -1,7 +1,7 @@
 "use client";
 
 import { useDisciplinaStore } from "@/store/disciplinaStore";
-import { usePlanejadorStore } from "@/store/planejadorStore";
+import { usePlanejadorStore } from "@/features/planejador/planejadorStore";
 
 type NovoSemestreModalProps = {
 	open: boolean;

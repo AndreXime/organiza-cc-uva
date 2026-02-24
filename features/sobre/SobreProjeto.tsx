@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SiTypescript, SiTailwindcss, SiNextdotjs, SiGithub } from "react-icons/si";
-import DisciplinaTable from "../ui/DisciplinaTable";
+import DisciplinaTable from "./DisciplinaTable";
 import { Footprints, BadgeCheck, LibraryBig, Clock, Sun, Moon, File, FileText } from "lucide-react";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import useCalculateProgress from "@/hooks/useCalculateProgress";

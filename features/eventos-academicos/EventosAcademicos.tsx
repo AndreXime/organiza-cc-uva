@@ -1,6 +1,6 @@
 import { useUIStore } from "@/store/uiStore";
-import SectionHeader from "@/components/ui/SectionHeader";
-import { type TimeFilter, useAcademicCalendarStore } from "@/store/academicCalendarStore";
+import SectionHeader from "@/components/SectionHeader";
+import { type TimeFilter, useAcademicCalendarStore } from "@/features/eventos-academicos/academicCalendarStore";
 
 const RELEVANT_KEYWORDS = ["Atividades complementares", "Matrícula", "Feriado", "Reajuste", "Trancamento"];
 

@@ -3,8 +3,8 @@ import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { ArrowDownNarrowWide } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useUIStore } from "@/store/uiStore";
-import { type FiltrosType, useFiltroStore } from "../../store/filtroStore";
-import SectionHeader from "@/components/ui/SectionHeader";
+import { type FiltrosType, useFiltroStore } from "@/features/filtro/filtroStore";
+import SectionHeader from "@/components/SectionHeader";
 
 export default function FiltroDisciplinas() {
 	const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
