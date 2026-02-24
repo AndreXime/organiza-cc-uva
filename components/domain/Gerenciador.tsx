@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ShieldCheck, ShieldAlert, ShieldBan } from "lucide-react";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
 import { generateDisciplinaClasses } from "@/lib/utils";
@@ -114,13 +114,10 @@ export default function GerenciadorInterativo() {
 			{mode !== "minimal" ? (
 				<SectionHeader title="Gerenciador de Disciplinas">
 					<p>
-						As disciplinas em <span className="font-bold text-green-600">verde</span> estão marcadas como{" "}
-						<span className="font-bold text-green-600">Concluídas</span>, e as em
-						<span className="font-bold text-blue-600"> azul</span> estão
-						<span className="font-bold text-blue-600"> Disponíveis</span>. <br />
-						Clique em uma disciplina disponível para marcá-la como concluída. Clique em uma disciplina concluída para
-						desmarcá-la. <br />
-						As disciplinas só aparecem como disponíveis quando todos os seus
+						<span className="font-bold text-green-600">Verde</span> indica disciplinas concluídas e
+						<span className="font-bold text-blue-600"> azul </span>indica disciplinas disponíveis. <br />
+						Clique nos cards das disciplina abaixo para alternar entre concluida e disponível. <br />
+						Uma disciplina só torna como disponíveil quando todos os seus
 						<span className="font-semibold text-red-600"> pré-requisitos</span> estão cumpridos. <br />
 						Suas alterações são salvas automaticamente!
 					</p>
@@ -177,6 +174,9 @@ export default function GerenciadorInterativo() {
 							<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
 								{disciplinas.map((disciplina) => {
 									const { cardClasses, titleClasses, estáBloqueada } = generateDisciplinaClasses(disciplina.id);
+									const foiFeita = DisciplinasFeitas.has(disciplina.id);
+									const estaDisponivel = DisciplinasDisponiveis.has(disciplina.id);
+									const StatusIcon = foiFeita ? ShieldCheck : estaDisponivel ? ShieldAlert : ShieldBan;
 
 									return (
 										<button
@@ -187,8 +187,11 @@ export default function GerenciadorInterativo() {
 												}
 											}}
 											key={disciplina.id}
-											className={`${cardClasses}`}
+											className={`${cardClasses} relative`}
 										>
+											<span className="absolute top-3 right-3 opacity-60" aria-hidden>
+												<StatusIcon className={titleClasses} size={28} strokeWidth={2} />
+											</span>
 											<strong className={titleClasses}>{disciplina.nome}</strong>
 											<span className="text-xs mt-2 font-semibold">
 												{disciplina.professor ? `${disciplina.professor} - ` : ""} {disciplina.carga_horaria} horas

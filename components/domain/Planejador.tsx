@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
 import { Plus, Sparkles } from "lucide-react";
 import SectionHeader from "../ui/SectionHeader";
+import { NovoSemestreModal } from "../ui/NovoSemestreModal";
 import { usePlanejadorStore } from "../../store/planejadorStore";
 
 export default function Planejador() {
@@ -24,13 +26,14 @@ export default function Planejador() {
 	const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);
 	const mode = useUIStore((state) => state.mode);
 
+	const [criandoNovoSemestre, setCriandoNovoSemestre] = useState(false);
+
 	const handleRemoverSemestre = (ano: number, semestre: number) => {
 		const { openModal } = useUIStore.getState();
 
 		openModal(
 			`Tem certeza que deseja remover o semestre ${ano}.${semestre}?\n Todas as disciplinas planejadas nele serão perdidas.`,
 			() => {
-				// Esta função só será chamada se o usuário clicar em "Sim"
 				removerSemestre(ano, semestre);
 			},
 		);
@@ -49,23 +52,32 @@ export default function Planejador() {
 		);
 	};
 
+	const handleAdicionarSemestre = () => {
+		adicionarSemestre();
+		const { planejamento: planejamentoAtual } = usePlanejadorStore.getState();
+		const novoSemestre = planejamentoAtual[planejamentoAtual.length - 1];
+
+		if (novoSemestre) {
+			iniciarEdicao(novoSemestre.ano, novoSemestre.semestre);
+			setCriandoNovoSemestre(true);
+		}
+	};
+
 	return (
 		<div className="space-y-8">
 			{mode !== "minimal" ? (
 				<SectionHeader title="Planejador de Curso">
 					<p>
-						Adicione os próximos semestres que você pretende cursar e planeje quais disciplinas fazer em cada um deles.
+						Adicione os próximos semestres e quais disciplinas fazer em cada um deles.
 						<br />
-						Clique em Adicionar semestre e editar semestre depois clique no dropdown Adicionar disciplina e aparecerão
-						as disciplinas disponíveis no momento. Mais disciplinas ficarão disponíveis em outros semestres, pois o
-						sistema leva em conta as que você planejou nos semestres anteriores.
+						Clique em Adicionar semestre e aparecerão as disciplinas disponíveis no momento. Mais disciplinas ficarão
+						disponíveis em outros semestres, pois o sistema leva em conta as que você planejou nos semestres anteriores.
 						<br />
-						As disciplinas em <span className="text-yellow-600 font-bold">amarelo</span> querem dizer que há um conflito
-						de horario com alguma outra disciplina do mesmo semestre. Mas há a possibilidade das disciplinas mudarem de
-						horarios entre os semestres.
+						As disciplinas em <span className="text-yellow-400 font-bold">amarelo</span> representa que há um conflito
+						de horario com outra disciplina no mesmo semestre.
 					</p>
 					<div className="text-center mt-4 flex justify-center gap-4">
-						<button type="button" onClick={adicionarSemestre} className="btn-primary">
+						<button type="button" onClick={handleAdicionarSemestre} className="btn-primary">
 							<Plus size={22} />
 							Adicionar Semestre
 						</button>
@@ -77,7 +89,7 @@ export default function Planejador() {
 				</SectionHeader>
 			) : (
 				<div className="text-center mt-4 flex justify-center gap-4">
-					<button type="button" onClick={adicionarSemestre} className="btn-primary">
+					<button type="button" onClick={handleAdicionarSemestre} className="btn-primary">
 						<Plus size={22} />
 						Adicionar Semestre
 					</button>
@@ -96,11 +108,16 @@ export default function Planejador() {
 					const emEdicao = semestreEmEdicao?.ano === semestre.ano && semestreEmEdicao?.semestre === semestre.semestre;
 
 					return (
-						<div key={`${semestre.ano}-${semestre.semestre}`} className="bg-card p-6 rounded-lg shadow-sm border border-border">
+						<div
+							key={`${semestre.ano}-${semestre.semestre}`}
+							className="bg-card p-6 rounded-lg shadow-sm border border-border"
+						>
 							<div className="flex justify-between items-center mb-6">
 								<h3 className="text-lg font-bold text-heading flex flex-col md:flex-row md:items-center gap-3">
 									{semestre.ano}.{semestre.semestre}{" "}
-									{emEdicao && <span className="font-normal text-sm text-muted">Clique na disciplina para remover</span>}
+									{emEdicao && (
+										<span className="font-normal text-sm text-muted">Clique na disciplina para remover</span>
+									)}
 								</h3>
 								{emEdicao ? (
 									<span className="flex flex-col md:flex-row gap-7 items-center">
@@ -175,6 +192,13 @@ export default function Planejador() {
 					);
 				})}
 			</div>
+
+			<NovoSemestreModal
+				open={criandoNovoSemestre}
+				onClose={() => {
+					setCriandoNovoSemestre(false);
+				}}
+			/>
 		</div>
 	);
 }
