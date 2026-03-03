@@ -54,7 +54,7 @@ export default function Home() {
 		<main className={`container mx-auto p-4 ${mode !== "minimal" ? "py-8" : "pb-8 pt-0"}`}>
 			{mode !== "minimal" && (
 				<header className="text-center">
-					<h1 className="text-3xl md:text-4xl font-bold text-header-primary">Gerenciador de Progresso Acadêmico</h1>
+					<h1 className="text-3xl md:text-4xl font-bold text-primary">Gerenciador de Progresso Acadêmico</h1>
 					<p className="text-foreground mt-2">
 						Para o curso de Ciência da Computação da Universidade Estadual do Vale do Acaraú
 					</p>

@@ -135,7 +135,7 @@ export default function EventosAcademicos() {
 								key={index}
 								className="bg-card p-4 rounded-lg text-sm flex flex-col gap-2 justify-start items-center text-center hover:bg-accent transition-colors border border-border"
 							>
-								<span className="text-header-primary font-bold text-base">
+								<span className="text-available-foreground font-bold text-base">
 									{end ? `${formatDate(start, false)} até ${formatDate(end, true)}` : formatDate(start, true)}
 								</span>
 								<span className="text-foreground leading-snug">{data.event}</span>

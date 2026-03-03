@@ -12,14 +12,14 @@ export function generateDisciplinaClasses(id: number) {
 	let titleClasses = "font-semibold ";
 
 	if (foiFeita) {
-		cardClasses += "bg-card-feita cursor-pointer";
-		titleClasses += "text-title-feita";
+		cardClasses += "bg-done cursor-pointer";
+		titleClasses += "text-done-foreground";
 	} else if (estaDisponivel) {
-		cardClasses += "bg-card-disponivel cursor-pointer";
-		titleClasses += "text-title-disponivel";
+		cardClasses += "bg-available cursor-pointer";
+		titleClasses += "text-available-foreground";
 	} else {
-		cardClasses += "bg-card-bloqueada cursor-not-allowed opacity-60";
-		titleClasses += "text-muted";
+		cardClasses += "bg-blocked cursor-not-allowed opacity-60";
+		titleClasses += "text-foreground";
 	}
 
 	const estáBloqueada = !foiFeita && !estaDisponivel;

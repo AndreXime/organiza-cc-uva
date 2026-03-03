@@ -1,75 +1,61 @@
 :root {
-	--background: #f9fafb; /* gray-50 */
-	--foreground: #1f2937; /* gray-800 */
-
-	--header-primary: #1447e6; /*text-blue-700*/
-	--header-secondary: #6a7282; /*text-gray-500*/
+	--background: #f9fafb;
+	--foreground: #1f2937;
 
 	/* Cores do componente NAV */
-	--card: #ffffff; /* bg-white */
-	--border: #e5e7eb; /* border-gray-200 */
-	--primary: #2563eb; /* bg-blue-600 */
-	--primary-foreground: #ffffff; /* text-white */
-	--muted-foreground: #4b5563; /* text-gray-600 */
-	--accent: #f3f4f6; /* hover:bg-gray-100 */
-
-	/* Cores do SectionHeader */
-	--info-background: #eff6ff; /* bg-blue-50 */
-	--info-border: #bfdbfe; /* border-blue-200 */
-	--info-foreground: #1e40af; /* text-blue-800 */
+	--card: #ffffff;
+	--border: #e5e7eb;
+	--primary: #2563eb;
+	--primary-foreground: #ffffff;
+	--muted-foreground: #4b5563;
+	--accent: #f3f4f6;
 
 	/* Texto secundário / títulos neutros */
-	--heading: #374151; /* text-gray-700 */
-	--muted: #6b7280; /* text-gray-600 */
+	--heading: #374151;
+	--muted: #6b7280;
 
-	/* Cards de disciplina (Gerenciador / Filtro) */
-	--card-feita-bg: #f0fdf4; /* green-50 */
-	--card-disponivel-bg: #eff6ff; /* blue-50 */
-	--card-bloqueada-bg: #f3f4f6; /* gray-100 */
-	--title-feita: #15803d; /* green-700 */
-	--title-disponivel: #1e40af; /* blue-800 */
-	--title-conflito: #854d0e; /* yellow-800 */
+	/* Status dos Cards */
+	--blocked: #f1f5f9;
+	--blocked-foreground: #475569;
+	--done: #dcfce7;
+	--done-foreground: #166534;
+	--available: #dbeafe;
+	--available-foreground: #1e40af;
+	--conflict: #fef9c3;
+	--conflict-foreground: #854d0e;
 }
 
 .dark {
-	--background: #0f0f0f; /* preto mais escuro */
-	--foreground: #f9fafb; /* gray-50 */
-
-	--header-primary: #60a5fa; /* blue-400 */
-	--header-secondary: #9ca3af; /* gray-400 */
+	--background: #2d2d30;
+	--foreground: #f9fafb;
 
 	/* Cores do componente NAV */
-	--card: #262626; /* preto mais claro (navbar, cards) */
-	--border: #404040; /* border neutro */
-	--primary: #3b82f6; /* bg-blue-500 */
-	--primary-foreground: #f9fafb; /* text-gray-50 */
-	--muted-foreground: #6b7280; /* text-gray-500 */
-	--accent: #1f2937; /* hover:bg-gray-800 */
-
-	/* Cores do SectionHeader */
-	--info-background: #1f2937; /* gray-800, neutro */
-	--info-border: #374151; /* gray-700 */
-	--info-foreground: #e5e7eb; /* gray-200 */
+	--card: #262626;
+	--border: #404040;
+	--primary: #3b82f6;
+	--primary-foreground: #f9fafb;
+	--muted-foreground: #6b7280;
+	--accent: #1f2937;
 
 	/* Texto secundário / títulos neutros */
-	--heading: #e5e7eb; /* gray-200 */
-	--muted: #9ca3af; /* gray-400 */
+	--heading: #e5e7eb;
+	--muted: #9ca3af;
 
-	/* Cards de disciplina (Gerenciador / Filtro) */
-	--card-feita-bg: rgba(22, 101, 52, 0.6); /* green-800 90% */
-	--card-disponivel-bg: rgba(30, 58, 138, 0.6); /* blue-900 90% */
-	--card-bloqueada-bg: #1f2937; /* gray-800 */
-	--title-feita: #4ade80; /* green-400 */
-	--title-disponivel: #93c5fd; /* blue-300 */
-	--title-conflito: #facc15; /* yellow-400 */
+	/* Status dos Cards */
+	--blocked: rgba(31, 41, 55, 0.5);
+	--blocked-foreground: #94a3b8;
+	--done: rgba(74, 222, 128, 0.15);
+	--done-foreground: #4ade80;
+	--available: rgba(96, 165, 250, 0.15);
+	--available-foreground: #60a5fa;
+	--conflict: rgba(250, 204, 21, 0.15);
+	--conflict-foreground: #facc15;
 }
 
 @theme {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-border: var(--border);
-	--color-header-primary: var(--header-primary);
-	--color-header-secondary: var(--header-secondary);
 
 	--color-heading: var(--heading);
 	--color-muted: var(--muted);
@@ -81,16 +67,13 @@
 	--color-muted-foreground: var(--muted-foreground);
 	--color-accent: var(--accent);
 
-	/* Cores do SectionHeader */
-	--color-info-background: var(--info-background);
-	--color-info-border: var(--info-border);
-	--color-info-foreground: var(--info-foreground);
-
-	/* Cards de disciplina (controlados pelo tema) */
-	--color-card-feita: var(--card-feita-bg);
-	--color-card-disponivel: var(--card-disponivel-bg);
-	--color-card-bloqueada: var(--card-bloqueada-bg);
-	--color-title-feita: var(--title-feita);
-	--color-title-disponivel: var(--title-disponivel);
-	--color-title-conflito: var(--title-conflito);
+	/* Status dos Cards */
+	--color-blocked: var(--blocked);
+	--color-blocked-foreground: var(--blocked-foreground);
+	--color-done: var(--done);
+	--color-done-foreground: var(--done-foreground);
+	--color-available: var(--available);
+	--color-available-foreground: var(--available-foreground);
+	--color-conflict: var(--conflict);
+	--color-conflict-foreground: var(--conflict-foreground);
 }

@@ -151,15 +151,18 @@ export default function Planejador() {
 								{semestre.disciplinas.map((disciplinaId) => {
 									const disciplina = DisciplinasTotais.find((d) => d.id === disciplinaId);
 									const temConflito = conflitos.has(disciplinaId);
-									const textColor = temConflito ? "text-title-conflito" : "text-title-disponivel";
 
 									return (
 										<div
 											key={disciplinaId}
 											onClick={emEdicao ? () => removerDisciplina(disciplinaId) : undefined}
-											className="course-item bg-card text-foreground gap-1 p-3 rounded select-none relative"
+											className={`course-item  ${temConflito ? "bg-conflict" : "bg-available"} text-foreground gap-1 p-3 rounded select-none relative`}
 										>
-											<span className={`font-bold ${textColor}`}>{disciplina?.nome}</span>{" "}
+											<span
+												className={`font-bold ${temConflito ? "text-conflict-foreground" : "text-available-foreground"}`}
+											>
+												{disciplina?.nome}
+											</span>{" "}
 											<span>{disciplina?.professor}</span>
 											<span>{disciplina?.horarios?.map((h) => `${h.dia}: ${h.inicio} - ${h.fim}`).join(" e ")}</span>
 										</div>
