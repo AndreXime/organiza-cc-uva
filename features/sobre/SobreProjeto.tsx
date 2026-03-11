@@ -1,6 +1,6 @@
 import Link from "next/link";
 import DisciplinaTable from "./DisciplinaTable";
-import { Footprints, BadgeCheck, LibraryBig, Clock, Sun, Moon, File, FileText } from "lucide-react";
+import { Footprints, BadgeCheck, LibraryBig, Clock, Sun, Moon, File, FileText, ExternalLink } from "lucide-react";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import useCalculateProgress from "@/hooks/useCalculateProgress";
 import { useUIStore } from "@/store/uiStore";
@@ -52,17 +52,28 @@ export default function Sobre() {
 		},
 	];
 
+	const linksRapidos = [
+		{ label: "Login", href: "https://aluno.uvanet.br" },
+		{
+			label: "Comunicados de calendário",
+			href: "https://ww2.uva.ce.gov.br/apps/view/listagem_documentos.php?buscar=0105",
+		},
+		{ label: "Creditos do RU", href: "https://sru.uvanet.br/apps/consumidor/" },
+		{ label: "Fluxograma das disciplinas", href: "/Fluxograma Ciências da computação.pdf" },
+	];
+
 	return (
 		<div className="max-w-7xl mx-auto space-y-12">
-			<div className="grid gap-8 md:grid-cols-2">
-				<div>
-					<h3 className="text-xl font-bold mb-4 text-heading border-b-2 border-border pb-2 flex flex-row items-center">
-						Temas de cores
-					</h3>
+			<div className="grid gap-8 lg:grid-cols-2">
+				<section className="rounded-lg border border-border bg-card overflow-hidden p-4">
+					<div className="mb-4">
+						<h3 className="text-lg font-semibold text-heading">Temas de cores</h3>
+						<p className="mt-0.5 text-sm text-muted-foreground">Escolha entre tema claro ou escuro para a interface.</p>
+					</div>
 					<div className="flex flex-wrap gap-3">
 						<button
 							type="button"
-							className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-4 py-2 text-sm font-medium text-foreground shadow-sm hover:bg-card hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+							className="cursor-pointer inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm hover:bg-card hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
 							onClick={() => toggleTheme("light")}
 						>
 							<Sun className="h-4 w-4 text-amber-500" />
@@ -70,27 +81,26 @@ export default function Sobre() {
 						</button>
 						<button
 							type="button"
-							className="inline-flex items-center gap-2 rounded-full border border-border bg-black px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-zinc-900 hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+							className="cursor-pointer inline-flex items-center gap-2 rounded-full border border-border bg-black px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-zinc-900 hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
 							onClick={() => toggleTheme("dark")}
 						>
 							<Moon className="h-4 w-4 text-sky-300" />
 							<span>Tema escuro</span>
 						</button>
 					</div>
-				</div>
-				<div>
-					<h3 className="text-xl font-bold mb-4 text-heading border-b-2 border-border pb-2 flex flex-row items-center">
-						Modo de exibição
-					</h3>
+				</section>
+				<section className="rounded-lg border border-border bg-card overflow-hidden p-4">
+					<div className="mb-4">
+						<h3 className="text-lg font-semibold text-heading">Modo de exibição</h3>
+						<p className="mt-0.5 text-sm text-muted-foreground">
+							Padrão ou minimalista para a visualização das disciplinas.
+						</p>
+					</div>
 					<div className="flex flex-wrap gap-3">
 						<button
 							type="button"
 							aria-pressed={mode === "default"}
-							className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
-								mode === "default"
-									? "bg-primary border-primary text-primary-foreground shadow-sm"
-									: "bg-card border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
-							}`}
+							className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background bg-primary/90 border-primary text-primary-foreground shadow-sm hover:bg-primary cursor-pointer`}
 							onClick={() => setMode("default")}
 						>
 							<FileText className="h-4 w-4" />
@@ -99,26 +109,50 @@ export default function Sobre() {
 						<button
 							type="button"
 							aria-pressed={mode === "minimal"}
-							className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
-								mode === "minimal"
-									? "bg-purple-700 border-purple-700 text-white shadow-sm"
-									: "bg-card border-border text-muted-foreground hover:border-purple-500/50 hover:text-foreground"
-							}`}
+							className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background bg-purple-700 border-purple-700 text-white shadow-sm hover:bg-purple-800 cursor-pointer`}
 							onClick={() => setMode("minimal")}
 						>
 							<File className="h-4 w-4" />
 							<span>Modo minimalista</span>
 						</button>
 					</div>
-				</div>
+				</section>
 			</div>
-			<div>
-				<h3 className="text-xl font-bold mb-4 text-heading border-b-2 border-border pb-2">Estatísticas de progresso</h3>
-				<div id="stats-container" className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+			<section className="rounded-lg border border-border bg-card overflow-hidden p-4">
+				<div className="mb-4">
+					<h3 className="text-lg font-semibold text-heading">Links rápidos</h3>
+				</div>
+				<ul className="flex flex-wrap gap-2">
+					{linksRapidos.map((item) => (
+						<li key={item.href}>
+							<a
+								href={item.href}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex items-center gap-2 rounded-lg border border-border bg-background/50 px-3 py-2 text-sm text-foreground hover:border-primary/40 hover:bg-card transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+							>
+								<ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground" />
+								<span className="font-medium">{item.label}</span>
+								<span className="text-muted-foreground truncate hidden sm:inline">
+									{item.href.replace(/^https?:\/\//, "")}
+								</span>
+							</a>
+						</li>
+					))}
+				</ul>
+			</section>
+			<section className="rounded-lg border border-border bg-card overflow-hidden p-4">
+				<div className="mb-4">
+					<h3 className="text-lg font-semibold text-heading">Estatísticas de progresso</h3>
+					<p className="mt-0.5 text-sm text-muted-foreground">
+						Visão geral rápida do seu andamento no curso com base nos dados atuais.
+					</p>
+				</div>
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					{stats.map((stat) => (
 						<div
 							key={stat.title}
-							className="stat-card bg-card p-4 rounded-lg shadow-sm border border-border flex items-center"
+							className="stat-card bg-background p-4 rounded-lg shadow-sm border border-border flex items-center"
 						>
 							<div className="text-3xl mr-4">
 								<stat.icon size={35} className={stat.color} />
@@ -130,7 +164,7 @@ export default function Sobre() {
 						</div>
 					))}
 				</div>
-			</div>
+			</section>
 			{mode !== "minimal" && (
 				<>
 					<div>
