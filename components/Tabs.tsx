@@ -35,7 +35,7 @@ export default function Tabs() {
 						{/* Badge posicionado no canto superior direito */}
 						{tab.isNew && (
 							<span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-[10px] px-1.5 py-0.5 rounded-full uppercase tracking-tight shadow-sm leading-none">
-								Novo
+								Atualizado
 							</span>
 						)}
 					</button>
