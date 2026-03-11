@@ -3,7 +3,7 @@ import { processDisciplinas, processEquivalentes } from "@/lib/csvToObject";
 
 const Disciplinas = {
 	metadata: {
-		lastUpdated: new Date("2025-10-03"),
+		lastUpdated: new Date("2026-03-11"),
 	},
 	data: processDisciplinas("./data/Disciplinas.csv"),
 };
