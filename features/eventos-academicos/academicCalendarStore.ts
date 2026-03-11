@@ -1,3 +1,4 @@
+import type { EventosAcademicosServer } from "@/data";
 import { create } from "zustand";
 
 export type TimeFilter = 7 | 30 | 90 | null; // 1 semana, 1 mês, 3 meses
@@ -5,12 +6,12 @@ export type TimeFilter = 7 | 30 | 90 | null; // 1 semana, 1 mês, 3 meses
 interface StoreState {
 	events: AcademicEvent[];
 	loading: boolean;
-	metadata: AcademicData["metadata"];
+	metadata: EventosAcademicosServer["metadata"];
 	searchTerm: string;
 	selectedFilters: string[];
 	timeFilter: TimeFilter;
 
-	init: (data: AcademicData) => void;
+	init: (data: EventosAcademicosServer) => void;
 	setSearchTerm: (term: string) => void;
 	toggleFilter: (keyword: string) => void;
 	setTimeFilter: (days: TimeFilter) => void;
@@ -28,7 +29,7 @@ const normalizeText = (text: string) => {
 
 export const useAcademicCalendarStore = create<StoreState>((set, get) => ({
 	events: [],
-	metadata: {},
+	metadata: { lastUpdated: new Date(), semesterDates: {} },
 	loading: true,
 	searchTerm: "",
 	selectedFilters: [],
@@ -36,7 +37,7 @@ export const useAcademicCalendarStore = create<StoreState>((set, get) => ({
 
 	init: (data) => {
 		set({
-			events: data.AcademicEvents,
+			events: data.data,
 			metadata: data.metadata,
 			loading: false,
 		});

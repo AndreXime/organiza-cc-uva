@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { DisciplinasCurso, DisciplinasEquivalentes, AcademicEvents } from "@/data";
-import { StoreInitializer } from "./page";
+import serverData from "@/data";
+import StoreInitializer from "@/store/StoreInitalizer";
 
 const inter = Inter({
 	variable: "--font-inter",
@@ -35,10 +35,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 				{/** biome-ignore lint/security/noDangerouslySetInnerHtml: "" */}
 				<script dangerouslySetInnerHTML={{ __html: themeCode }} />
 			</head>
-			<StoreInitializer
-				disciplinaServer={{ DisciplinasCurso, DisciplinasEquivalentes }}
-				academicDataServer={AcademicEvents}
-			/>
+			<StoreInitializer data={serverData} />
 			<body className={`${inter.variable} antialiased bg-background`}>{children}</body>
 		</html>
 	);

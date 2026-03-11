@@ -8,8 +8,7 @@ interface rawEvent {
 	event: string;
 }
 
-// Começo e final do 2 semestres
-const metadata: { [key: string]: { start: Date; end: Date } } = {
+const semesterDates: Record<string, { start: Date; end: Date }> = {
 	"2026.1": {
 		start: new Date("2026-03-30"),
 		end: new Date("2026-07-31"),
@@ -294,4 +293,4 @@ const AcademicEvents: AcademicEvent[] = rawEvents.map((item) => {
 	};
 });
 
-export default { metadata, AcademicEvents } as AcademicData;
+export { semesterDates, AcademicEvents };

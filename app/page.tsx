@@ -9,25 +9,7 @@ import Sobre from "@/features/sobre/SobreProjeto";
 import Modal from "@/components/Modal";
 import Popup from "@/components/Popup";
 import Tabs from "@/components/Tabs";
-import { useAcademicCalendarStore } from "@/features/eventos-academicos/academicCalendarStore";
-import { type DisciplinaServerData, useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
-import { useEffect } from "react";
-
-export function StoreInitializer({
-	disciplinaServer,
-	academicDataServer,
-}: {
-	disciplinaServer: DisciplinaServerData;
-	academicDataServer: AcademicData;
-}) {
-	useEffect(() => {
-		useDisciplinaStore.getState().init(disciplinaServer);
-		useAcademicCalendarStore.getState().init(academicDataServer);
-	}, [disciplinaServer, academicDataServer]);
-
-	return null;
-}
 
 export default function Home() {
 	const Tab = useUIStore((state) => state.Tab);

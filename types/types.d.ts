@@ -28,11 +28,6 @@ interface Equivalente {
 	professor: string;
 }
 
-interface AcademicData {
-	metadata: { [key: string]: { start: Date; end: Date } };
-	AcademicEvents: AcademicEvent[];
-}
-
 interface AcademicEvent {
 	untilDate?: Date | undefined;
 	date: Date;

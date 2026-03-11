@@ -1,10 +1,6 @@
+import type { DisciplinasServer } from "@/data";
 import { create } from "zustand";
 import { persist, type PersistStorage } from "zustand/middleware";
-
-export type DisciplinaServerData = {
-	DisciplinasCurso: Disciplina[];
-	DisciplinasEquivalentes: Equivalente[];
-};
 
 export interface DisciplinaState {
 	DisciplinasFeitas: Set<number>;
@@ -12,8 +8,9 @@ export interface DisciplinaState {
 	DisciplinasEquivalentes: Equivalente[];
 	DisciplinasPorPeriodo: Record<string, Set<number>>;
 	DisciplinasDisponiveis: Set<number>;
+	metadata: { DisciplinaLastUpdated: Date; DisciplinaEquivalentesLastUpdated: Date };
 	loading: boolean;
-	init: (data: DisciplinaServerData) => void;
+	init: (data: DisciplinasServer) => void;
 	recalculateDisponiveis: () => void;
 	toggleDisciplina: (id: number) => string | undefined;
 	getDisciplinasByIds: (ids: Set<number>) => Disciplina[];
@@ -76,6 +73,7 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 			DisciplinasPorPeriodo: {},
 			DisciplinasDisponiveis: new Set(),
 			DisciplinasEquivalentes: [],
+			metadata: { DisciplinaEquivalentesLastUpdated: new Date(), DisciplinaLastUpdated: new Date() },
 			loading: true,
 
 			recalculateDisponiveis: () => {
@@ -136,7 +134,7 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 
 			// Ação para inicializar o estado com dados do servidor
 			init: (data) => {
-				const DisciplinasPorPeriodo = data.DisciplinasCurso.reduce<Record<string, Set<number>>>((acc, disc) => {
+				const DisciplinasPorPeriodo = data.Disciplinas.data.reduce<Record<string, Set<number>>>((acc, disc) => {
 					if (disc.periodo === "Optativa" && !disc.professor) {
 						disc.periodo = "Não ofertadas";
 					}
@@ -163,9 +161,13 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 				}
 
 				set({
-					DisciplinasTotais: data.DisciplinasCurso,
-					DisciplinasEquivalentes: data.DisciplinasEquivalentes,
+					DisciplinasTotais: data.Disciplinas.data,
+					DisciplinasEquivalentes: data.DisciplinasEquivalentes.data,
 					DisciplinasPorPeriodo: DisciplinasPorPeriodoOrdenado,
+					metadata: {
+						DisciplinaLastUpdated: data.Disciplinas.metadata.lastUpdated,
+						DisciplinaEquivalentesLastUpdated: data.DisciplinasEquivalentes.metadata.lastUpdated,
+					},
 				});
 
 				get().recalculateDisponiveis();

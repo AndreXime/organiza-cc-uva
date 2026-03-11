@@ -9,10 +9,15 @@ import { GitHub, Nextjs, TailwindCSS, TypeScript, Zustand } from "@/components/I
 export default function Sobre() {
 	const DisciplinasDisponiveis = useDisciplinaStore((state) => state.DisciplinasDisponiveis);
 	const getDisciplinasByIds = useDisciplinaStore((state) => state.getDisciplinasByIds);
+	const metadata = useDisciplinaStore((state) => state.metadata);
 	const setMode = useUIStore((state) => state.setMode);
 	const mode = useUIStore((state) => state.mode);
 
 	const { totalFeitas, faltantes } = useCalculateProgress();
+
+	const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
+		dateStyle: "short",
+	});
 
 	function toggleTheme(theme: "light" | "dark") {
 		const html = document.documentElement;
@@ -163,6 +168,30 @@ export default function Sobre() {
 							</div>
 						</div>
 					))}
+				</div>
+			</section>
+			<section className="rounded-lg border border-border bg-card overflow-hidden p-4">
+				<div className="mb-4">
+					<h3 className="text-lg font-semibold text-heading">Atualização dos dados</h3>
+					<p className="mt-0.5 text-sm text-muted-foreground">
+						Informações sobre a última atualização dos dados usados pelo projeto.
+					</p>
+				</div>
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+					<div className="rounded-lg border border-border bg-background/60 p-3 flex flex-col gap-1">
+						<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Disciplinas</span>
+						<span className="font-medium text-foreground">
+							{dateFormatter.format(new Date(metadata.DisciplinaLastUpdated))}
+						</span>
+					</div>
+					<div className="rounded-lg border border-border bg-background/60 p-3 flex flex-col gap-1">
+						<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+							Equivalências de disciplinas
+						</span>
+						<span className="font-medium text-foreground">
+							{dateFormatter.format(new Date(metadata.DisciplinaEquivalentesLastUpdated))}
+						</span>
+					</div>
 				</div>
 			</section>
 			{mode !== "minimal" && (

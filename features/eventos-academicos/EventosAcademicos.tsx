@@ -37,18 +37,30 @@ export default function EventosAcademicos() {
 							<br />
 							Datas extraidas do PDF oficial por IA
 						</p>
+						<p>
+							Última atualização das datas:{" "}
+							<span className="font-semibold">
+								{new Intl.DateTimeFormat("pt-BR", {
+									dateStyle: "short",
+								}).format(new Date(metadata.lastUpdated))}
+							</span>
+						</p>
 						<div className="mt-2">
-							{Object.entries(metadata).map(([key, value]) => {
-								const diffInMs = value.end.getTime() - Date.now();
-								const diffInDaysRaw = diffInMs / (1000 * 60 * 60 * 24);
-								const diffInDaysRounded = Math.floor(Math.abs(diffInDaysRaw));
+							{Object.entries(metadata.semesterDates).map(([key, value]) => {
+								const now = Date.now();
+
+								const startDiffInMs = now - value.start.getTime();
+								const startDiffInDays = Math.floor(Math.abs(startDiffInMs / (1000 * 60 * 60 * 24)));
+
+								const endDiffInMs = value.end.getTime() - now;
+								const endDiffInDays = Math.floor(Math.abs(endDiffInMs / (1000 * 60 * 60 * 24)));
 
 								return (
 									<div key={key}>
 										Período <strong>{key}</strong>:{" "}
-										{diffInMs > 0
-											? `${diffInDaysRounded} dias para o encerramento`
-											: `Encerrado há ${Math.abs(diffInDaysRounded)} dias`}
+										{startDiffInMs >= 0 ? `Começou há ${startDiffInDays} dias` : `Começa em ${startDiffInDays} dias`}
+										{" • "}
+										{endDiffInMs >= 0 ? `Termina em ${endDiffInDays} dias` : `Terminou há ${endDiffInDays} dias`}
 									</div>
 								);
 							})}
