@@ -23,7 +23,7 @@ Site para acompanhar o curso de **Ciência da Computação** da **Universidade E
 
 ## Como atualizar as disciplinas (`data/Disciplinas.csv`)
 
-A grade é lida em build por `lib/csvToObject.ts`. Se alguma linha estiver inválida, o **`npm run build`** (ou o dev server ao compilar) **falha** com mensagem apontando o registro.
+A grade é lida em build por `lib/csvToObject.ts`. Se alguma linha estiver inválida, o **`npm run build`** **falha** com mensagem apontando o registro.
 
 ### Cabeçalho (obrigatório)
 
@@ -35,15 +35,17 @@ id,nome,periodo,horarios,requisitos,carga_horaria,professor
 
 ### Colunas
 
-| Coluna | Obrigatório | Descrição |
-|--------|-------------|-----------|
-| **id** | sim | Número inteiro único por disciplina. Os **requisitos** de outras linhas referenciam esses ids. |
-| **nome** | sim | Nome como no fluxograma/catalogo. **Não mude à toa**: `Equivalentes.csv` usa o nome para amarrar à disciplina oficial. |
-| **periodo** | sim | Texto livre (ex.: `1° Período`). Só organização visual. |
-| **horarios** | não | Ver formato abaixo. Vazio = sem horário na grade. |
-| **requisitos** | não | Ids dos pré-requisitos, **separados por vírgula** (ex.: `2` ou `11,10,9`). Sem espaços obrigatórios. Vazio = sem requisito. |
-| **carga_horaria** | sim | Número (ex.: `60`, `100`). |
-| **professor** | sim | Texto; pode ficar vazio no CSV (`,,` no fim da linha) se ainda não houver docente. |
+O cabeçalho define **sete colunas em toda linha** — não remova colunas. **Opcional** aqui significa só que **o valor da célula pode ficar vazio** (a coluna continua lá, com vírgula e célula vazia se precisar).
+
+| Coluna | Valor | Descrição |
+|--------|-------|-----------|
+| **id** | obrigatório | Número inteiro único. Os **requisitos** de outras linhas referenciam esses ids. |
+| **nome** | obrigatório | Como no fluxograma/catálogo. **Não mude à toa**: `Equivalentes.csv` amarra pelo nome. |
+| **periodo** | obrigatório | Texto livre (ex.: `1° Período`). Só organização visual. |
+| **horarios** | opcional | Ver formato abaixo. Vazio = sem horário na grade. |
+| **requisitos** | opcional | Ids dos pré-requisitos, **separados por vírgula** (ex.: `2`, `11,10,9`). Vazio = sem requisito. |
+| **carga_horaria** | obrigatório | Número (ex.: `60`, `100`). |
+| **professor** | opcional | Nome do docente. Vazio = ainda sem docente (última célula da linha vazia, ex.: `...,60,`). |
 
 ### Formato de **horarios** (grade semanal)
 
