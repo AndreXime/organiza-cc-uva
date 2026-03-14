@@ -1,29 +1,95 @@
-# Organizador de Disciplinas - CC UVA
+# Organiza CC UVA
 
-Este projeto é um site para organizar as disciplinas do curso de **Ciência da Computação** da **Universidade Estadual do Vale do Acaraú (UVA)**.
-
-A ideia surgiu da necessidade recorrente de montar uma tabela no Excel, todo semestre, para verificar se as disciplinas tinham conflitos de horário.
+Site para acompanhar o curso de **Ciência da Computação** da **Universidade Estadual do Vale do Acaraú (UVA)**: progresso nas disciplinas, grade semanal e calendário acadêmico — sem depender de planilhas para checar conflitos de horário.
 
 ## Funcionalidades
 
-### Gerenciador Interativo
+| Área | O que faz |
+|------|-----------|
+| **Gerenciador de Disciplinas** | Marca disciplinas como concluídas; calcula o que está **disponível** a partir dos pré-requisitos; mostra **equivalentes** quando existem. Tudo persiste no **navegador** (localStorage). |
+| **Organizador de Horários** | Monta a **semana** com as disciplinas disponíveis; destaca **conflitos** de horário; permite **exportar a grade** como imagem. |
+| **Pesquisar Disciplinas** | Busca e filtra disciplinas da grade. |
+| **Calendário acadêmico** | Eventos do calendário institucional (datas de matrícula, recesso, provas etc.), com busca e filtros. |
+| **Planejador de Curso** | Apoio ao planejamento do percurso no curso. |
+| **Sobre o projeto** | Estatísticas do seu progresso, tema claro/escuro, modo de exibição e links úteis (portal, RU, fluxograma). |
 
-- Clique nas disciplinas disponíveis para marcar como concluídas e nas já feitas para desmarcar.
+## Dados do projeto
 
-- As disciplinas disponíveis são calculadas com base nos pré-requisitos.
+- **`data/Disciplinas.csv`** — grade oficial do curso: id, nome, período, horários (blocos semanais), pré-requisitos por id, carga horária e professor. É a fonte do gerenciador, da grade semanal e do planejador. Detalhes de edição na seção abaixo.
+- **`data/Equivalentes.csv`** — equivalências (optativas); o campo que liga à grade é o **nome exato** da disciplina oficial em `Disciplinas.csv`.
+- **`data/Eventos.ts`** — calendário acadêmico (extraído do PDF da coordenação).
 
-- Todas as alterações são salvas automaticamente no navegador.
+---
 
-### Grade de Horários
+## Como atualizar as disciplinas (`data/Disciplinas.csv`)
 
-- As disciplinas marcadas como disponíveis no Gerenciador Interativo aparecem automaticamente aqui organizadas por horário em um calendario semanal.
+A grade é lida em build por `lib/csvToObject.ts`. Se alguma linha estiver inválida, o **`npm run build`** (ou o dev server ao compilar) **falha** com mensagem apontando o registro.
 
-## Tecnologias Utilizadas
+### Cabeçalho (obrigatório)
 
-- [Next.js](https://nextjs.org/)
-- [React](https://reactjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
+A primeira linha deve ser exatamente:
 
-## Contribuições
+```text
+id,nome,periodo,horarios,requisitos,carga_horaria,professor
+```
 
-Se quiser sugerir alguma melhoria, você pode abrir uma **issue** ou um **pull request** neste repositório.
+### Colunas
+
+| Coluna | Obrigatório | Descrição |
+|--------|-------------|-----------|
+| **id** | sim | Número inteiro único por disciplina. Os **requisitos** de outras linhas referenciam esses ids. |
+| **nome** | sim | Nome como no fluxograma/catalogo. **Não mude à toa**: `Equivalentes.csv` usa o nome para amarrar à disciplina oficial. |
+| **periodo** | sim | Texto livre (ex.: `1° Período`). Só organização visual. |
+| **horarios** | não | Ver formato abaixo. Vazio = sem horário na grade. |
+| **requisitos** | não | Ids dos pré-requisitos, **separados por vírgula** (ex.: `2` ou `11,10,9`). Sem espaços obrigatórios. Vazio = sem requisito. |
+| **carga_horaria** | sim | Número (ex.: `60`, `100`). |
+| **professor** | sim | Texto; pode ficar vazio no CSV (`,,` no fim da linha) se ainda não houver docente. |
+
+### Formato de **horarios** (grade semanal)
+
+Cada “token” é **um dígito de dia** + **uma ou mais letras de bloco**, sem espaço no meio. Vários tokens na mesma célula = **separados por espaço**.
+
+- **Dia:** `2` = Segunda … `7` = Sábado (igual ao padrão da UVA no código).
+- **Blocos:** `A`…`S` = faixas horárias fixas em `lib/csvToObject.ts` (ex.: `B` 08:00–08:50, `C` 08:50–09:40).
+
+Exemplos:
+
+| Valor no CSV | Significado |
+|--------------|-------------|
+| `2BC 4BCDE` | Segunda nos blocos B–C; Quarta nos blocos B–E. |
+| `5IJKL` | Quinta, blocos I até L (um intervalo contínuo por token). |
+| *(vazio)* | Disciplina sem horário (ex.: só requisito / sem turma fixa na planilha). |
+
+Regex aceita por token: dia `2`–`7` + só letras `A`–`S` (ex.: `3IJKL` válido; `1AB` inválido).
+
+### Checklist ao editar
+
+1. Editar **`data/Disciplinas.csv`** (UTF-8; evita Excel quebrando acentos — prefira editor ou “CSV UTF-8”).
+2. Se mudou **nome** de disciplina que tem equivalente, atualizar **`data/Equivalentes.csv`** (coluna que referencia o nome oficial).
+3. Atualizar **`lastUpdated`** do bloco `Disciplinas` em **`data/index.ts`**.
+4. Rodar **`npm run build`** para validar; corrigir até passar.
+5. **Quem já usa o site:** trocar **ids** ou apagar disciplinas pode desalinhar o progresso salvo no **localStorage** do navegador (marcações antigas). Mudança de nome/horário/professor em geral não quebra ids já salvos.
+
+### Equivalentes
+
+Arquivo separado: **`data/Equivalentes.csv`**. A coluna que indica a disciplina da grade deve coincidir **caractere a caractere** com **`nome`** em `Disciplinas.csv`. Atualize `DisciplinasEquivalentes.metadata.lastUpdated` em `data/index.ts` quando alterar esse CSV.
+
+## Como rodar
+
+```bash
+npm install
+npm run dev
+```
+
+Abra [http://localhost:3000](http://localhost:3000). Build de produção: `npm run build` → `npm start`.
+
+## Stack
+
+- **Next.js** (App Router) · **React** · **TypeScript**
+- **Tailwind CSS** · **Zustand** (estado)
+- **react-big-calendar** · **date-fns** · **csv-parse** · **html2canvas-pro**
+- **Biome** (lint/format)
+
+## Contribuir
+
+Sugestões e correções são bem-vindas via **issue** ou **pull request** neste repositório.
