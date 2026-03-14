@@ -1,28 +1,28 @@
 import fs from "node:fs";
 import { parse } from "csv-parse/sync";
+import { validarDisciplina, validarEquivalenteRow } from "@/lib/csvRowValidators";
 
 export function processDisciplinas(csvPath: string): Disciplina[] {
 	const conteudo = fs.readFileSync(csvPath, "utf-8");
 	const registros = parse(conteudo, {
 		columns: true,
 		skip_empty_lines: true,
-	});
+	}) as Record<string, unknown>[];
 
 	return registros
-		.map((row: any) => {
-			validarDisciplina(row); // Throw error se invalido
-			const horarios = parseHorarios(row.horarios);
-
-			const requisitos = row.requisitos ? row.requisitos.split(",").map((id: string) => ({ id: Number(id) })) : [];
+		.map((row) => {
+			const csv = validarDisciplina(row);
+			const horarios = parseHorarios(csv.horarios);
+			const requisitos = csv.requisitos ? csv.requisitos.split(",").map((id) => ({ id: Number(id) })) : [];
 
 			return {
-				id: Number(row.id),
-				nome: row.nome,
-				periodo: row.periodo,
+				id: Number(csv.id),
+				nome: csv.nome,
+				periodo: csv.periodo,
 				horarios: horarios.length ? horarios : undefined,
 				requisitos: requisitos.length ? requisitos : undefined,
-				carga_horaria: Number(row.carga_horaria),
-				professor: row.professor,
+				carga_horaria: Number(csv.carga_horaria),
+				professor: csv.professor,
 			};
 		})
 		.toSorted((a, b) => a.id - b.id);
@@ -33,24 +33,24 @@ export function processEquivalentes(csvPath: string, Disciplinas: Disciplina[]):
 	const registros = parse(conteudo, {
 		columns: true,
 		skip_empty_lines: true,
-	});
+	}) as Record<string, unknown>[];
 
-	return registros.map((row: any) => {
-		const horarios = parseHorarios(row.Horario);
-		const originalId = searchDisciplinaId(row.Equivale, Disciplinas);
+	return registros.map((row) => {
+		const csv = validarEquivalenteRow(row);
+		const horarios = parseHorarios(csv.Horario);
+		const originalId = searchDisciplinaId(csv.Equivale, Disciplinas);
 
 		return {
-			nome: row.Nome,
-			curso: row.Curso,
+			nome: csv.Nome,
+			curso: csv.Curso,
 			horarios: horarios.length ? horarios : undefined,
 			equivaleId: originalId,
-			equivaleNome: row.Equivale,
-			professor: row.Professor,
+			equivaleNome: csv.Equivale,
+			professor: csv.Professor,
 		};
 	});
 }
 
-// Formato de horarios da faculdade
 const horarios: Record<string, { inicio: string; fim: string }> = {
 	A: { inicio: "07:10", fim: "08:00" },
 	B: { inicio: "08:00", fim: "08:50" },
@@ -86,7 +86,7 @@ function parseHorarios(codigos: string) {
 	if (!codigos.trim()) return [];
 
 	return codigos
-		.split(/\s+/) // quebra por um ou mais espaços
+		.split(/\s+/)
 		.filter(Boolean)
 		.map((codigo) => {
 			const dia = dias[codigo[0]];
@@ -96,42 +96,6 @@ function parseHorarios(codigos: string) {
 
 			return { dia, inicio: primeiro.inicio, fim: ultimo.fim } as Horario;
 		});
-}
-
-function validarDisciplina(row: any) {
-	const erros: string[] = [];
-
-	if (!row.id || Number.isNaN(Number(row.id))) {
-		erros.push("Campo id inválido");
-	}
-	if (!row.carga_horaria || Number.isNaN(Number(row.carga_horaria))) {
-		erros.push("Campo carga_horaria inválido");
-	}
-	if (typeof row.nome !== "string") {
-		erros.push("Campo nome inválido");
-	}
-	if (typeof row.periodo !== "string") {
-		erros.push("Campo periodo inválido");
-	}
-	if (typeof row.professor !== "string") {
-		erros.push("Campo professor inválido");
-	}
-	if (row.requisitos && !row.requisitos.split(",").every((r: string) => !Number.isNaN(Number(r)))) {
-		erros.push("Campo requisitos inválido");
-	}
-	if (
-		row.horarios &&
-		!row.horarios
-			.split(/\s+/) // quebra por um ou mais espaços
-			.filter(Boolean)
-			.every((h: string) => /^[2-7][A-S]+$/.test(h.trim()))
-	) {
-		erros.push("Campo horarios inválido");
-	}
-
-	if (erros.length > 0) {
-		throw new Error(`${erros.join("\n")}\nEm: ${JSON.stringify(row)}`);
-	}
 }
 
 function searchDisciplinaId(name: string, Disciplina: Disciplina[]): number {
