@@ -5,7 +5,7 @@ id,nome,periodo,horarios,requisitos,carga_horaria,professor
 1,Lógica de Programação,1° Período,2IJKL 3IJKL,,100,Walisson Ferreira
 3,Lógica Matemática,1° Período,3BCDE 4IJ,,80,Hudson Costa
 
-11,Álgebra Linear,2° Período,5IJKL,,60,Francisco Raimundo
+11,Álgebra Linear,2° Período,2NOPQ,,60,Francisco Raimundo
 10,Cálculo II,2° Período,3IJKL 4IJ,2,80,Rosangela Marques
 7,Circuitos Digitais,2° Período,4BCDE,3,60,Walisson Ferreira
 9,Laboratório de Programação,2° Período,5IJKL,1,60,Paulo Regis
