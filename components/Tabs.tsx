@@ -1,10 +1,16 @@
 import { useUIStore } from "@/store/uiStore";
 
-const navButtons = [
+interface navButtonsType {
+	label: string;
+	path: string;
+	badge?: string;
+}
+
+const navButtons: navButtonsType[] = [
 	{ label: "Gerenciador de Disciplinas", path: "gerenciador" },
 	{ label: "Organizador de Horários", path: "horario" },
 	{ label: "Pesquisar Disciplinas", path: "filtro" },
-	{ label: "Calendario academico", path: "academic-events", isNew: true },
+	{ label: "Calendario academico", path: "academic-events" },
 	{ label: "Planejador de Curso", path: "planejador" },
 	{ label: "Sobre o projeto", path: "sobre" },
 ];
@@ -32,10 +38,9 @@ export default function Tabs() {
 					>
 						{tab.label}
 
-						{/* Badge posicionado no canto superior direito */}
-						{tab.isNew && (
+						{tab.badge && (
 							<span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-[10px] px-1.5 py-0.5 rounded-full uppercase tracking-tight shadow-sm leading-none">
-								Atualizado
+								{tab.badge}
 							</span>
 						)}
 					</button>
