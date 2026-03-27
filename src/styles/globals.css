@@ -23,30 +23,27 @@ body {
 	@apply disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed;
 }
 
-/* Popup de mensagem generico */
+/* Popup de mensagem generico: entra da direita, sai pela direita */
 .popup-message-error {
 	color: white;
+	background-color: #e84820;
 	padding: 0.75rem 1.25rem;
 	border-radius: 0.375rem;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-	animation: pulseOut 7s ease-in-out forwards;
-	background-color: #e84820;
+	animation: popupSlideFromRight 7s cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 
-@keyframes pulseOut {
+@keyframes popupSlideFromRight {
 	0% {
-		opacity: 1;
+		transform: translateX(calc(100% + 1.5rem));
 	}
-	25% {
-		opacity: 0.5;
+	12% {
+		transform: translateX(0);
 	}
-	50% {
-		opacity: 1;
-	}
-	75% {
-		opacity: 0.5;
+	82% {
+		transform: translateX(0);
 	}
 	100% {
-		opacity: 0;
+		transform: translateX(calc(100% + 1.5rem));
 	}
 }
