@@ -7,7 +7,8 @@
 		"dev": "vite",
 		"build": "vite build",
 		"preview": "vite preview",
-		"lint": "biome check ."
+		"lint": "biome check . && tsc --noEmit",
+		"format": "biome check --write --no-errors-on-unmatched ."
 	},
 	"dependencies": {
 		"csv-parse": "^6.2.1",

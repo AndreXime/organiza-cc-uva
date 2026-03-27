@@ -1,10 +1,10 @@
-import { generateDisciplinaClasses } from "@/lib/utils";
-import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { ArrowDownNarrowWide } from "lucide-react";
 import { useEffect, useMemo } from "react";
-import { useUIStore } from "@/store/uiStore";
-import { type FiltrosType, useFiltroStore } from "@/features/filtro/filtroStore";
 import SectionHeader from "@/components/SectionHeader";
+import { type FiltrosType, useFiltroStore } from "@/features/filtro/filtroStore";
+import { generateDisciplinaClasses } from "@/lib/utils";
+import { useDisciplinaStore } from "@/store/disciplinaStore";
+import { useUIStore } from "@/store/uiStore";
 
 export default function FiltroDisciplinas() {
 	const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);

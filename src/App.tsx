@@ -1,17 +1,17 @@
 "use client";
 
-import StoreInitializer from "@/store/StoreInitalizer";
+import serverData from "virtual:server-data";
+import Modal from "@/components/Modal";
+import Popup from "@/components/Popup";
+import Tabs from "@/components/Tabs";
 import EventosAcademicos from "@/features/eventos/Eventos";
 import FiltroDisciplinas from "@/features/filtro/Filtrar";
 import Gerenciador from "@/features/gerenciador/Gerenciador";
 import HorarioManager from "@/features/horario/Horario";
 import Planejador from "@/features/planejador/Planejador";
 import Sobre from "@/features/sobre/Sobre";
-import Modal from "@/components/Modal";
-import Popup from "@/components/Popup";
-import Tabs from "@/components/Tabs";
+import StoreInitializer from "@/store/StoreInitalizer";
 import { useUIStore } from "@/store/uiStore";
-import serverData from "virtual:server-data";
 
 export default function App() {
 	const Tab = useUIStore((state) => state.Tab);

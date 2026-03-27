@@ -1,5 +1,5 @@
-import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { create } from "zustand";
+import { useDisciplinaStore } from "@/store/disciplinaStore";
 
 export type FiltrosType = {
 	professor: string;
@@ -92,7 +92,7 @@ function filtroPorTurno(disciplina: Disciplina, turno: string): boolean {
 
 	// verificar se TODOS os horários correspondem ao turno.
 	return disciplina.horarios.every((horario) => {
-		const horaInicio = parseInt(horario.inicio.split(":")[0]);
+		const horaInicio = parseInt(horario.inicio.split(":")[0], 10);
 		if (turno === "manha") return horaInicio < 12;
 		if (turno === "tarde") return horaInicio >= 12 && horaInicio < 18;
 		if (turno === "noite") return horaInicio >= 18;

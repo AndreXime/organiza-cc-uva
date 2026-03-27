@@ -1,5 +1,5 @@
-import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useState } from "react";
+import { useDisciplinaStore } from "@/store/disciplinaStore";
 
 export default function DisciplinaTable() {
 	const DisciplinasTotais = useDisciplinaStore((state) => state.DisciplinasTotais);

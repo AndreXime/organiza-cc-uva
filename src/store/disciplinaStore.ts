@@ -1,6 +1,6 @@
-import type { DisciplinasServer } from "@/data";
 import { create } from "zustand";
-import { persist, type PersistStorage } from "zustand/middleware";
+import { type PersistStorage, persist } from "zustand/middleware";
+import type { DisciplinasServer } from "@/data";
 
 export interface DisciplinaState {
 	DisciplinasFeitas: Set<number>;
@@ -147,7 +147,7 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 				// Ordenar: normais primeiro (1°, 2°, ...), depois optativas e não ofertadas
 				const periodosOrdenados = Object.keys(DisciplinasPorPeriodo).sort((a, b) => {
 					const getWeight = (p: string) => {
-						if (/^\d+°/.test(p)) return parseInt(p); // pega número do período
+						if (/^\d+°/.test(p)) return parseInt(p, 10); // pega número do período
 						if (p === "Optativa") return 9998; // Joga optativa para ser antepenultimo
 						if (p === "Não ofertadas") return 9999; // Joga para o final
 						return 10000;

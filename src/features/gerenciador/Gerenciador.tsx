@@ -1,13 +1,13 @@
 "use client";
 
+import { Eye, EyeOff, ShieldAlert, ShieldBan, ShieldCheck } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Eye, EyeOff, ShieldCheck, ShieldAlert, ShieldBan } from "lucide-react";
+import { SkeletonSection } from "@/components/LoadingSkeleton";
+import SectionHeader from "@/components/SectionHeader";
+import ProgressBar from "@/features/gerenciador/components/ProgressBar";
+import { generateDisciplinaClasses } from "@/lib/utils";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
-import { generateDisciplinaClasses } from "@/lib/utils";
-import { SkeletonSection } from "@/components/LoadingSkeleton";
-import ProgressBar from "@/features/gerenciador/components/ProgressBar";
-import SectionHeader from "@/components/SectionHeader";
 
 export default function GerenciadorInterativo() {
 	const {

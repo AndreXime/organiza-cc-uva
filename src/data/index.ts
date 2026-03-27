@@ -1,6 +1,6 @@
 import path from "node:path";
-import { AcademicEvents, semesterDates } from "./Eventos";
 import { processDisciplinas, processEquivalentes } from "../lib/csvToObject";
+import { AcademicEvents, semesterDates } from "./Eventos";
 
 export function buildServerData(projectRoot: string = process.cwd()) {
 	const Disciplinas = {

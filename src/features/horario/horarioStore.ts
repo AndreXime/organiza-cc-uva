@@ -1,8 +1,8 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { getDay, startOfWeek, parse, format, setDay } from "date-fns";
+import { format, getDay, parse, setDay, startOfWeek } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
 import { dateFnsLocalizer } from "react-big-calendar";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 
 export interface CalendarState {

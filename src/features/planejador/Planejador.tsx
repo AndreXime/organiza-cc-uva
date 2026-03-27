@@ -1,12 +1,12 @@
 "use client";
 
+import { Plus, Sparkles } from "lucide-react";
 import { useState } from "react";
+import SectionHeader from "@/components/SectionHeader";
+import { usePlanejadorStore } from "@/features/planejador/planejadorStore";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
-import { Plus, Sparkles } from "lucide-react";
-import SectionHeader from "@/components/SectionHeader";
 import { NovoSemestreModal } from "./components/NovoSemestreModal";
-import { usePlanejadorStore } from "@/features/planejador/planejadorStore";
 
 export default function Planejador() {
 	const {

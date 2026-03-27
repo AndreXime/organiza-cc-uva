@@ -293,4 +293,4 @@ const AcademicEvents: AcademicEvent[] = rawEvents.map((item) => {
 	};
 });
 
-export { semesterDates, AcademicEvents };
+export { AcademicEvents, semesterDates };

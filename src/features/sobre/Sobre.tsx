@@ -1,9 +1,9 @@
-import DisciplinaTable from "./components/DisciplinaTable";
-import { Footprints, BadgeCheck, LibraryBig, Clock, Sun, Moon, File, FileText, ExternalLink } from "lucide-react";
-import { useDisciplinaStore } from "@/store/disciplinaStore";
-import useCalculateProgress from "@/hooks/useCalculateProgress";
-import { useUIStore } from "@/store/uiStore";
+import { BadgeCheck, Clock, ExternalLink, File, FileText, Footprints, LibraryBig, Moon, Sun } from "lucide-react";
 import { GitHub, Nextjs, TailwindCSS, TypeScript, Zustand } from "@/components/Icons";
+import useCalculateProgress from "@/hooks/useCalculateProgress";
+import { useDisciplinaStore } from "@/store/disciplinaStore";
+import { useUIStore } from "@/store/uiStore";
+import DisciplinaTable from "./components/DisciplinaTable";
 
 export default function Sobre() {
 	const DisciplinasDisponiveis = useDisciplinaStore((state) => state.DisciplinasDisponiveis);

@@ -1,5 +1,5 @@
-import type { EventosAcademicosServer } from "@/data";
 import { create } from "zustand";
+import type { EventosAcademicosServer } from "@/data";
 
 export type TimeFilter = 7 | 30 | 90 | null; // 1 semana, 1 mês, 3 meses
 
