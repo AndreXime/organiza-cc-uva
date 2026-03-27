@@ -1,6 +1,6 @@
 "use client";
 import type { ServerData } from "@/data";
-import { useAcademicCalendarStore } from "@/features/eventos-academicos/academicCalendarStore";
+import { useAcademicCalendarStore } from "@/features/eventos/eventosStore";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useEffect } from "react";
 

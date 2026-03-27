@@ -5,7 +5,7 @@ import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
 import { Plus, Sparkles } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
-import { NovoSemestreModal } from "./NovoSemestreModal";
+import { NovoSemestreModal } from "./components/NovoSemestreModal";
 import { usePlanejadorStore } from "@/features/planejador/planejadorStore";
 
 export default function Planejador() {

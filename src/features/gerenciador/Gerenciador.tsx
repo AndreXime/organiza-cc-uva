@@ -6,7 +6,7 @@ import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
 import { generateDisciplinaClasses } from "@/lib/utils";
 import { SkeletonSection } from "@/components/LoadingSkeleton";
-import ProgressBar from "@/features/gerenciador/ProgressBar";
+import ProgressBar from "@/features/gerenciador/components/ProgressBar";
 import SectionHeader from "@/components/SectionHeader";
 
 export default function GerenciadorInterativo() {

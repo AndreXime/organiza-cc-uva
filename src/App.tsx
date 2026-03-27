@@ -1,12 +1,12 @@
 "use client";
 
 import StoreInitializer from "@/store/StoreInitalizer";
-import EventosAcademicos from "@/features/eventos-academicos/EventosAcademicos";
+import EventosAcademicos from "@/features/eventos/Eventos";
 import FiltroDisciplinas from "@/features/filtro/Filtrar";
 import Gerenciador from "@/features/gerenciador/Gerenciador";
-import HorarioManager from "@/features/horario/HorarioManager";
+import HorarioManager from "@/features/horario/Horario";
 import Planejador from "@/features/planejador/Planejador";
-import Sobre from "@/features/sobre/SobreProjeto";
+import Sobre from "@/features/sobre/Sobre";
 import Modal from "@/components/Modal";
 import Popup from "@/components/Popup";
 import Tabs from "@/components/Tabs";

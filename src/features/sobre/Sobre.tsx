@@ -1,4 +1,4 @@
-import DisciplinaTable from "./DisciplinaTable";
+import DisciplinaTable from "./components/DisciplinaTable";
 import { Footprints, BadgeCheck, LibraryBig, Clock, Sun, Moon, File, FileText, ExternalLink } from "lucide-react";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import useCalculateProgress from "@/hooks/useCalculateProgress";

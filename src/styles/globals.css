@@ -23,47 +23,6 @@ body {
 	@apply disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed;
 }
 
-/* Desfazendo estilos do react-big-calendar */
-.rbc-allday-cell {
-	display: none;
-	min-height: unset;
-}
-.rbc-time-header-content .rbc-row .rbc-time-header-cell {
-	border-bottom: none;
-}
-.rbc-time-view .rbc-row {
-	min-height: unset;
-}
-.rbc-current-time-indicator {
-	display: none;
-}
-
-/* Tema escuro: HorarioManager */
-.dark .rbc-calendar,
-.dark .rbc-time-view,
-.dark .rbc-time-content,
-.dark .rbc-time-view-resources .rbc-time-gutter,
-.dark .rbc-time-view-resources .rbc-time-header-gutter,
-.dark .rbc-time-header,
-.dark .rbc-time-header-content,
-.dark .rbc-day-slot,
-.dark .rbc-timeslot-group,
-.dark .rbc-day-slot .rbc-time-slot,
-.dark .rbc-header + .rbc-header,
-.dark .rbc-header,
-.dark .rbc-label {
-	background-color: var(--color-card) !important;
-	border-color: var(--color-border) !important;
-	color: var(--color-foreground);
-}
-
-.rbc-events-container {
-	padding: 0px !important;
-	margin: 0px !important;
-	margin-inline: 3px !important;
-	border-color: var(--color-border) !important;
-}
-
 /* Popup de mensagem generico */
 .popup-message-error {
 	color: white;

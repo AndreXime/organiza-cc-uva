@@ -4,11 +4,12 @@ import { Calendar } from "react-big-calendar";
 import { format, startOfWeek } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import "./horario.css";
 import html2canvas from "html2canvas-pro";
 import { Download, Eye, EyeOff } from "lucide-react";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import SectionHeader from "@/components/SectionHeader";
-import { useCalendarStore, localizer } from "@/features/horario/calendarStore";
+import { useCalendarStore, localizer } from "@/features/horario/horarioStore";
 import { useUIStore } from "@/store/uiStore";
 
 export default function HorarioManager() {
