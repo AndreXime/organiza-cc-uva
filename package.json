@@ -10,25 +10,25 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
-		"csv-parse": "^6.1.0",
+		"csv-parse": "^6.2.1",
 		"date-fns": "^4.1.0",
-		"html2canvas-pro": "^2.0.0",
-		"lucide-react": "^0.575.0",
-		"next": "^16.1.6",
-		"postcss": "^8.5.6",
+		"html2canvas-pro": "^2.0.2",
+		"lucide-react": "^1.7.0",
+		"next": "^16.2.1",
+		"postcss": "^8.5.8",
 		"react": "^19.2.4",
 		"react-big-calendar": "^1.19.4",
 		"react-dom": "^19.2.4",
-		"zustand": "^5.0.11"
+		"zustand": "^5.0.12"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.4.4",
-		"@tailwindcss/postcss": "^4.2.1",
+		"@biomejs/biome": "^2.4.9",
+		"@tailwindcss/postcss": "^4.2.2",
 		"@types/node": "^25",
 		"@types/react": "^19",
 		"@types/react-big-calendar": "^1.16.3",
 		"@types/react-dom": "^19",
-		"tailwindcss": "^4.2.1",
-		"typescript": "^5"
+		"tailwindcss": "^4.2.2",
+		"typescript": "^6"
 	}
 }
