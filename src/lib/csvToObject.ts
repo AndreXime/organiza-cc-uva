@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import { parse } from "csv-parse/sync";
-import { validarDisciplina, validarEquivalenteRow } from "@/lib/csvRowValidators";
+import { validarDisciplina, validarEquivalenteRow } from "./csvRowValidators";
 
 export function processDisciplinas(csvPath: string): Disciplina[] {
 	const conteudo = fs.readFileSync(csvPath, "utf-8");

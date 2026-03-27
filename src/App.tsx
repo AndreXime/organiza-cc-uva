@@ -1,5 +1,6 @@
 "use client";
 
+import StoreInitializer from "@/store/StoreInitalizer";
 import EventosAcademicos from "@/features/eventos-academicos/EventosAcademicos";
 import FiltroDisciplinas from "@/features/filtro/Filtrar";
 import Gerenciador from "@/features/gerenciador/Gerenciador";
@@ -10,8 +11,9 @@ import Modal from "@/components/Modal";
 import Popup from "@/components/Popup";
 import Tabs from "@/components/Tabs";
 import { useUIStore } from "@/store/uiStore";
+import serverData from "virtual:server-data";
 
-export default function Home() {
+export default function App() {
 	const Tab = useUIStore((state) => state.Tab);
 	const mode = useUIStore((state) => state.mode);
 
@@ -48,6 +50,7 @@ export default function Home() {
 				<ActiveTab />
 			</main>
 
+			<StoreInitializer data={serverData} />
 			<Popup />
 			<Modal />
 		</main>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import DisciplinaTable from "./DisciplinaTable";
 import { Footprints, BadgeCheck, LibraryBig, Clock, Sun, Moon, File, FileText, ExternalLink } from "lucide-react";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
@@ -236,13 +235,15 @@ export default function Sobre() {
 							Se quiser sugerir alguma melhoria, você pode abrir uma <strong className="font-semibold">issue</strong> ou
 							um <strong className="font-semibold">pull request</strong>.
 						</p>
-						<Link
+						<a
 							href="https://github.com/AndreXime/organiza-cc-uva"
+							target="_blank"
+							rel="noreferrer"
 							className="inline-flex items-center gap-2 justify-center bg-gray-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-900 transition-colors"
 						>
 							<GitHub size={25} />
 							Ver no GitHub
-						</Link>
+						</a>
 					</div>
 				</>
 			)}

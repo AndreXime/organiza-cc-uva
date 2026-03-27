@@ -40,3 +40,4 @@ temp
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+dist

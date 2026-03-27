@@ -1,31 +1,34 @@
-import { AcademicEvents, semesterDates } from "@/data/Eventos";
-import { processDisciplinas, processEquivalentes } from "@/lib/csvToObject";
+import path from "node:path";
+import { AcademicEvents, semesterDates } from "./Eventos";
+import { processDisciplinas, processEquivalentes } from "../lib/csvToObject";
 
-const Disciplinas = {
-	metadata: {
-		lastUpdated: new Date("2026-03-11"),
-	},
-	data: processDisciplinas("./src/data/Disciplinas.csv"),
-};
+export function buildServerData(projectRoot: string = process.cwd()) {
+	const Disciplinas = {
+		metadata: {
+			lastUpdated: new Date("2026-03-11"),
+		},
+		data: processDisciplinas(path.join(projectRoot, "src/data/Disciplinas.csv")),
+	};
 
-const DisciplinasEquivalentes = {
-	metadata: {
-		lastUpdated: new Date("2025-09-20"),
-	},
-	data: processEquivalentes("./src/data/Equivalentes.csv", Disciplinas.data),
-};
+	const DisciplinasEquivalentes = {
+		metadata: {
+			lastUpdated: new Date("2025-09-20"),
+		},
+		data: processEquivalentes(path.join(projectRoot, "src/data/Equivalentes.csv"), Disciplinas.data),
+	};
 
-const EventosAcademicos = {
-	metadata: {
-		lastUpdated: new Date("2026-03-11"),
-		semesterDates,
-	},
-	data: AcademicEvents,
-};
+	const EventosAcademicos = {
+		metadata: {
+			lastUpdated: new Date("2026-03-11"),
+			semesterDates,
+		},
+		data: AcademicEvents,
+	};
 
-export default { EventosAcademicos, Disciplinas, DisciplinasEquivalentes };
-export type EventosAcademicosServer = typeof EventosAcademicos;
-export type DisciplinasServer = {
-	Disciplinas: typeof Disciplinas;
-	DisciplinasEquivalentes: typeof DisciplinasEquivalentes;
-};
+	return { EventosAcademicos, Disciplinas, DisciplinasEquivalentes };
+}
+
+export type ServerData = ReturnType<typeof buildServerData>;
+
+export type EventosAcademicosServer = ServerData["EventosAcademicos"];
+export type DisciplinasServer = Pick<ServerData, "Disciplinas" | "DisciplinasEquivalentes">;

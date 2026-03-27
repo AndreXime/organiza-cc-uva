@@ -15,15 +15,15 @@ Site para acompanhar o curso de **Ciência da Computação** da **Universidade E
 
 ## Dados do projeto
 
-- **`data/Disciplinas.csv`** — grade oficial do curso: id, nome, período, horários (blocos semanais), pré-requisitos por id, carga horária e professor. É a fonte do gerenciador, da grade semanal e do planejador. Detalhes de edição na seção abaixo.
-- **`data/Equivalentes.csv`** — equivalências (optativas); o campo que liga à grade é o **nome exato** da disciplina oficial em `Disciplinas.csv`.
-- **`data/Eventos.ts`** — calendário acadêmico (extraído do PDF da coordenação).
+- **`src/data/Disciplinas.csv`** — grade oficial do curso: id, nome, período, horários (blocos semanais), pré-requisitos por id, carga horária e professor. É a fonte do gerenciador, da grade semanal e do planejador. Detalhes de edição na seção abaixo.
+- **`src/data/Equivalentes.csv`** — equivalências (optativas); o campo que liga à grade é o **nome exato** da disciplina oficial em `Disciplinas.csv`.
+- **`src/data/Eventos.ts`** — calendário acadêmico (extraído do PDF da coordenação).
 
 ---
 
-## Como atualizar as disciplinas (`data/Disciplinas.csv`)
+## Como atualizar as disciplinas (`src/data/Disciplinas.csv`)
 
-A grade é lida em build por `lib/csvToObject.ts`. Se alguma linha estiver inválida, o **`npm run build`** **falha** com mensagem apontando o registro.
+A grade é lida em build por `src/lib/csvToObject.ts`. Se alguma linha estiver inválida, o **`npm run build`** **falha** com mensagem apontando o registro.
 
 ### Cabeçalho (obrigatório)
 
@@ -52,7 +52,7 @@ O cabeçalho define **sete colunas em toda linha** — não remova colunas. **Op
 Cada “token” é **um dígito de dia** + **uma ou mais letras de bloco**, sem espaço no meio. Vários tokens na mesma célula = **separados por espaço**.
 
 - **Dia:** `2` = Segunda … `7` = Sábado (igual ao padrão da UVA no código).
-- **Blocos:** `A`…`S` = faixas horárias fixas em `lib/csvToObject.ts` (ex.: `B` 08:00–08:50, `C` 08:50–09:40).
+- **Blocos:** `A`…`S` = faixas horárias fixas em `src/lib/csvToObject.ts` (ex.: `B` 08:00–08:50, `C` 08:50–09:40).
 
 Exemplos:
 
@@ -66,15 +66,15 @@ Regex aceita por token: dia `2`–`7` + só letras `A`–`S` (ex.: `3IJKL` váli
 
 ### Checklist ao editar
 
-1. Editar **`data/Disciplinas.csv`** (UTF-8; evita Excel quebrando acentos — prefira editor ou “CSV UTF-8”).
-2. Se mudou **nome** de disciplina que tem equivalente, atualizar **`data/Equivalentes.csv`** (coluna que referencia o nome oficial).
-3. Atualizar **`lastUpdated`** do bloco `Disciplinas` em **`data/index.ts`**.
+1. Editar **`src/data/Disciplinas.csv`** (UTF-8; evita Excel quebrando acentos — prefira editor ou “CSV UTF-8”).
+2. Se mudou **nome** de disciplina que tem equivalente, atualizar **`src/data/Equivalentes.csv`** (coluna que referencia o nome oficial).
+3. Atualizar **`lastUpdated`** do bloco `Disciplinas` em **`src/data/index.ts`**.
 4. Rodar **`npm run build`** para validar; corrigir até passar.
 5. **Quem já usa o site:** trocar **ids** ou apagar disciplinas pode desalinhar o progresso salvo no **localStorage** do navegador (marcações antigas). Mudança de nome/horário/professor em geral não quebra ids já salvos.
 
 ### Equivalentes
 
-Arquivo separado: **`data/Equivalentes.csv`**. A coluna que indica a disciplina da grade deve coincidir **caractere a caractere** com **`nome`** em `Disciplinas.csv`. Atualize `DisciplinasEquivalentes.metadata.lastUpdated` em `data/index.ts` quando alterar esse CSV.
+Arquivo separado: **`src/data/Equivalentes.csv`**. A coluna que indica a disciplina da grade deve coincidir **caractere a caractere** com **`nome`** em `Disciplinas.csv`. Atualize `DisciplinasEquivalentes.metadata.lastUpdated` em `src/data/index.ts` quando alterar esse CSV.
 
 ## Como rodar
 
@@ -83,11 +83,11 @@ npm install
 npm run dev
 ```
 
-Abra [http://localhost:3000](http://localhost:3000). Build de produção: `npm run build` → `npm start`.
+Abra [http://localhost:5173](http://localhost:5173). Preview de produção: `npm run build` → `npm run preview`.
 
 ## Stack
 
-- **Next.js** (App Router) · **React** · **TypeScript**
+- **Vite** · **React** · **TypeScript**
 - **Tailwind CSS** · **Zustand** (estado)
 - **react-big-calendar** · **date-fns** · **csv-parse** · **html2canvas-pro**
 - **Biome** (lint/format)
