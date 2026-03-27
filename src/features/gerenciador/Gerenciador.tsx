@@ -45,7 +45,7 @@ export default function GerenciadorInterativo() {
 		DisciplinasEquivalentes.forEach((disciplina) => {
 			const key = disciplina.equivaleNome;
 			if (!gruposMap.has(key)) gruposMap.set(key, []);
-			gruposMap.get(key)!.push(disciplina);
+			gruposMap.get(key)?.push(disciplina);
 		});
 
 		// Função para calcular o peso para ordenação
