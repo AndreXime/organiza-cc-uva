@@ -5,14 +5,14 @@ const Disciplinas = {
 	metadata: {
 		lastUpdated: new Date("2026-03-11"),
 	},
-	data: processDisciplinas("./data/Disciplinas.csv"),
+	data: processDisciplinas("./src/data/Disciplinas.csv"),
 };
 
 const DisciplinasEquivalentes = {
 	metadata: {
 		lastUpdated: new Date("2025-09-20"),
 	},
-	data: processEquivalentes("./data/Equivalentes.csv", Disciplinas.data),
+	data: processEquivalentes("./src/data/Equivalentes.csv", Disciplinas.data),
 };
 
 const EventosAcademicos = {

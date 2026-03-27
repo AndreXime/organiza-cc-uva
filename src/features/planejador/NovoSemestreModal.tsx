@@ -22,9 +22,7 @@ export function NovoSemestreModal({ open, onClose }: NovoSemestreModalProps) {
 	if (!open || !semestreEmEdicao) return null;
 
 	const semestreCriacao =
-		planejamento.find(
-			(p) => p.ano === semestreEmEdicao.ano && p.semestre === semestreEmEdicao.semestre,
-		) ?? null;
+		planejamento.find((p) => p.ano === semestreEmEdicao.ano && p.semestre === semestreEmEdicao.semestre) ?? null;
 
 	if (!semestreCriacao) return null;
 
@@ -37,9 +35,7 @@ export function NovoSemestreModal({ open, onClose }: NovoSemestreModalProps) {
 		.filter((d): d is Disciplina => Boolean(d));
 
 	const disciplinasDisponiveis =
-		indexSemestreCriacao >= 0
-			? getDisciplinasDisponiveisParaSelecao(semestreCriacao, indexSemestreCriacao)
-			: [];
+		indexSemestreCriacao >= 0 ? getDisciplinasDisponiveisParaSelecao(semestreCriacao, indexSemestreCriacao) : [];
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -110,4 +106,3 @@ export function NovoSemestreModal({ open, onClose }: NovoSemestreModalProps) {
 		</div>
 	);
 }
-
