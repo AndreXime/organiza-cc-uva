@@ -1,5 +1,3 @@
-"use client";
-
 import { usePlanejadorStore } from "@/features/planejador/planejadorStore";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 

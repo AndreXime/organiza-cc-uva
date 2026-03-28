@@ -1,4 +1,3 @@
-"use client";
 import { format, startOfWeek } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
 import { useMemo, useRef, useState } from "react";

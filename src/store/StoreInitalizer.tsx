@@ -1,4 +1,3 @@
-"use client";
 import { useEffect } from "react";
 import type { ServerData } from "@/data";
 import { useAcademicCalendarStore } from "@/features/eventos/eventosStore";

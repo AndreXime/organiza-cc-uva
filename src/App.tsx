@@ -1,5 +1,3 @@
-"use client";
-
 import serverData from "virtual:server-data";
 import { lazy, Suspense } from "react";
 import Modal from "@/components/Modal";

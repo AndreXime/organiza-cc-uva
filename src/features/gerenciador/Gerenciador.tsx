@@ -1,5 +1,3 @@
-"use client";
-
 import { Eye, EyeOff, ShieldAlert, ShieldBan, ShieldCheck } from "lucide-react";
 import { useMemo, useState } from "react";
 import { SkeletonSection } from "@/components/LoadingSkeleton";

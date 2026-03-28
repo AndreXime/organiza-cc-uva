@@ -1,5 +1,3 @@
-"use client";
-
 import { Plus, Sparkles } from "lucide-react";
 import { useState } from "react";
 import SectionHeader from "@/components/SectionHeader";
