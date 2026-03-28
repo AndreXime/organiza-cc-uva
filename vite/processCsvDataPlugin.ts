@@ -2,8 +2,8 @@ import path from "node:path";
 import type { Plugin } from "vite";
 import { buildServerData } from "../src/data";
 
-const VIRTUAL_ID = "virtual:server-data";
-const RESOLVED_VIRTUAL_ID = `\0${VIRTUAL_ID}`;
+const MODULE_ID = "serverdata";
+const RESOLVED_MODULE_ID = `\0${MODULE_ID}`;
 
 function serializeToJs(value: unknown): string {
 	if (value instanceof Date) {
@@ -26,16 +26,16 @@ function serializeToJs(value: unknown): string {
 
 export default function processCsvDataPlugin(): Plugin {
 	return {
-		name: "server-data-virtual-module",
+		name: "serverdata-module",
 		enforce: "pre",
 
 		resolveId(id) {
-			if (id === VIRTUAL_ID) return RESOLVED_VIRTUAL_ID;
+			if (id === MODULE_ID) return RESOLVED_MODULE_ID;
 			return null;
 		},
 
 		async load(id) {
-			if (id !== RESOLVED_VIRTUAL_ID) return null;
+			if (id !== RESOLVED_MODULE_ID) return null;
 
 			const projectRoot = process.cwd();
 			const serverData = buildServerData(projectRoot);
@@ -48,6 +48,8 @@ export default function processCsvDataPlugin(): Plugin {
 
 			const code = `// Gerado virtualmente por Vite.
 const data = ${serializeToJs(serverData)};
+const { Disciplinas, DisciplinasEquivalentes, EventosAcademicos } = data;
+export { Disciplinas, DisciplinasEquivalentes, EventosAcademicos };
 export default data;
 `;
 

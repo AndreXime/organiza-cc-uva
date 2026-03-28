@@ -1,9 +1,10 @@
-import serverData from "virtual:server-data";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import { Disciplinas, DisciplinasEquivalentes, EventosAcademicos as eventosAcademicosData } from "serverdata";
 import Modal from "@/components/Modal";
 import Popup from "@/components/Popup";
 import Tabs from "@/components/Tabs";
-import StoreInitializer from "@/store/StoreInitalizer";
+import { useAcademicCalendarStore } from "@/features/eventos/eventosStore";
+import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
 import LoadingSpinner from "./components/LoadingSpinner";
 
@@ -37,6 +38,11 @@ export default function App() {
 	const Tab = useUIStore((state) => state.Tab);
 	const mode = useUIStore((state) => state.mode);
 
+	useEffect(() => {
+		useDisciplinaStore.getState().init({ Disciplinas, DisciplinasEquivalentes });
+		useAcademicCalendarStore.getState().init(eventosAcademicosData);
+	}, []);
+
 	return (
 		<main className={`container mx-auto p-4 ${mode !== "minimal" ? "py-8" : "pb-8 pt-0"}`}>
 			{mode !== "minimal" && (
@@ -61,7 +67,6 @@ export default function App() {
 				</Suspense>
 			</main>
 
-			<StoreInitializer data={serverData} />
 			<Popup />
 			<Modal />
 		</main>
