@@ -15,17 +15,17 @@ Site para acompanhar o curso de **Ciência da Computação** da **Universidade E
 
 ## Dados do projeto
 
-- **`src/data/Disciplinas.csv`** — grade oficial do curso: id, nome, período, horários (blocos semanais), pré-requisitos por id, carga horária e professor. É a fonte do gerenciador, da grade semanal e do planejador. Detalhes de edição na seção abaixo.
-- **`src/data/Equivalentes.csv`** — equivalências (optativas); o campo que liga à grade é o **nome exato** da disciplina oficial em `Disciplinas.csv`.
+- **`src/data/Disciplinas.csv`** — grade oficial do curso: id, nome, período, horários, pré-requisitos por id, carga horária e professor. É a fonte do gerenciador, da grade semanal e do planejador. Detalhes de edição na seção abaixo.
+- **`src/data/Equivalentes.csv`** — equivalências; o campo que liga à grade é o **nome exato** da disciplina oficial em `Disciplinas.csv`.
 - **`src/data/Eventos.ts`** — calendário acadêmico (extraído do PDF da coordenação).
 
 ---
 
 ## Como atualizar as disciplinas (`src/data/Disciplinas.csv`)
 
-A grade é lida em build por `src/lib/csvToObject.ts`. Se alguma linha estiver inválida, o **`npm run build`** **falha** com mensagem apontando o registro.
+A grade é lida em build. Se alguma linha estiver inválida, o **`npm run build`** **falha** com mensagem apontando o registro.
 
-### Cabeçalho (obrigatório)
+### Cabeçalho
 
 A primeira linha deve ser exatamente:
 
@@ -45,22 +45,14 @@ O cabeçalho define **sete colunas em toda linha** — não remova colunas. **Op
 | **horarios** | opcional | Ver formato abaixo. Vazio = sem horário na grade. |
 | **requisitos** | opcional | Ids dos pré-requisitos, **separados por vírgula** (ex.: `2`, `11,10,9`). Vazio = sem requisito. |
 | **carga_horaria** | obrigatório | Número (ex.: `60`, `100`). |
-| **professor** | opcional | Nome do docente. Vazio = ainda sem docente (última célula da linha vazia, ex.: `...,60,`). |
+| **professor** | opcional | Nome do docente. Vazio = ainda sem docente. |
 
-### Formato de **horarios** (grade semanal)
+### Formato de horarios
 
 Cada “token” é **um dígito de dia** + **uma ou mais letras de bloco**, sem espaço no meio. Vários tokens na mesma célula = **separados por espaço**.
 
 - **Dia:** `2` = Segunda … `7` = Sábado (igual ao padrão da UVA no código).
 - **Blocos:** `A`…`S` = faixas horárias fixas em `src/lib/csvToObject.ts` (ex.: `B` 08:00–08:50, `C` 08:50–09:40).
-
-Exemplos:
-
-| Valor no CSV | Significado |
-|--------------|-------------|
-| `2BC 4BCDE` | Segunda nos blocos B–C; Quarta nos blocos B–E. |
-| `5IJKL` | Quinta, blocos I até L (um intervalo contínuo por token). |
-| *(vazio)* | Disciplina sem horário (ex.: só requisito / sem turma fixa na planilha). |
 
 Regex aceita por token: dia `2`–`7` + só letras `A`–`S` (ex.: `3IJKL` válido; `1AB` inválido).
 
@@ -74,7 +66,7 @@ Regex aceita por token: dia `2`–`7` + só letras `A`–`S` (ex.: `3IJKL` váli
 
 ### Equivalentes
 
-Arquivo separado: **`src/data/Equivalentes.csv`**. A coluna que indica a disciplina da grade deve coincidir **caractere a caractere** com **`nome`** em `Disciplinas.csv`. Atualize `DisciplinasEquivalentes.metadata.lastUpdated` em `src/data/index.ts` quando alterar esse CSV.
+Arquivo separado: **`src/data/Equivalentes.csv`**. A coluna que indica a disciplina da grade deve coincidir todos os caractere com nome em `Disciplinas.csv`. Atualize `DisciplinasEquivalentes.metadata.lastUpdated` em `src/data/index.ts` quando alterar esse CSV.
 
 ## Como rodar
 
@@ -83,12 +75,10 @@ npm install
 npm run dev
 ```
 
-Abra [http://localhost:5173](http://localhost:5173). Preview de produção: `npm run build` → `npm run preview`.
-
 ## Stack
 
 - **Vite** · **React** · **TypeScript**
-- **Tailwind CSS** · **Zustand** (estado)
+- **Tailwind CSS** · **Zustand**
 - **react-big-calendar** · **date-fns** · **csv-parse** · **html2canvas-pro**
 - **Biome** (lint/format)
 
