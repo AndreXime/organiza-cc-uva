@@ -1,5 +1,5 @@
 import { BadgeCheck, Clock, ExternalLink, File, FileText, Footprints, LibraryBig, Moon, Sun } from "lucide-react";
-import { GitHub, Nextjs, TailwindCSS, TypeScript, Zustand } from "@/components/Icons";
+import { Biome, GitHub, ReactIcon, TailwindCSS, TypeScript, Vite, Zustand } from "@/components/Icons";
 import useCalculateProgress from "@/hooks/useCalculateProgress";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
@@ -210,22 +210,30 @@ export default function Sobre() {
 						<h3 className="text-xl font-bold mb-4 text-heading border-b-2 border-border pb-2">
 							Tecnologias Utilizadas
 						</h3>
-						<div className="flex flex-wrap justify-center gap-6 text-center">
+						<div className="flex flex-wrap justify-center gap-6 text-center text-foreground">
 							<div className="text-muted flex flex-col justify-center items-center gap-2">
 								<TypeScript size={50} />
 								Typescript
 							</div>
 							<div className="text-muted flex flex-col justify-center  items-center gap-2">
-								<Nextjs size={50} />
-								Next.js
+								<ReactIcon size={50} />
+								React
+							</div>
+							<div className="text-muted flex flex-col justify-center items-center gap-2">
+								<Zustand size={50} />
+								Zustand
+							</div>
+							<div className="text-muted flex flex-col justify-center  items-center gap-2">
+								<Vite size={50} />
+								Vite
 							</div>
 							<div className="text-muted flex flex-col justify-center items-center gap-2">
 								<TailwindCSS size={50} />
 								TailwindCSS
 							</div>
 							<div className="text-muted flex flex-col justify-center items-center gap-2">
-								<Zustand size={50} />
-								Zustand
+								<Biome size={50} />
+								Biome
 							</div>
 						</div>
 					</div>
