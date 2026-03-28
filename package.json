@@ -40,6 +40,7 @@
 		"jest-environment-jsdom": "^30.3.0",
 		"tailwindcss": "^4.2.2",
 		"typescript": "^6",
-		"vite": "^8.0.3"
+		"vite": "^8.0.3",
+		"vite-prerender-plugin": "^0.5.13"
 	}
 }
