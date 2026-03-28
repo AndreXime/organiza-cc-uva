@@ -4,11 +4,11 @@ import Modal from "@/components/Modal";
 import Popup from "@/components/Popup";
 import Tabs from "@/components/Tabs";
 import { useAcademicCalendarStore } from "@/features/eventos/eventosStore";
+import Gerenciador from "@/features/gerenciador/Gerenciador";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
 import LoadingSpinner from "./components/LoadingSpinner";
 
-const Gerenciador = lazy(() => import("@/features/gerenciador/Gerenciador"));
 const HorarioManager = lazy(() => import("@/features/horario/Horario"));
 const Sobre = lazy(() => import("@/features/sobre/Sobre"));
 const FiltroDisciplinas = lazy(() => import("@/features/filtro/Filtrar"));
