@@ -20,7 +20,7 @@ Sugestões e correções são bem-vindas via **issue** ou **pull request**.
    | `npm run lint` | Biome + `tsc --noEmit`. |
    | `npm run build` | Build de produção (inclui validação dos CSVs de disciplinas no pipeline de dados). |
 
-4. O hook **pre-commit** (Husky) roda `npm run format` e `npm run lint`. Commits que não passarem no lint serão bloqueados até corrigir.
+4. O hook **pre-commit** (Husky) roda `npm run format`, `npm run lint` e `npm run test`. Commits que não passarem serão bloqueados até corrigir.
 
 5. Descreva no PR o que mudou e por quê; se for correção de bug ou dado, cite a fonte quando fizer sentido.
 

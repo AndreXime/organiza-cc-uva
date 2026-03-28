@@ -7,3 +7,4 @@ git diff --name-only --cached --diff-filter=d | while IFS= read -r file; do
 done
 
 npm run lint
+npm run test
