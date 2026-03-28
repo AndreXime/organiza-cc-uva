@@ -8,7 +8,8 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"lint": "biome check . && tsc --noEmit",
-		"format": "biome check --write --no-errors-on-unmatched ."
+		"format": "biome check --write --no-errors-on-unmatched .",
+		"prepare": "husky"
 	},
 	"dependencies": {
 		"csv-parse": "^6.2.1",
@@ -28,9 +29,10 @@
 		"@types/react": "^19",
 		"@types/react-big-calendar": "^1.16.3",
 		"@types/react-dom": "^19",
+		"@vitejs/plugin-react": "^6.0.1",
+		"husky": "^9.1.7",
 		"tailwindcss": "^4.2.2",
 		"typescript": "^6",
-		"vite": "^8.0.3",
-		"@vitejs/plugin-react": "^6.0.1"
+		"vite": "^8.0.3"
 	}
 }

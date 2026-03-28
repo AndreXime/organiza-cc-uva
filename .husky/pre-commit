@@ -1,0 +1,9 @@
+npm run format
+
+# O format muda o disco; o stage ainda pode ter a versão pré-format. Re-adiciona só os
+# caminhos que já estavam no stage para o commit incluir o ficheiro já formatado.
+git diff --name-only --cached --diff-filter=d | while IFS= read -r file; do
+	[ -n "$file" ] && git add -- "$file"
+done
+
+npm run lint
