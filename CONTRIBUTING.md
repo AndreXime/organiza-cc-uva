@@ -2,6 +2,24 @@
 
 Sugestões e correções são bem-vindas via **issue** ou **pull request**.
 
+## Estrutura do repositório
+
+| Caminho | Papel |
+|---------|--------|
+| **`public/`** | Ficheiros estáticos servidos pelo Vite (ex.: favicon). |
+| **`vite/`** | Código só do tooling: plugin que lê os CSV e expõe `virtual:server-data` no build (`processCsvDataPlugin.ts`). |
+| **`src/main.tsx`**, **`src/App.tsx`** | Entrada da SPA, lazy loading das áreas e layout com abas. |
+| **`src/components/`** | UI partilhada entre features (Modal, Tabs, SectionHeader, skeletons, etc.). |
+| **`src/features/`** | Uma pasta por área do produto (`gerenciador`, `horario`, `filtro`, `eventos`, `planejador`, `sobre`). Cada uma concentra o ecrã principal, estilos locais quando existem, e frequentemente um `*Store.ts` (Zustand) ao lado. Subpastas `components/` para peças só daquela feature. |
+| **`src/store/`** | Estado global (ex.: `disciplinaStore`, `uiStore`) e `StoreInitalizer`, que hidrata as stores com os dados vindos do build. |
+| **`src/data/`** | Dados de domínio: CSVs (`Disciplinas.csv`, `Equivalentes.csv`), `Eventos.ts`, e `index.ts` com `buildServerData` + metadata `lastUpdated`. |
+| **`src/lib/`** | Parsing/validação de CSV (`csvToObject`, `csvRowValidators`) e utilitários (`utils.ts`). |
+| **`src/hooks/`** | Hooks reutilizáveis (ex.: cálculo de progresso). |
+| **`src/types/`** | Declarações TypeScript globais (`types.d.ts`). |
+| **`src/styles/`** | CSS global e tema. |
+| **`src/test/`** | Helpers para testes (ex.: reset de stores). |
+| **Raiz** | `vite.config.ts`, `biome.json`, `jest.config.ts`, `package.json`, `.husky/` — configuração e hooks Git. |
+
 ## Contribuir com código
 
 1. Faça um fork e crie uma branch a partir de `main`.
