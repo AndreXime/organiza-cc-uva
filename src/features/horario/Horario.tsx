@@ -4,7 +4,6 @@ import { useMemo, useRef, useState } from "react";
 import { Calendar } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./horario.css";
-import html2canvas from "html2canvas-pro";
 import { Download, Eye, EyeOff } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
 import { localizer, useCalendarStore } from "@/features/horario/horarioStore";
@@ -26,23 +25,22 @@ export default function HorarioManager() {
 	const calendarRef = useRef<HTMLDivElement>(null);
 
 	const salvarImagem = async () => {
-		setLoading(true);
 		const calendarRefcurrent = calendarRef.current;
 		if (!calendarRefcurrent) return;
+		setLoading(true);
+		try {
+			const { default: html2canvas } = await import("html2canvas-pro");
+			const canvas = await html2canvas(calendarRefcurrent);
 
-		const canvas = await html2canvas(calendarRefcurrent, {
-			allowTaint: true,
-			useCORS: true,
-			scale: 2,
-		});
-
-		const link = document.createElement("a");
-		link.href = canvas.toDataURL("image/png");
-		link.download = "horarios.png";
-		document.body.appendChild(link);
-		link.click();
-		document.body.removeChild(link);
-		setLoading(false);
+			const link = document.createElement("a");
+			link.href = canvas.toDataURL("image/png");
+			link.download = "horarios.png";
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	return (
