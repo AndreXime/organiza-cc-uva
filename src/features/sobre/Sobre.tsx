@@ -1,6 +1,7 @@
 import { ClipboardCheck, Clock, ExternalLink, File, FileText, Footprints, Moon, Puzzle, Sun } from "lucide-react";
 import { Biome, GitHub, ReactIcon, TailwindCSS, TypeScript, Vite, Zustand } from "@/components/Icons";
 import useProfileReport from "@/hooks/useProfileReport";
+import useProfileSync from "@/hooks/useProfileSync";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
 import DisciplinaTable from "./components/DisciplinaTable";
@@ -11,8 +12,10 @@ export default function Sobre() {
 	const metadata = useDisciplinaStore((state) => state.metadata);
 	const setMode = useUIStore((state) => state.setMode);
 	const mode = useUIStore((state) => state.mode);
+	const setMessage = useUIStore((state) => state.setMessage);
 
 	const audit = useProfileReport();
+	const { exportProfile, importProfile } = useProfileSync();
 
 	const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
 		dateStyle: "short",
@@ -145,30 +148,68 @@ export default function Sobre() {
 					))}
 				</div>
 			</section>
-			<section className="rounded-lg border border-border bg-card overflow-hidden p-4">
-				<div className="mb-4">
-					<h3 className="text-lg font-semibold text-heading">Atualização dos dados</h3>
-					<p className="mt-0.5 text-sm text-muted-foreground">
-						Informações sobre a última atualização dos dados usados pelo projeto.
-					</p>
-				</div>
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-					<div className="rounded-lg border border-border bg-background/60 p-3 flex flex-col gap-1">
-						<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Disciplinas</span>
-						<span className="font-medium text-foreground">
-							{dateFormatter.format(new Date(metadata.DisciplinaLastUpdated))}
-						</span>
+			<div className="grid gap-8 lg:grid-cols-2">
+				<section className="rounded-lg border border-border bg-card overflow-hidden p-4">
+					<div className="mb-4">
+						<h3 className="text-lg font-semibold text-heading">Dados pessoais</h3>
+						<p className="mt-0.5 text-sm text-muted-foreground">
+							Exporte ou importe o seu progresso e planejamentos como um arquivo JSON.
+						</p>
 					</div>
-					<div className="rounded-lg border border-border bg-background/60 p-3 flex flex-col gap-1">
-						<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-							Equivalências de disciplinas
-						</span>
-						<span className="font-medium text-foreground">
-							{dateFormatter.format(new Date(metadata.DisciplinaEquivalentesLastUpdated))}
-						</span>
+					<div className="flex flex-col lg:flex-row gap-3 lg:items-center">
+						<button
+							type="button"
+							className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background/50 px-4 py-2 text-sm font-medium text-foreground hover:border-primary/40 hover:bg-card transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+							onClick={exportProfile}
+						>
+							Exportar perfil
+						</button>
+						<label className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background/50 px-4 py-2 text-sm font-medium text-foreground hover:border-primary/40 hover:bg-card transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+							Importar perfil
+							<input
+								type="file"
+								accept="application/json"
+								className="hidden"
+								onChange={async (e) => {
+									const file = e.target.files?.[0];
+									e.target.value = "";
+									if (!file) return;
+									try {
+										const text = await file.text();
+										importProfile(text);
+									} catch {
+										setMessage("Não foi possível ler o arquivo.");
+									}
+								}}
+							/>
+						</label>
 					</div>
-				</div>
-			</section>
+				</section>
+				<section className="rounded-lg border border-border bg-card overflow-hidden p-4">
+					<div className="mb-4">
+						<h3 className="text-lg font-semibold text-heading">Atualização dos dados</h3>
+						<p className="mt-0.5 text-sm text-muted-foreground">
+							Informações sobre a última atualização dos dados usados pelo projeto.
+						</p>
+					</div>
+					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+						<div className="rounded-lg border border-border bg-background/60 p-3 flex flex-col gap-1">
+							<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Disciplinas</span>
+							<span className="font-medium text-foreground">
+								{dateFormatter.format(new Date(metadata.DisciplinaLastUpdated))}
+							</span>
+						</div>
+						<div className="rounded-lg border border-border bg-background/60 p-3 flex flex-col gap-1">
+							<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+								Equivalências de disciplinas
+							</span>
+							<span className="font-medium text-foreground">
+								{dateFormatter.format(new Date(metadata.DisciplinaEquivalentesLastUpdated))}
+							</span>
+						</div>
+					</div>
+				</section>
+			</div>
 			<section className="rounded-lg border border-border bg-card overflow-hidden p-4">
 				<div className="mb-4">
 					<h3 className="text-lg font-semibold text-heading">Links rápidos</h3>
