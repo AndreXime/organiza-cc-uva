@@ -1,4 +1,5 @@
 import { ClipboardCheck, Clock, ExternalLink, File, FileText, Footprints, Moon, Puzzle, Sun } from "lucide-react";
+import { useMemo, useState } from "react";
 import { Biome, GitHub, ReactIcon, TailwindCSS, TypeScript, Vite, Zustand } from "@/components/Icons";
 import useProfileReport from "@/hooks/useProfileReport";
 import useProfileSync from "@/hooks/useProfileSync";
@@ -16,10 +17,21 @@ export default function Sobre() {
 
 	const audit = useProfileReport();
 	const { exportProfile, importProfile } = useProfileSync();
+	const [theme, setTheme] = useState<"light" | "dark">(() =>
+		document.documentElement.classList.contains("dark") ? "dark" : "light",
+	);
 
 	const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
 		dateStyle: "short",
 	});
+
+	const toggleButtonClassName = useMemo(() => {
+		const base =
+			"cursor-pointer inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+		const active = "bg-primary border-primary text-primary-foreground hover:bg-primary/90";
+		const inactive = "bg-background/60 border-border text-foreground hover:bg-accent hover:border-primary/40";
+		return { base, active, inactive };
+	}, []);
 
 	function toggleTheme(theme: "light" | "dark") {
 		const html = document.documentElement;
@@ -30,6 +42,7 @@ export default function Sobre() {
 		html.classList.add(theme);
 
 		localStorage.setItem("theme", theme);
+		setTheme(theme);
 	}
 
 	const stats = [
@@ -78,18 +91,24 @@ export default function Sobre() {
 					<div className="flex flex-wrap gap-3">
 						<button
 							type="button"
-							className="cursor-pointer inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm hover:bg-card hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+							aria-pressed={theme === "light"}
+							className={`${toggleButtonClassName.base} ${
+								theme === "light" ? toggleButtonClassName.active : toggleButtonClassName.inactive
+							}`}
 							onClick={() => toggleTheme("light")}
 						>
-							<Sun className="h-4 w-4 text-amber-500" />
+							<Sun className="h-4 w-4" />
 							<span>Tema claro</span>
 						</button>
 						<button
 							type="button"
-							className="cursor-pointer inline-flex items-center gap-2 rounded-full border border-border bg-black px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-zinc-900 hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+							aria-pressed={theme === "dark"}
+							className={`${toggleButtonClassName.base} ${
+								theme === "dark" ? toggleButtonClassName.active : toggleButtonClassName.inactive
+							}`}
 							onClick={() => toggleTheme("dark")}
 						>
-							<Moon className="h-4 w-4 text-sky-300" />
+							<Moon className="h-4 w-4" />
 							<span>Tema escuro</span>
 						</button>
 					</div>
@@ -105,7 +124,9 @@ export default function Sobre() {
 						<button
 							type="button"
 							aria-pressed={mode === "default"}
-							className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background bg-primary/90 border-primary text-primary-foreground shadow-sm hover:bg-primary cursor-pointer`}
+							className={`${toggleButtonClassName.base} ${
+								mode === "default" ? toggleButtonClassName.active : toggleButtonClassName.inactive
+							}`}
 							onClick={() => setMode("default")}
 						>
 							<FileText className="h-4 w-4" />
@@ -114,7 +135,9 @@ export default function Sobre() {
 						<button
 							type="button"
 							aria-pressed={mode === "minimal"}
-							className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background bg-purple-700 border-purple-700 text-white shadow-sm hover:bg-purple-800 cursor-pointer`}
+							className={`${toggleButtonClassName.base} ${
+								mode === "minimal" ? toggleButtonClassName.active : toggleButtonClassName.inactive
+							}`}
 							onClick={() => setMode("minimal")}
 						>
 							<File className="h-4 w-4" />

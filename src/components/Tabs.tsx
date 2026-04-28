@@ -12,7 +12,7 @@ const navButtons: navButtonsType[] = [
 	{ label: "Pesquisar Disciplinas", path: "filtro" },
 	{ label: "Calendario academico", path: "academic-events" },
 	{ label: "Planejador de Curso", path: "planejador" },
-	{ label: "Sobre o projeto", path: "sobre" },
+	{ label: "Configurações", path: "sobre" },
 ];
 
 export default function Tabs() {
