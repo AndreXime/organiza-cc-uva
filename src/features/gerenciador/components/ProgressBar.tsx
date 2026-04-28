@@ -1,9 +1,9 @@
-import useCalculateProgress from "@/hooks/useCalculateProgress";
+import useProfileReport from "@/hooks/useProfileReport";
 import { getCurrentTheme } from "@/lib/utils";
 
 export default function ProgressBar() {
-	const { percentage } = useCalculateProgress();
-	const percent = percentage || 0;
+	const { progress } = useProfileReport();
+	const percent = progress.percentage || 0;
 
 	const isDark = getCurrentTheme() === "dark";
 

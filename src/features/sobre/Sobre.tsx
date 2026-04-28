@@ -1,6 +1,6 @@
-import { BadgeCheck, Clock, ExternalLink, File, FileText, Footprints, LibraryBig, Moon, Sun } from "lucide-react";
+import { ClipboardCheck, Clock, ExternalLink, File, FileText, Footprints, Moon, Puzzle, Sun } from "lucide-react";
 import { Biome, GitHub, ReactIcon, TailwindCSS, TypeScript, Vite, Zustand } from "@/components/Icons";
-import useCalculateProgress from "@/hooks/useCalculateProgress";
+import useProfileReport from "@/hooks/useProfileReport";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
 import DisciplinaTable from "./components/DisciplinaTable";
@@ -12,7 +12,7 @@ export default function Sobre() {
 	const setMode = useUIStore((state) => state.setMode);
 	const mode = useUIStore((state) => state.mode);
 
-	const { totalFeitas, faltantes } = useCalculateProgress();
+	const audit = useProfileReport();
 
 	const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
 		dateStyle: "short",
@@ -31,28 +31,26 @@ export default function Sobre() {
 
 	const stats = [
 		{
-			title: "Disciplinas concluídas",
-			value: totalFeitas,
-			icon: BadgeCheck,
-			color: "text-green-600",
+			title: "Obrigatórias",
+			value: `${audit.obrigatorias.feitas}/${audit.obrigatorias.total} feitas • ${audit.obrigatorias.faltandoIds.length} faltando`,
+			icon: ClipboardCheck,
 		},
 		{
-			title: "Disciplinas disponíveis para cursar",
-			value: DisciplinasDisponiveis.size,
-			icon: LibraryBig,
-			color: "text-blue-600",
+			title: "Optativas",
+			value: `${audit.optativas.feitasContabilizadas}/${audit.optativas.maxCount} contabilizadas • ${audit.optativas.faltando} faltando`,
+			icon: Puzzle,
 		},
 		{
-			title: "Disciplinas para terminar o curso",
-			value: faltantes,
+			title: "Carga horaria (Obrigatorias + Optativas)",
+			value: `${audit.cargaHoraria.totalFeita}h / ${
+				audit.cargaHoraria.totalObrigatorias + audit.cargaHoraria.totalOptativasContabilizadas
+			}h`,
 			icon: Clock,
-			color: "text-orange-600",
 		},
 		{
 			title: "Próxima disciplina disponível",
 			value: getDisciplinasByIds(DisciplinasDisponiveis)[0]?.nome || "Você concluiu todas as disciplinas!",
 			icon: Footprints,
-			color: "text-purple-600",
 		},
 	];
 
@@ -122,29 +120,7 @@ export default function Sobre() {
 					</div>
 				</section>
 			</div>
-			<section className="rounded-lg border border-border bg-card overflow-hidden p-4">
-				<div className="mb-4">
-					<h3 className="text-lg font-semibold text-heading">Links rápidos</h3>
-				</div>
-				<ul className="flex flex-wrap gap-2">
-					{linksRapidos.map((item) => (
-						<li key={item.href}>
-							<a
-								href={item.href}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="inline-flex items-center gap-2 rounded-lg border border-border bg-background/50 px-3 py-2 text-sm text-foreground hover:border-primary/40 hover:bg-card transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-							>
-								<ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground" />
-								<span className="font-medium">{item.label}</span>
-								<span className="text-muted-foreground truncate hidden sm:inline">
-									{item.href.replace(/^https?:\/\//, "")}
-								</span>
-							</a>
-						</li>
-					))}
-				</ul>
-			</section>
+
 			<section className="rounded-lg border border-border bg-card overflow-hidden p-4">
 				<div className="mb-4">
 					<h3 className="text-lg font-semibold text-heading">Estatísticas de progresso</h3>
@@ -159,11 +135,11 @@ export default function Sobre() {
 							className="stat-card bg-background p-4 rounded-lg shadow-sm border border-border flex items-center"
 						>
 							<div className="text-3xl mr-4">
-								<stat.icon size={35} className={stat.color} />
+								<stat.icon size={35} className="text-foreground" />
 							</div>
 							<div>
-								<h4 className="font-bold text-muted text-sm">{stat.title}</h4>
-								<div className={`text-xl font-semibold ${stat.color}`}>{stat.value}</div>
+								<h4 className="font-bold text-muted text-sm uppercase">{stat.title}</h4>
+								<div className={`mt-1 font-semibold text-foreground`}>{stat.value}</div>
 							</div>
 						</div>
 					))}
@@ -193,6 +169,30 @@ export default function Sobre() {
 					</div>
 				</div>
 			</section>
+			<section className="rounded-lg border border-border bg-card overflow-hidden p-4">
+				<div className="mb-4">
+					<h3 className="text-lg font-semibold text-heading">Links rápidos</h3>
+				</div>
+				<ul className="flex flex-wrap gap-2">
+					{linksRapidos.map((item) => (
+						<li key={item.href}>
+							<a
+								href={item.href}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex items-center gap-2 rounded-lg border border-border bg-background/50 px-3 py-2 text-sm text-foreground hover:border-primary/40 hover:bg-card transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+							>
+								<ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground" />
+								<span className="font-medium">{item.label}</span>
+								<span className="text-muted-foreground truncate hidden sm:inline">
+									{item.href.replace(/^https?:\/\//, "")}
+								</span>
+							</a>
+						</li>
+					))}
+				</ul>
+			</section>
+
 			{mode !== "minimal" && (
 				<>
 					<div>
