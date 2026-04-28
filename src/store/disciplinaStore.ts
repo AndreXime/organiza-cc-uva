@@ -13,6 +13,7 @@ export interface DisciplinaState {
 	init: (data: DisciplinasServer) => void;
 	recalculateDisponiveis: () => void;
 	toggleDisciplina: (id: number) => string | undefined;
+	setDisciplinasFeitas: (ids: Iterable<number>) => void;
 	getDisciplinasByIds: (ids: Set<number>) => Disciplina[];
 	getDisciplinaByName: (name: string) => Disciplina | undefined;
 }
@@ -117,6 +118,20 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 				set({
 					DisciplinasFeitas: novoSetFeitas,
 				});
+				get().recalculateDisponiveis();
+			},
+
+			setDisciplinasFeitas: (ids) => {
+				const { DisciplinasTotais } = get();
+				const idsSet = new Set(ids);
+
+				// Garante integridade: só aceita ids existentes
+				const idsValidos = new Set<number>();
+				for (const d of DisciplinasTotais) {
+					if (idsSet.has(d.id)) idsValidos.add(d.id);
+				}
+
+				set({ DisciplinasFeitas: idsValidos });
 				get().recalculateDisponiveis();
 			},
 

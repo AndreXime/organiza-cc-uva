@@ -13,6 +13,7 @@ export interface CalendarState {
 	totalCargaHoraria: number;
 	setHideNonSelected: (hide: boolean) => void;
 	toggleSelectedDisc: (discId: number) => void;
+	setSelectedDiscs: (discIds: number[]) => void;
 	buildEvents: (DisciplinasDisponiveis: Set<number>) => void;
 	calculateVisibleEvents: () => void;
 }
@@ -143,6 +144,12 @@ export const useCalendarStore = create<CalendarState>()(
 						};
 					}
 				});
+				get().calculateVisibleEvents();
+			},
+
+			setSelectedDiscs: (discIds) => {
+				const unique = Array.from(new Set(discIds));
+				set({ selectedDiscs: unique });
 				get().calculateVisibleEvents();
 			},
 		}),

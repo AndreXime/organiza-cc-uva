@@ -20,6 +20,7 @@ type PlanejadorActions = {
 	concluirEdicao: () => void;
 	adicionarDisciplina: (disciplinaId: number) => void;
 	removerDisciplina: (disciplinaId: number) => void;
+	setPlanejamento: (planejamento: PlanejamentoType[]) => void;
 	getDisciplinasDisponiveisParaSelecao: (semestre: PlanejamentoType, index: number) => Disciplina[];
 	getConflitos: (semestre: PlanejamentoType) => Set<number>;
 	preencherAutomaticamente: () => void;
@@ -143,6 +144,10 @@ export const usePlanejadorStore = create<PlanejadorState & PlanejadorActions>()(
 							: p,
 					),
 				}));
+			},
+
+			setPlanejamento: (planejamento) => {
+				set({ planejamento, semestreEmEdicao: null });
 			},
 
 			getConflitos: (semestre) => {
