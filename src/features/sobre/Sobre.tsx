@@ -158,7 +158,7 @@ export default function Sobre() {
 					{stats.map((stat) => (
 						<div
 							key={stat.title}
-							className="stat-card bg-background p-4 rounded-lg shadow-sm border border-border flex items-center"
+							className="stat-card bg-card p-4 rounded-lg shadow-md border border-border flex items-center"
 						>
 							<div className="text-3xl mr-4">
 								<stat.icon size={35} className="text-foreground" />

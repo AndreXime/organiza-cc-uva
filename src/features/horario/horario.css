@@ -1,3 +1,13 @@
+:root {
+	--marked-bg: #7231a1;
+	--marked-text: #6818a2;
+}
+
+.dark {
+	--marked-bg: #7231a1;
+	--marked-text: #cf9af4;
+}
+
 /* Overrides react-big-calendar (carregar depois de react-big-calendar.css) */
 .rbc-allday-cell {
 	display: none;

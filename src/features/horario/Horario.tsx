@@ -50,9 +50,9 @@ export default function HorarioManager() {
 					<p>
 						A grade abaixo mostra os horários das disciplinas que estão disponíveis na aba{" "}
 						<span className="font-semibold text-blue-600">Gerenciador de Disciplinas</span>. Você pode clicar nos cards
-						para <span className="font-semibold text-[#7608c4]">marcar como selecionada</span> , isso fará ocultar
-						disciplina que tenham conflito com ela, você pode usar isso para planejar as disciplinas com base nos
-						horarios.
+						para <span className="font-semibold text-[var(--marked-text)]">marcar como selecionada</span> , isso fará
+						ocultar disciplina que tenham conflito com ela, você pode usar isso para planejar as disciplinas com base
+						nos horarios.
 					</p>
 					<p className="font-semibold">Total de horas das disciplinas selecionadas: {totalCargaHoraria} horas</p>
 					<p className="flex flex-wrap flex-row gap-4 items-center justify-center">
@@ -120,7 +120,7 @@ export default function HorarioManager() {
 							const isSelected = selectedDiscs.includes(event.id);
 							return {
 								style: {
-									backgroundColor: isSelected ? "#6A0DAD" : undefined,
+									backgroundColor: isSelected ? "var(--marked-bg)" : undefined,
 									color: isSelected ? "#FFFFFF" : undefined,
 								},
 							};
