@@ -10,7 +10,7 @@ const navButtons: navButtonsType[] = [
 	{ label: "Gerenciador de Disciplinas", path: "gerenciador" },
 	{ label: "Organizador de Horários", path: "horario" },
 	{ label: "Pesquisar Disciplinas", path: "filtro" },
-	{ label: "Calendario academico", path: "academic-events" },
+	{ label: "Calendario Acadêmico", path: "academic-events" },
 	{ label: "Planejador de Curso", path: "planejador" },
 	{ label: "Configurações", path: "sobre" },
 ];
