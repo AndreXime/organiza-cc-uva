@@ -6,6 +6,7 @@ import useProfileSync from "@/hooks/useProfileSync";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
 import { useUIStore } from "@/store/uiStore";
 import DisciplinaTable from "./components/DisciplinaTable";
+import ProfileManager from "./components/ProfileManager";
 
 export default function Sobre() {
 	const DisciplinasDisponiveis = useDisciplinaStore((state) => state.DisciplinasDisponiveis);
@@ -170,6 +171,15 @@ export default function Sobre() {
 						</div>
 					))}
 				</div>
+			</section>
+			<section className="rounded-lg border border-border bg-card overflow-hidden p-4 mb-8">
+				<div className="mb-4">
+					<h3 className="text-lg font-semibold text-heading">Perfis</h3>
+					<p className="mt-0.5 text-sm text-muted-foreground">
+						Troque entre progresso de pessoas ou usos neste navegador.
+					</p>
+				</div>
+				<ProfileManager />
 			</section>
 			<div className="grid gap-8 lg:grid-cols-2">
 				<section className="rounded-lg border border-border bg-card overflow-hidden p-4">
