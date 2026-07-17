@@ -55,7 +55,7 @@ export default function App() {
 			)}
 			<Tabs />
 
-			<main>
+			<div>
 				<Suspense
 					fallback={
 						<div className="w-full flex justify-center items-center pt-20">
@@ -65,7 +65,7 @@ export default function App() {
 				>
 					<ActiveTab tab={Tab} />
 				</Suspense>
-			</main>
+			</div>
 
 			<Popup />
 			<Modal />
