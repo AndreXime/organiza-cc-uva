@@ -45,14 +45,18 @@ describe("useProfileStore", () => {
 		useProfileStore.getState().createProfile("Segundo");
 		expect(Array.from(useDisciplinaStore.getState().DisciplinasFeitas)).toEqual([]);
 		useDisciplinaStore.getState().setDisciplinasFeitas([2]);
-		const principalId = useProfileStore.getState().profiles.find((p) => p.name === "Principal")!.id;
-		useProfileStore.getState().switchProfile(principalId);
+		const principal = useProfileStore.getState().profiles.find((p) => p.name === "Principal");
+		expect(principal).toBeDefined();
+		if (!principal) return;
+		useProfileStore.getState().switchProfile(principal.id);
 		expect(Array.from(useDisciplinaStore.getState().DisciplinasFeitas)).toEqual([1]);
 	});
 
 	it("deleteProfile bloqueia o último", () => {
 		useProfileStore.getState().ensureMigrated();
-		const id = useProfileStore.getState().activeProfileId!;
+		const id = useProfileStore.getState().activeProfileId;
+		expect(id).toBeTruthy();
+		if (!id) return;
 		const err = useProfileStore.getState().deleteProfile(id);
 		expect(err).toBeTruthy();
 		expect(useProfileStore.getState().profiles).toHaveLength(1);
@@ -60,7 +64,9 @@ describe("useProfileStore", () => {
 
 	it("renameProfile vazio vira Sem nome", () => {
 		useProfileStore.getState().ensureMigrated();
-		const id = useProfileStore.getState().activeProfileId!;
+		const id = useProfileStore.getState().activeProfileId;
+		expect(id).toBeTruthy();
+		if (!id) return;
 		useProfileStore.getState().renameProfile(id, "   ");
 		expect(useProfileStore.getState().profiles[0]?.name).toBe("Sem nome");
 	});

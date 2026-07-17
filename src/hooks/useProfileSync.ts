@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { applySnapshot, captureSnapshot, isValidSnapshot } from "@/lib/profileSnapshot";
+import { useProfileStore } from "@/store/profileStore";
 import { useUIStore } from "@/store/uiStore";
 
 function downloadJson(filename: string, data: unknown) {
@@ -43,6 +44,7 @@ export default function useProfileSync() {
 		}
 
 		applySnapshot(parsed);
+		useProfileStore.getState().saveActiveSnapshot();
 		setMessage("Perfil importado com sucesso.");
 	}, []);
 

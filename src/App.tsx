@@ -5,7 +5,9 @@ import Popup from "@/components/Popup";
 import Tabs from "@/components/Tabs";
 import { useAcademicCalendarStore } from "@/features/eventos/eventosStore";
 import Gerenciador from "@/features/gerenciador/Gerenciador";
+import useProfileCatalogSync from "@/hooks/useProfileCatalogSync";
 import { useDisciplinaStore } from "@/store/disciplinaStore";
+import { useProfileStore } from "@/store/profileStore";
 import { useUIStore } from "@/store/uiStore";
 import LoadingSpinner from "./components/LoadingSpinner";
 
@@ -38,9 +40,12 @@ export default function App() {
 	const Tab = useUIStore((state) => state.Tab);
 	const mode = useUIStore((state) => state.mode);
 
+	useProfileCatalogSync();
+
 	useEffect(() => {
 		useDisciplinaStore.getState().init({ Disciplinas, DisciplinasEquivalentes });
 		useAcademicCalendarStore.getState().init(eventosAcademicosData);
+		useProfileStore.getState().ensureMigrated();
 	}, []);
 
 	return (
