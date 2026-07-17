@@ -89,11 +89,13 @@ describe("useDisciplinaStore", () => {
 			expect(disp.has(2)).toBe(false);
 		});
 
-		it("atualiza periodo da disciplina no array quando optativa sem professor vira Não ofertadas", () => {
+		it("classifica optativa sem professor como Não ofertadas sem mutar o array de entrada", () => {
 			const discs: Disciplina[] = [{ id: 1, nome: "Opt", periodo: "Optativa", carga_horaria: 30 }];
 			useDisciplinaStore.getState().init(serverData(discs));
 
+			expect(discs[0]?.periodo).toBe("Optativa");
 			expect(useDisciplinaStore.getState().DisciplinasTotais[0]?.periodo).toBe("Não ofertadas");
+			expect(useDisciplinaStore.getState().DisciplinasPorPeriodo["Não ofertadas"]?.has(1)).toBe(true);
 		});
 
 		it("inclui período não numérico na ordenação após períodos numéricos e rótulos conhecidos", () => {
@@ -263,9 +265,9 @@ describe("useDisciplinaStore", () => {
 			expect(useDisciplinaStore.getState().DisciplinasFeitas.has(1)).toBe(true);
 		});
 
-		it("aceita marcar id que não existe em DisciplinasTotais (comportamento atual do store)", () => {
-			expect(useDisciplinaStore.getState().toggleDisciplina(999)).toBeUndefined();
-			expect(useDisciplinaStore.getState().DisciplinasFeitas.has(999)).toBe(true);
+		it("rejeita marcar id que não existe em DisciplinasTotais", () => {
+			expect(useDisciplinaStore.getState().toggleDisciplina(999)).toBe("Disciplina não encontrada.");
+			expect(useDisciplinaStore.getState().DisciplinasFeitas.has(999)).toBe(false);
 		});
 	});
 

@@ -94,6 +94,9 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 
 			toggleDisciplina(id: number) {
 				const { DisciplinasFeitas, DisciplinasTotais } = get();
+				if (!DisciplinasTotais.some((d) => d.id === id)) {
+					return "Disciplina não encontrada.";
+				}
 				const novoSetFeitas = new Set(DisciplinasFeitas);
 
 				if (novoSetFeitas.has(id)) {
@@ -149,22 +152,22 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 
 			// Ação para inicializar o estado com dados do servidor
 			init: (data) => {
-				const DisciplinasPorPeriodo = data.Disciplinas.data.reduce<Record<string, Set<number>>>((acc, disc) => {
-					if (disc.periodo === "Optativa" && !disc.professor) {
-						disc.periodo = "Não ofertadas";
-					}
+				const disciplinasComPeriodoEfetivo = data.Disciplinas.data.map((disc) => {
+					const periodo = disc.periodo === "Optativa" && !disc.professor ? "Não ofertadas" : disc.periodo;
+					return periodo === disc.periodo ? disc : { ...disc, periodo };
+				});
 
+				const DisciplinasPorPeriodo = disciplinasComPeriodoEfetivo.reduce<Record<string, Set<number>>>((acc, disc) => {
 					if (!acc[disc.periodo]) acc[disc.periodo] = new Set();
 					acc[disc.periodo].add(disc.id);
 					return acc;
 				}, {});
 
-				// Ordenar: normais primeiro (1°, 2°, ...), depois optativas e não ofertadas
 				const periodosOrdenados = Object.keys(DisciplinasPorPeriodo).sort((a, b) => {
 					const getWeight = (p: string) => {
-						if (/^\d+°/.test(p)) return parseInt(p, 10); // pega número do período
-						if (p === "Optativa") return 9998; // Joga optativa para ser antepenultimo
-						if (p === "Não ofertadas") return 9999; // Joga para o final
+						if (/^\d+°/.test(p)) return parseInt(p, 10);
+						if (p === "Optativa") return 9998;
+						if (p === "Não ofertadas") return 9999;
 						return 10000;
 					};
 					return getWeight(a) - getWeight(b);
@@ -176,7 +179,7 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 				}
 
 				set({
-					DisciplinasTotais: data.Disciplinas.data,
+					DisciplinasTotais: disciplinasComPeriodoEfetivo,
 					DisciplinasEquivalentes: data.DisciplinasEquivalentes.data,
 					DisciplinasPorPeriodo: DisciplinasPorPeriodoOrdenado,
 					metadata: {
@@ -186,10 +189,7 @@ export const useDisciplinaStore = create<DisciplinaState>()(
 				});
 
 				get().recalculateDisponiveis();
-
-				set({
-					loading: false,
-				});
+				set({ loading: false });
 			},
 		}),
 		{
