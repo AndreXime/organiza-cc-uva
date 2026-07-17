@@ -114,8 +114,8 @@ export default function GerenciadorInterativo() {
 					<p>
 						<span className="font-bold text-green-600">Verde</span> indica disciplinas concluídas e
 						<span className="font-bold text-blue-600"> azul </span>indica disciplinas disponíveis. <br />
-						Clique nos cards das disciplina abaixo para alternar entre concluida e disponível. <br />
-						Uma disciplina só torna como disponíveil quando todos os seus
+						Clique nos cards das disciplinas abaixo para alternar entre concluída e disponível. <br />
+						Uma disciplina só fica disponível quando todos os seus
 						<span className="font-semibold text-red-600"> pré-requisitos</span> estão cumpridos. <br />
 						Suas alterações são salvas automaticamente!
 					</p>

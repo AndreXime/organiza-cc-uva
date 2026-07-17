@@ -6,11 +6,11 @@ Sugestões e correções são bem-vindas via **issue** ou **pull request**.
 
 | Caminho | Papel |
 |---------|--------|
-| **`public/`** | Ficheiros estáticos servidos pelo Vite (ex.: favicon). |
+| **`public/`** | Arquivos estáticos servidos pelo Vite (ex.: favicon). |
 | **`vite/`** | Plugins Vite que leem os CSV e expõem o módulo `serverdata` no build. |
 | **`src/main.tsx`**, **`src/App.tsx`** | Entrada da SPA; `App` hidrata as stores com `serverdata` em `useEffect`. Lazy loading das áreas e layout com abas. |
-| **`src/components/`** | UI partilhada entre features (Modal, Tabs, SectionHeader, skeletons, etc.). |
-| **`src/features/`** | Uma pasta por área do produto. Cada uma concentra o ecrã principal, estilos locais quando existem, e frequentemente um `*Store.ts` ao lado. Subpastas `components/` para peças só daquela feature. |
+| **`src/components/`** | UI compartilhada entre features (Modal, Tabs, SectionHeader, skeletons, etc.). |
+| **`src/features/`** | Uma pasta por área do produto. Cada uma concentra a tela principal, estilos locais quando existem, e frequentemente um `*Store.ts` ao lado. Subpastas `components/` para peças só daquela feature. |
 | **`src/store/`** | Estado global (Zustand), persistido onde aplicável. |
 | **`src/data/`** | Dados de domínio: CSVs, `Eventos.ts`, e `index.ts` com `buildServerData` + metadata `lastUpdated`. |
 | **`src/lib/`** | Parsing/validação de CSV e utilitários. |
@@ -74,10 +74,10 @@ O cabeçalho define **sete colunas em toda linha** — não remova colunas. **Op
 
 Cada “token” é **um dígito de dia** + **uma ou mais letras de bloco**, sem espaço no meio. Vários tokens na mesma célula = **separados por espaço**.
 
-- **Dia:** `2` = Segunda … `7` = Sábado (igual ao padrão da UVA no código).
+- **Dia:** `2` = Segunda … `6` = Sexta (igual ao padrão da UVA no código).
 - **Blocos:** `A`…`S` = faixas horárias fixas em `src/lib/csvToObject.ts` (ex.: `B` 08:00–08:50, `C` 08:50–09:40).
 
-Regex aceita por token: dia `2`–`7` + só letras `A`–`S` (ex.: `3IJKL` válido; `1AB` inválido).
+Regex aceita por token: dia `2`–`6` + só letras `A`–`S` (ex.: `3IJKL` válido; `1AB` inválido).
 
 ### Checklist ao editar
 

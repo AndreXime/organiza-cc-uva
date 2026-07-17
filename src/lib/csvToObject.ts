@@ -79,7 +79,6 @@ const dias: Record<string, string> = {
 	"4": "Quarta",
 	"5": "Quinta",
 	"6": "Sexta",
-	"7": "Sábado",
 };
 
 function parseHorarios(codigos: string) {

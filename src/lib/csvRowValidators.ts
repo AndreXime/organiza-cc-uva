@@ -18,7 +18,7 @@ function validHorario(v: unknown): boolean {
 	return v
 		.split(/\s+/)
 		.filter(Boolean)
-		.every((t) => /^[2-7][A-S]+$/.test(t.trim()));
+		.every((t) => /^[2-6][A-S]+$/.test(t.trim()));
 }
 
 /** Não-string / vazio → ok (opcional). String com IDs → cada parte numérica. */

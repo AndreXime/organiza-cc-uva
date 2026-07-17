@@ -1,6 +1,6 @@
 import { format, startOfWeek } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Calendar } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./horario.css";
@@ -18,7 +18,7 @@ export default function HorarioManager() {
 		useCalendarStore();
 	const [loading, setLoading] = useState(false);
 
-	useMemo(() => {
+	useEffect(() => {
 		useCalendarStore.getState().buildEvents(DisciplinasDisponiveis);
 	}, [DisciplinasDisponiveis]);
 
@@ -46,13 +46,13 @@ export default function HorarioManager() {
 	return (
 		<>
 			{mode !== "minimal" ? (
-				<SectionHeader title="Organizador de horarios">
+				<SectionHeader title="Organizador de horários">
 					<p>
 						A grade abaixo mostra os horários das disciplinas que estão disponíveis na aba{" "}
 						<span className="font-semibold text-blue-600">Gerenciador de Disciplinas</span>. Você pode clicar nos cards
 						para <span className="font-semibold text-[var(--marked-text)]">marcar como selecionada</span> , isso fará
 						ocultar disciplina que tenham conflito com ela, você pode usar isso para planejar as disciplinas com base
-						nos horarios.
+						nos horários.
 					</p>
 					<p className="font-semibold">Total de horas das disciplinas selecionadas: {totalCargaHoraria} horas</p>
 					<p className="flex flex-wrap flex-row gap-4 items-center justify-center">
@@ -74,7 +74,7 @@ export default function HorarioManager() {
 							)}
 						</button>
 						<button type="button" disabled={loading} className="btn-primary" onClick={salvarImagem}>
-							<Download size={20} /> Salvar horarios como imagem
+							<Download size={20} /> Salvar horários como imagem
 						</button>
 					</p>
 				</SectionHeader>
@@ -98,7 +98,7 @@ export default function HorarioManager() {
 						)}
 					</button>
 					<button type="button" disabled={loading} className="btn-primary" onClick={salvarImagem}>
-						<Download size={20} /> Salvar horarios como imagem
+						<Download size={20} /> Salvar horários como imagem
 					</button>
 				</p>
 			)}
