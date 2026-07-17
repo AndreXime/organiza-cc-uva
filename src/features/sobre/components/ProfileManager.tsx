@@ -1,3 +1,4 @@
+import useProfileSync from "@/hooks/useProfileSync";
 import { useProfileStore } from "@/store/profileStore";
 import { useUIStore } from "@/store/uiStore";
 
@@ -13,6 +14,7 @@ export default function ProfileManager() {
 	const deleteProfile = useProfileStore((s) => s.deleteProfile);
 	const setMessage = useUIStore((s) => s.setMessage);
 	const openModal = useUIStore((s) => s.openModal);
+	const { exportProfile, importProfile } = useProfileSync();
 
 	const activeName = profiles.find((p) => p.id === activeProfileId)?.name ?? "—";
 
@@ -65,7 +67,7 @@ export default function ProfileManager() {
 					))}
 				</select>
 			</div>
-			<div className="flex flex-col lg:flex-row gap-3 lg:items-center">
+			<div className="flex flex-col lg:flex-row gap-3 lg:items-center lg:flex-wrap">
 				<button type="button" className={buttonClassName} onClick={handleCreate}>
 					Criar
 				</button>
@@ -75,6 +77,28 @@ export default function ProfileManager() {
 				<button type="button" className={buttonClassName} onClick={handleDelete}>
 					Apagar
 				</button>
+				<button type="button" className={buttonClassName} onClick={exportProfile}>
+					Exportar
+				</button>
+				<label className={buttonClassName}>
+					Importar
+					<input
+						type="file"
+						accept="application/json"
+						className="hidden"
+						onChange={async (e) => {
+							const file = e.target.files?.[0];
+							e.target.value = "";
+							if (!file) return;
+							try {
+								const text = await file.text();
+								importProfile(text);
+							} catch {
+								setMessage("Não foi possível ler o arquivo.");
+							}
+						}}
+					/>
+				</label>
 			</div>
 		</div>
 	);
