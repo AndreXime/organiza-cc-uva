@@ -184,7 +184,9 @@ function FluxogramaCanvas() {
 			{editMode && exportText !== null && (
 				<div className="rounded-xl border border-border bg-card p-3 flex flex-col gap-2">
 					<div className="flex flex-wrap items-center gap-4">
-						<span className="text-sm font-medium text-heading">JSON com coordenadas das arestas</span>
+						<span className="text-sm font-medium text-heading">
+							JSON com coordenadas das arestas (só para debug, você não precisa mexer nisso)
+						</span>
 						<button type="button" className="btn-primary" onClick={() => void copyExport()}>
 							<Copy size={16} /> Copiar
 						</button>
