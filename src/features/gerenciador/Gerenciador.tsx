@@ -1,4 +1,4 @@
-import { Eye, EyeOff, ShieldAlert, ShieldBan, ShieldCheck } from "lucide-react";
+import { Eye, EyeOff, Network, ShieldAlert, ShieldBan, ShieldCheck } from "lucide-react";
 import { useMemo, useState } from "react";
 import { SkeletonSection } from "@/components/LoadingSkeleton";
 import SectionHeader from "@/components/SectionHeader";
@@ -24,6 +24,7 @@ export default function GerenciadorInterativo() {
 	const mostrarFeitas = useUIStore((state) => state.mostrarFeitas);
 	const setMostrarFeitas = useUIStore((state) => state.setMostrarFeitas);
 	const setMessage = useUIStore((state) => state.setMessage);
+	const setTab = useUIStore((state) => state.setTab);
 
 	const [expandEquivalente, setExpandEquivalente] = useState<number>();
 
@@ -137,6 +138,9 @@ export default function GerenciadorInterativo() {
 									</>
 								)}
 							</button>
+							<button type="button" onClick={() => setTab("fluxograma")} className="btn-primary">
+								<Network size={20} /> Ver fluxograma
+							</button>
 						</p>
 					</div>
 				</SectionHeader>
@@ -158,6 +162,9 @@ export default function GerenciadorInterativo() {
 									<Eye size={20} /> Mostrar todas disciplinas
 								</>
 							)}
+						</button>
+						<button type="button" onClick={() => setTab("fluxograma")} className="btn-primary">
+							<Network size={20} /> Ver fluxograma
 						</button>
 					</p>
 				</div>

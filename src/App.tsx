@@ -16,6 +16,7 @@ const Sobre = lazy(() => import("@/features/sobre/Sobre"));
 const FiltroDisciplinas = lazy(() => import("@/features/filtro/Filtrar"));
 const Planejador = lazy(() => import("@/features/planejador/Planejador"));
 const EventosAcademicos = lazy(() => import("@/features/eventos/Eventos"));
+const Fluxograma = lazy(() => import("@/features/fluxograma/Fluxograma"));
 
 function ActiveTab({ tab }: { tab: string }) {
 	switch (tab) {
@@ -31,6 +32,8 @@ function ActiveTab({ tab }: { tab: string }) {
 			return <Planejador />;
 		case "academic-events":
 			return <EventosAcademicos />;
+		case "fluxograma":
+			return <Fluxograma />;
 		default:
 			return null;
 	}
